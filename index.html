@@ -257,6 +257,62 @@ td .sub{color:var(--text3)}
 .ctrls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .ctrls select{height:28px;border:1px solid var(--border2);border-radius:7px;background:var(--surface);padding:0 8px;font-size:12px;font-weight:600;color:var(--text2)}
 
+/* ===== minimal layer ===== */
+.card{border:0;box-shadow:0 1px 2px rgba(0,0,0,.04),0 0 0 1px var(--border);border-radius:12px;padding:18px 20px}
+.ch{margin-bottom:16px;min-height:24px}
+.ch h3{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.07em}
+.seg{border:0;background:none;padding:0;gap:2px}
+.seg button{height:24px;padding:0 8px;border-radius:6px;font-size:12px;color:var(--text3)}
+.seg button.on{background:var(--surface2);color:var(--text)}
+.kpis{display:flex;flex-wrap:wrap;background:none;border:0;border-radius:0;gap:0;margin:6px 0 4px}
+.kpi{background:none;padding:2px 28px 2px 0;margin-right:28px;border-right:1px solid var(--border);flex:0 0 auto}
+.kpi:last-child{border-right:0;margin-right:0}
+.kpi .v{font-size:30px}
+.kpi .f{margin-top:2px}
+@media (max-width:640px){.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 0}.kpi{border-right:0;margin:0;padding:0 8px 0 0}.kpis .kpi:last-child:nth-child(odd){grid-column:auto}}
+.mini{display:flex;flex-wrap:wrap;gap:12px 32px;background:none;border:0;border-radius:0;margin-bottom:18px}
+.mini div{background:none;padding:0}
+.mini span{font-size:11px}
+.mini b{font-size:18px}
+.facts{display:flex;flex-wrap:wrap;gap:12px 32px;background:none;border:0;margin-top:20px;justify-content:center}
+.facts div{background:none;padding:0;text-align:center}
+.psel select{border:0;background:none;height:auto;padding:0 24px 0 0;font-size:22px;letter-spacing:-.02em}
+.psel:after{right:4px;width:6px;height:6px}
+.phead{padding:8px 0 12px;align-items:flex-end}
+.pmeta{font-size:12px;color:var(--text3);gap:6px}
+.cell small{display:none}
+.cell{min-height:38px}
+.game{border-color:transparent;background:var(--surface);box-shadow:0 0 0 1px var(--border)}
+.lg{font-size:11.5px}
+.ctrls select{border:0;background:var(--surface2);border-radius:6px}
+.simgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 32px}
+@media (max-width:700px){.simgrid{grid-template-columns:1fr}}
+.inp{border:0;border-radius:0;padding:8px 0;background:none;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.inp label{margin:0;font-size:13px;font-weight:500;color:var(--text2)}
+.stp{width:150px}
+.stp button{border:0;background:var(--surface2);width:28px;height:28px}
+.stp input{font-size:17px}
+.pbtn{border:0;background:var(--surface2)}
+/* filter popover */
+.navwrap{position:sticky;top:0;z-index:30;background:var(--bg);display:flex;align-items:center;border-bottom:1px solid var(--border);margin-bottom:14px}
+.navwrap nav.tabs{border-bottom:0;position:static;flex:1;min-width:0}
+.fbtn{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px;border-radius:7px;font-size:12px;font-weight:600;color:var(--text3);white-space:nowrap;flex:none}
+.fbtn:hover,.fbtn.open{color:var(--text);background:var(--surface2)}
+.fbtn.act{color:var(--text)}
+.fbtn.act:before{content:'';width:6px;height:6px;border-radius:50%;background:var(--me)}
+.fbtn svg{width:14px;height:14px}
+.fpop{position:absolute;right:0;top:calc(100% + 6px);width:260px;background:var(--surface);border-radius:12px;box-shadow:0 0 0 1px var(--border),0 12px 32px rgba(0,0,0,.14);padding:12px;display:none}
+.fpop.open{display:block}
+.fpop .fl{display:block;margin:4px 4px 6px}
+.frow{display:flex;align-items:center;gap:10px;width:100%;padding:7px 6px;border-radius:7px;font-size:13px;text-align:left}
+.frow:hover{background:var(--surface2)}
+.frow .cb{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border2);display:grid;place-items:center;flex:none}
+.frow.on .cb{background:var(--text);border-color:var(--text)}
+.frow.on .cb:after{content:'';width:8px;height:4px;border-left:2px solid var(--surface);border-bottom:2px solid var(--surface);transform:rotate(-45deg) translate(1px,-1px)}
+.frow .sc{margin-left:auto;font-size:12px;color:var(--text3)}
+.frow.dis{opacity:.4}
+.fpop .ft{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.fwrap{position:relative;flex:none}
 #tip{position:fixed;z-index:100;pointer-events:none;background:var(--text);color:var(--surface);padding:7px 10px;border-radius:7px;font-size:12px;line-height:1.4;max-width:260px;opacity:0;transition:opacity .1s;box-shadow:0 6px 20px rgba(0,0,0,.18)}
 #tip.show{opacity:1}
 #tip b{font-weight:600}
@@ -267,6 +323,8 @@ td .sub{color:var(--text3)}
   .board .sc{font-size:30px}.board .tm{font-size:13px}
   .hb{grid-template-columns:76px minmax(0,1fr) max-content}
   .rec .lbl{display:none}
+  .fbtn .ftx{display:none}
+  .tab{padding:0 10px}
   .cell small{display:none}
   .kpis .kpi:last-child:nth-child(odd){grid-column:span 2}
 }
@@ -280,8 +338,7 @@ td .sub{color:var(--text3)}
     <div class="sp"></div>
     <div class="rec" id="rec"></div>
   </header>
-  <nav class="tabs" id="tabs"></nav>
-  <div id="filters"></div>
+  <div class="navwrap"><nav class="tabs" id="tabs"></nav><div class="fwrap" id="filters"></div></div>
   <main id="app"></main>
 </div>
 <div id="tip"></div>
@@ -544,7 +601,8 @@ function vbars(el, W, o) {
     s += `<rect x="${pl + bw * i}" y="${pt - 12}" width="${bw}" height="${ih + 24}" fill="transparent" data-tip="${esc(it.tip || '')}"/>`;
   });
   if (ok(avg)) s += `<line x1="${pl}" x2="${W - pr}" y1="${y(avg)}" y2="${y(avg)}" stroke="var(--text2)" stroke-width="1" stroke-dasharray="4 4"/>`;
-  el.innerHTML = s + '</svg>' + (ok(avg) ? `<div class="lg"><span><svg width="18" height="2"><line x1="0" x2="18" y1="1" y2="1" stroke="var(--text2)" stroke-dasharray="4 3"/></svg>Media ${signed ? sgn(avg, 1) : nf(avg, 1)}</span></div>` : '');
+  if (ok(avg)) s += `<text x="${W - pr}" y="${y(avg) - 5}" class="ax" text-anchor="end">x̄ ${signed ? sgn(avg, 1) : nf(avg, 1)}</text>`;
+  el.innerHTML = s + '</svg>';
 }
 function niceStep(v) { if (v <= 0) return 1; const e = Math.pow(10, Math.floor(Math.log10(v))), f = v / e; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * e; }
 function roundBar(x, y, w, h, up) {
@@ -713,23 +771,21 @@ function viewJugadora() {
         const df = fv - v, low = MET[key] && MET[key].low, th = Math.max(Math.abs(v) * .08, .2);
         const dir = Math.abs(df) < th ? '' : ((df > 0) !== !!low ? 'up' : 'dn');
         const fmtv = key === 'ftp' ? nf(fv, 0) + '%' : key === 'pm' ? sgn(fv, 1) : nf(fv, 1);
-        f = `<span class="arr ${dir}">${dir === 'up' ? '▲' : dir === 'dn' ? '▼' : '='}</span><b>${fmtv}</b> ${fw === 1 ? 'último' : 'últ. ' + fw}`;
+        f = `<span class="arr ${dir}">${dir === 'up' ? '▲' : dir === 'dn' ? '▼' : '='}</span>${fmtv}`;
       }
     } else if (opts.foot) f = opts.foot;
-    return `<div class="kpi" ${r ? `data-tip="${esc(`${lab}: ${r.r}º de ${r.n} en el equipo`)}"` : ''}><div class="l"><span>${lab}</span>${r ? `<span class="rk ${r.r <= 3 ? 'top' : ''}">${r.r}º<span class="muted">/${r.n}</span></span>` : ''}</div><div class="v">${val}</div><div class="f">${f}</div></div>`;
+    return `<div class="kpi" data-tip="${esc(`<b>${lab}</b>${r ? `<br>${r.r}º de ${r.n} en el equipo` : ''}${fp && md !== 'tot' ? `<br><span class=&quot;tm&quot;>Flecha: ${fw === 1 ? 'último partido' : 'últimos ' + fw} vs media</span>` : ''}`)}"><div class="l"><span>${lab}</span>${r ? `<span class="rk ${r.r <= 3 ? 'top' : ''}">${r.r}º</span>` : ''}</div><div class="v">${val}</div><div class="f">${f}</div></div>`;
   };
   const kp = `<div class="kpis fade">
-    ${tile('min', md === 'tot' ? 'Minutos' : 'Minutos / partido', { foot: `${nf(p.sec / (sum(gs.filter(g => g.players[p.id] && g.players[p.id].sec > 0), g => g.len) || 1) * 100, 0)}% del tiempo en pista` })}
+    ${tile('min', 'Minutos')}
     ${tile('pts', 'Puntos')}
-    ${tile('t2m', 'Canastas de 2')}
-    ${tile('t3m', 'Triples')}
-    ${tile('ftp', 'Tiros libres', { foot: `<b>${p.ftm}/${p.fta}</b> total` })}
+    ${tile('ftp', 'Tiros libres', { suffix: `${p.ftm}/${p.fta}` })}
     ${tile('fc', 'Faltas')}
     ${tile('pm', '+/−')}
   </div>`;
 
-  const head = `<div class="phead"><div class="psel"><select data-act="player">${playerOptions(A, p.id)}</select></div>
-    <div class="pmeta"><span><b>${p.gp}</b>PJ</span><span><b>${p.gs}</b>titular</span><span><b>${mmss(p.sec)}</b>min</span><span><b>${p.pts}</b>pts</span></div>
+  const head = `<div class="phead"><div><div class="psel"><select data-act="player">${playerOptions(A, p.id)}</select></div>
+    <div class="pmeta">${p.gp} partidos · ${p.gs} de titular</div></div>
     <div class="sp"></div>${seg('mode', MODES, md)}</div>`;
 
   // per game
@@ -743,24 +799,21 @@ function viewJugadora() {
         tip: x && x.sec > 0 ? `<b>J${g.j} · ${esc(g.opp)}</b> <span class="tm">${g.pf}–${g.pa}</span><br>${mmss(x.sec)} min${x.partial ? '' : ` · ${x.pts} pts · ${sgn(x.pm)}<br>TL ${x.ftm}/${x.fta} · ${x.fc} faltas${x.start ? ' · titular' : ''}`}` : `<b>J${g.j} · ${esc(g.opp)}</b><br>No jugó` };
     });
     const vs = items.map(i => i.v).filter(ok);
-    vbars(el, W, { items, signed: k === 'pm', avg: vs.length > 1 ? sum(vs) / vs.length : null, d: k === 'min' ? 1 : 0, H: 210 });
+    vbars(el, W, { items, signed: k === 'pm', avg: vs.length > 1 ? sum(vs) / vs.length : null, d: k === 'min' ? 1 : 0, H: 200 });
   });
 
   // impact
   const on40 = per40(p.pm, p.sec), off40 = per40(p.offPm, p.offSec), net = ok(on40) && ok(off40) ? on40 - off40 : null;
   const imx = Math.max(5, Math.abs(on40 || 0), Math.abs(off40 || 0));
   const impRows = hbars([
-    { label: 'En pista', v: on40, tip: `${sgn(p.pm)} en ${mmss(p.sec)} min` },
-    { label: 'Banquillo', v: off40, tip: `${sgn(p.offPm)} en ${mmss(p.offSec)} min` },
+    { label: 'En pista', v: on40, tip: `<b>En pista</b><br>${sgn(p.pm)} en ${mmss(p.sec)} min<br>${mine.map(g => `J${g.j} ${sgn(g.players[p.id].pm)}`).join(' · ')}` },
+    { label: 'Banquillo', v: off40, tip: `<b>En el banquillo</b><br>${sgn(p.offPm)} en ${mmss(p.offSec)} min<br>${mine.map(g => `J${g.j} ${sgn(g.diff - g.players[p.id].pm)}`).join(' · ')}` },
   ], { signed: true, max: imx, fmt: v => sgn(v, 1) });
   const rnet = (() => { const arr = Object.values(A.P).map(q => ({ id: q.id, v: mv(q, 'net') })).filter(z => ok(z.v)).sort((a, b) => b.v - a.v); const i = arr.findIndex(z => z.id === p.id); return i < 0 ? null : { r: i + 1, n: arr.length }; })();
   const impact = `${impRows}
     <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
-      <div><div class="muted" style="font-size:12px">Impacto neto · por 40'</div>${rnet ? `<div style="font-size:12px;color:var(--text2);margin-top:2px">${rnet.r}º de ${rnet.n} en el equipo</div>` : ''}</div>
-      <div style="font-size:28px;font-weight:700;letter-spacing:-.02em">${sgn(net, 1)}</div></div>
-    <div class="tw" style="margin-top:12px"><table><thead><tr><th>Partido</th><th>En pista</th><th>Banquillo</th><th>Neto/40'</th></tr></thead><tbody>
-    ${mine.map(g => { const x = g.players[p.id], off = g.diff - x.pm, offS = g.len - x.sec, n4 = (per40(x.pm, x.sec) ?? 0) - (per40(off, offS) ?? 0);
-      return `<tr><td>J${g.j} <span class="sub">${g.home ? '' : '@'}${esc(g.code)}</span></td><td>${pmHtml(x.pm)}</td><td>${pmHtml(off)}</td><td>${sgn(n4, 1)}</td></tr>`; }).join('')}</tbody></table></div>`;
+      <div class="muted" style="font-size:12px">Neto${rnet ? ` · ${rnet.r}º de ${rnet.n}` : ''}</div>
+      <div style="font-size:28px;font-weight:700;letter-spacing:-.02em">${sgn(net, 1)}</div></div>`;
 
   // quarters heat
   const maxP = Math.max(4, ...mine.map(g => g.periods.length));
@@ -802,8 +855,7 @@ function viewJugadora() {
   const zc = { pin: pshots.filter(s => s.zone === 'pin').length, med: pshots.filter(s => s.zone === 'med').length, tri: pshots.filter(s => s.zone === 'tri').length };
   const ptsType = `<div class="split"><div>${court(pshots, s => s.type === 'T3' ? '#eb6834' : 'var(--blue)', '')}</div><div>
     <div class="stack" style="margin-bottom:12px">${tp.filter(t => t.v).map(t => `<i style="flex:${t.v};background:${t.c}" data-tip="${esc(`${t.k}: ${t.v} pts (${nf(t.v / tot * 100, 0)}%)`)}">${t.v / tot > .12 ? nf(t.v / tot * 100, 0) + '%' : ''}</i>`).join('') || '<i style="flex:1;background:var(--surface2)"></i>'}</div>
-    ${hbars(tp.map(t => ({ label: t.k === '2P' ? 'Tiros de 2' : t.k === '3P' ? 'Triples' : 'Tiros libres', v: t.v, color: t.c, sub: t.k === 'TL' ? `${p.ftm}/${p.fta}` : `×${t.n}` })), { max: Math.max(1, ...tp.map(t => t.v)), fmt: v => nf(v, 0) + ' pts' })}
-    <div class="mini" style="margin:14px 0 0;grid-template-columns:repeat(3,minmax(0,1fr))">${['pin', 'med', 'tri'].map(z => `<div><span>${ZN[z]}</span><b>${zc[z]}</b></div>`).join('')}</div></div></div>`;
+    <div class="mini" style="margin:0">${tp.map(t => `<div><span><i style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${t.c};margin-right:5px"></i>${t.k}</span><b>${t.v}<small>${t.k === 'TL' ? `${p.ftm}/${p.fta}` : 'pts'}</small></b></div>`).join('')}</div></div></div>`;
 
   // rotation
   const st = []; mine.filter(g => g.detail).forEach(g => (g.stints[p.id] || []).forEach(s => st.push({ ...s, g })));
@@ -812,11 +864,11 @@ function viewJugadora() {
   const firstIn = mine.filter(g => g.detail && (g.stints[p.id] || []).length).map(g => g.stints[p.id][0].s);
   const longest = st.reduce((b, s) => !b || (s.e - s.s) > (b.e - b.s) ? s : b, null);
   const rotMini = `<div class="mini">
-    <div><span>Tramos / partido</span><b>${mine.length ? nf(nSt / mine.length, 1) : '—'}</b></div>
+    <div><span>Entradas / partido</span><b>${mine.length ? nf(nSt / mine.length, 1) : '—'}</b></div>
     <div><span>Duración media</span><b>${avgSt ? mmss(avgSt) : '—'}</b></div>
     <div><span>Descanso medio</span><b>${rests.length ? mmss(sum(rests) / rests.length) : '—'}</b></div>
     <div><span>Primera entrada</span><b>${firstIn.length ? (firstIn.every(t => t === 0) ? 'Titular' : 'min ' + nf(sum(firstIn) / firstIn.length / 60, 1)) : '—'}</b></div>
-    <div><span>Tramo más largo</span><b>${longest ? mmss(longest.e - longest.s) : '—'}<small>${longest ? 'J' + longest.g.j : ''}</small></b></div></div>`;
+</div>`;
   const rotGantts = chart((el, W) => {
     el.innerHTML = '';
     const gg = mine.filter(g => g.detail);
@@ -844,13 +896,11 @@ function viewJugadora() {
   const fouls = `<div class="mini">
       <div><span>Faltas / partido</span><b>${nf(p.fc / (p.gp - p.partial || 1), 1)}</b></div>
       <div><span>Faltas / 40'</span><b>${nf(per40(p.fc, p.sec), 1)}</b></div>
-      <div><span>Minutos por falta</span><b>${p.fc ? nf(p.sec / 60 / p.fc, 1) : '—'}</b></div>
-      <div><span>Eliminada</span><b>${fl.filter(x => x.f.length >= 5).length}<small>veces</small></b></div></div>
-    <div class="muted" style="font-size:12px;margin-bottom:6px">Por cuarto</div>
+      <div><span>Min por falta</span><b>${p.fc ? nf(p.sec / 60 / p.fc, 1) : '—'}</b></div></div>
     ${hbars(Array.from({ length: maxQ }, (_, i) => ({ label: pLabel(i + 1), v: byQ[i + 1] || 0, color: 'var(--red)' })), { max: Math.max(1, ...Object.values(byQ)), fmt: v => nf(v, 0) })}
-    <div class="muted" style="font-size:12px;margin:14px 0 6px">Minutos jugados según faltas acumuladas</div>
+    <div class="muted" style="font-size:11px;margin:16px 0 6px">Minutos según faltas acumuladas</div>
     <div class="stack">${loaded.map((s, i) => s > 0 ? `<i style="flex:${s};background:${fcol[i]};color:${i < 2 ? 'var(--text)' : '#fff'}" data-tip="${esc(`Con ${i}${i === 5 ? '+' : ''} falta${i === 1 ? '' : 's'}: ${mmss(s)} min (${nf(s / totL * 100, 0)}%)`)}">${s / totL > .1 ? i + 'F' : ''}</i>` : '').join('')}</div>
-    <div class="lg">${loaded.map((s, i) => s > 0 ? `<span><i style="background:${fcol[i]}"></i>${i}F · ${mmss(s)}</span>` : '').join('')}</div>`;
+`;
 
   // chemistry
   const pr = {};
@@ -860,18 +910,16 @@ function viewJugadora() {
   const cmax = Math.max(10, ...chemRows.filter(r => r.sec >= 120).map(r => Math.abs(r.p40)));
   const chem = chemRows.length ? hbars(chemRows.map(r => ({ label: r.q.nick, v: r.p40, dim: r.sec < 120,
       sub: `${nf(r.sec / 60, 0)}'`, tip: `<b>${esc(p.first)} + ${esc(r.q.name)}</b><br>${mmss(r.sec)} min juntas · ${sgn(r.pm)}<br>${sgn(r.p40, 1)} por 40'${r.sec < 120 ? '<br><span class="tm">Muestra pequeña</span>' : ''}` })),
-      { signed: true, max: cmax, fmt: v => sgn(v, 1) })
-    + `<div class="lg"><span><i style="background:var(--blue)"></i>+/− por 40' juntas</span><span class="muted">minutos juntas a la derecha · atenuado &lt; 2'</span></div>` : '<div class="empty">Sin datos de quintetos</div>';
+      { signed: true, max: cmax, fmt: v => sgn(v, 1) }) : '<div class="empty">Sin datos de quintetos</div>';
 
   return head + kp + `<div class="grid" style="margin-top:12px">
     ${card('s8', 'Partido a partido', perGame, seg('pgMetric', pgOpts, S.pgMetric))}
-    ${card('s4', 'Impacto en pista', impact, '', "+/− por 40'")}
+    ${card('s4', "Impacto · por 40'", impact)}
     ${card('s7', 'Minutos por cuarto', heat)}
     ${card('s5', 'Tipo de puntos', ptsType)}
-    ${card('s12', 'Rotación', rotMini + `<div class="muted" style="font-size:12px;margin-bottom:4px">Probabilidad de estar en pista en cada momento del partido</div>` + chart((el, W) => presence(el, W, gs, p.id)) +
-      `<div class="muted" style="font-size:12px;margin:14px 0 2px">Tramos por partido · color = +/− del tramo · ① faltas</div>` + rotGantts)}
+    ${card('s12', 'Rotación', rotMini + chart((el, W) => presence(el, W, gs, p.id)) + `<div style="height:18px"></div>` + rotGantts)}
     ${card('s6', 'Faltas', fouls)}
-    ${card('s6', 'Química', chem, seg('chem', [['sec', 'Más minutos'], ['pm', 'Mejor +/−']], S.chem), "+/− por 40' juntas")}
+    ${card('s6', 'Química', chem, seg('chem', [['sec', 'Minutos'], ['pm', '+/−']], S.chem))}
   </div>`;
 }
 
@@ -924,7 +972,7 @@ function viewEquipo() {
       <td>${tm === 'tot' ? T.t2m : tm === 'pg' ? nf(T.t2m / n, 1) : nf(per40(T.t2m, T.sec), 1)}</td><td>${tm === 'tot' ? T.t3m : tm === 'pg' ? nf(T.t3m / n, 1) : nf(per40(T.t3m, T.sec), 1)}</td>
       <td>${tm === 'tot' ? `${T.ftm}/${T.fta}` : tm === 'pg' ? `${nf(T.ftm / n, 1)}/${nf(T.fta / n, 1)}` : `${nf(per40(T.ftm, T.sec), 1)}/${nf(per40(T.fta, T.sec), 1)}`}</td><td>${nf(pct(T.ftm, T.fta), 0)}</td>
       <td>${tm === 'tot' ? T.fc : tm === 'pg' ? nf(T.fc / n, 1) : nf(per40(T.fc, T.sec), 1)}</td><td>${sgn(tm === 'tot' ? T.pf - T.pa : tm === 'pg' ? (T.pf - T.pa) / n : per40(T.pf - T.pa, T.sec), d)}</td></tr>
-    </tbody></table></div><div class="lg"><span><span class="st" style="margin:0"></span></span><span class="muted">Clic en una jugadora para ver su ficha · ${tm === 'p40' ? "por 40' = ritmo por cada 40 minutos en pista" : tm === 'pg' ? 'media por partido jugado' : 'acumulado'}</span></div>`;
+    </tbody></table></div>`;
 
   // minutes share
   const shOpts = [['tot', 'Total'], ['pg', 'Media'], ...gs.map(g => [String(g.n), 'J' + g.j])];
@@ -934,8 +982,7 @@ function viewEquipo() {
   else { const g = gs.find(x => String(x.n) === S.share); shareRows = Object.entries(g.players).filter(([, x]) => x.sec > 0).map(([id, x]) => ({ p: A.P[id] || { name: (M.names[id] || {}).name, nick: (M.names[id] || {}).name, id, dorsal: '' }, s: x.sec })); }
   shareRows.sort((a, b) => b.s - a.s);
   const shTot = sum(shareRows, r => r.s) || 1;
-  const share = `<div class="stack" style="margin-bottom:14px">${shareRows.map(r => `<i style="flex:${r.s};background:${r.p.id === CFG.me ? 'var(--me)' : 'var(--blue)'};opacity:${r.p.id === CFG.me ? 1 : .35 + .65 * r.s / shareRows[0].s}" data-tip="${esc(`<b>${r.p.name}</b><br>${mmss(r.s)} min · ${nf(r.s / shTot * 100, 1)}%`)}">${r.s / shTot > .06 ? r.p.dorsal : ''}</i>`).join('')}</div>
-    ${hbars(shareRows.map(r => ({ label: r.p.nick || r.p.name, me: r.p.id === CFG.me, v: r.s / 60, color: r.p.id === CFG.me ? 'var(--me)' : 'var(--blue)', sub: nf(r.s / shTot * 100, 0) + '%', tip: `${esc(r.p.name)}: ${mmss(r.s)}` })), { max: S.share === 'tot' ? Math.max(...shareRows.map(r => r.s / 60)) : 40, fmt: v => nf(v, 1) + "'" })}`;
+  const share = `${hbars(shareRows.map(r => ({ label: r.p.nick || r.p.name, me: r.p.id === CFG.me, v: r.s / 60, color: r.p.id === CFG.me ? 'var(--me)' : 'var(--blue)', sub: nf(r.s / shTot * 100, 0) + '%', tip: `${esc(r.p.name)}: ${mmss(r.s)}` })), { max: S.share === 'tot' ? Math.max(...shareRows.map(r => r.s / 60)) : 40, fmt: v => nf(v, 1) + "'" })}`;
 
   // quarters
   const qs = Object.entries(T.per).sort((a, b) => a[0] - b[0]);
@@ -943,7 +990,7 @@ function viewEquipo() {
   const quarters = `<div class="tw"><table><thead><tr><th>Cuarto</th><th>A favor</th><th></th><th>En contra</th><th>Dif.</th><th>Ganados</th></tr></thead><tbody>
     ${qs.map(([k, x]) => { const won = gs.filter(g => (g.periods || []).some(q => q.p == k && q.us > q.them)).length; const df = (x.us - x.them) / x.n;
       return `<tr><td>${pLabel(+k)}</td><td>${nf(x.us / x.n, 1)}</td><td style="width:40%"><div style="display:flex;gap:2px;height:12px"><div style="flex:1;display:flex;justify-content:flex-end"><i style="display:block;width:${x.us / x.n / qm * 100}%;background:var(--blue);border-radius:3px 0 0 3px"></i></div><div style="flex:1"><i style="display:block;height:100%;width:${x.them / x.n / qm * 100}%;background:var(--red);border-radius:0 3px 3px 0"></i></div></div></td><td>${nf(x.them / x.n, 1)}</td><td>${pmHtml(df, 1)}</td><td>${won}/${x.n}</td></tr>`; }).join('')}
-    </tbody></table></div><div class="lg"><span><i style="background:var(--blue)"></i>Claret</span><span><i style="background:var(--red)"></i>Rival</span><span class="muted">media por partido</span></div>`;
+    </tbody></table></div>`;
 
   // lineups
   let lus = A.L.map(l => ({ ...l, p40: per40(l.pm, l.sec) }));
@@ -952,7 +999,7 @@ function viewEquipo() {
   lus = lus.slice(0, 12);
   const lineups = lus.length ? `<div class="tw"><table><thead><tr><th>Quinteto</th><th>Min</th><th>Partidos</th><th>+/−</th><th>+/− 40'</th></tr></thead><tbody>
     ${lus.map(l => `<tr><td><div class="lu">${l.ids.map(id => ({ id, d: (M.names[id] || {}).dorsal || '?', nm: (M.names[id] || {}).name || '' })).sort((a, b) => a.d - b.d).map(x => `<span class="${x.id === CFG.me ? 'me' : ''}" data-tip="${esc(x.nm)}">${x.d}</span>`).join('')}</div></td>
-      <td>${mmss(l.sec)}</td><td>${l.g.size}</td><td>${pmHtml(l.pm)}</td><td class="${l.sec < 300 ? 'muted' : ''}">${sgn(l.p40, 1)}</td></tr>`).join('')}</tbody></table></div><div class="lg"><span class="muted">+/− 40' atenuado con menos de 5 minutos juntas</span></div>` : '<div class="empty">Sin quintetos</div>';
+      <td>${mmss(l.sec)}</td><td>${l.g.size}</td><td>${pmHtml(l.pm)}</td><td class="${l.sec < 300 ? 'muted' : ''}">${sgn(l.p40, 1)}</td></tr>`).join('')}</tbody></table></div>` : '<div class="empty">Sin quintetos</div>';
 
   // shots
   const side = S.shot;
@@ -965,19 +1012,18 @@ function viewEquipo() {
   const maxQ = Math.max(4, ...gs.map(g => (g.periods || []).length));
   const shotCtl = `<div class="ctrls">${seg('shot', [['us', 'Ataque'], ['them', 'Defensa']], side)}
     ${side === 'us' ? `<select data-act="sel" data-k="shotP"><option value="all">Todas</option>${shooters.map(p => `<option value="${p.id}" ${S.shotP === p.id ? 'selected' : ''}>${p.dorsal} · ${esc(p.name)}</option>`).join('')}</select>` : ''}
-    <select data-act="sel" data-k="shotT"><option value="all">2P y 3P</option><option value="T2" ${S.shotT === 'T2' ? 'selected' : ''}>Solo 2P</option><option value="T3" ${S.shotT === 'T3' ? 'selected' : ''}>Solo 3P</option></select>
-    <select data-act="sel" data-k="shotQ"><option value="all">Todos los cuartos</option>${Array.from({ length: maxQ }, (_, i) => `<option value="${i + 1}" ${S.shotQ === String(i + 1) ? 'selected' : ''}>${pLabel(i + 1)}</option>`).join('')}</select></div>`;
+</div>`;
   const cA = side === 'us' ? 'var(--blue)' : 'var(--red)';
-  const shots = `<div class="split"><div>${court(fs, s => s.type === 'T3' ? '#eb6834' : cA, `<span><i class="c" style="background:${cA}"></i>2P</span><span><i class="c" style="background:#eb6834"></i>3P</span><span class="muted">${fs.length} canastas · solo anotadas</span>`)}</div>
+  const shots = `<div class="split"><div>${court(fs, s => s.type === 'T3' ? '#eb6834' : cA, `<span><i class="c" style="background:${cA}"></i>2P</span><span><i class="c" style="background:#eb6834"></i>3P</span>`)}</div>
     <div>${hbars(zc.map(z => ({ label: ZN[z.z], v: z.n, color: z.z === 'tri' ? '#eb6834' : cA, sub: z.pts + ' pts' })), { max: Math.max(1, ...zc.map(z => z.n)), fmt: v => nf(v, 0) })}
-    <div class="mini" style="margin:14px 0 0"><div><span>Por partido</span><b>${nf(fs.length / n, 1)}</b></div><div><span>Puntos de campo</span><b>${sum(zc, z => z.pts)}</b></div><div><span>% desde la pintura</span><b>${fs.length ? nf(zc[0].n / fs.length * 100, 0) : '—'}<small>%</small></b></div></div></div></div>`;
+</div></div>`;
 
   return kp + `<div class="grid" style="margin-top:12px">
-    ${card('s12', 'Partidos', games, '', 'más reciente a la derecha')}
+    ${card('s12', 'Partidos', games)}
     ${card('s12', 'Plantilla', table, seg('tmode', MODES, tm))}
     ${card('s6', 'Reparto de minutos', share, seg('share', shOpts, S.share))}
     ${card('s6', 'Por cuartos', quarters)}
-    ${card('s12', 'Quintetos', lineups, seg('luMin', [['all', 'Todos'], ['me', 'Con ' + esc(((M.names[CFG.me] || {}).name || 'Jana').split(' ')[0])]], S.luMin) + seg('luSort', [['sec', 'Minutos'], ['pm', '+/−'], ['p40', "+/− 40'"]], S.luSort))}
+    ${card('s12', 'Quintetos', lineups, seg('luMin', [['all', 'Todos'], ['me', 'Conmigo']], S.luMin) + seg('luSort', [['sec', 'Min'], ['pm', '+/−']], S.luSort))}
     ${card('s12', 'Carta de tiro', shots, shotCtl)}
   </div>`;
 }
@@ -1014,7 +1060,7 @@ function viewPartidos() {
       return `<tr class="${me ? 'me' : ''}"><td class="${S.box === 'us' ? 'nm' : ''}" ${S.box === 'us' ? `data-act="toPlayer" data-id="${pl.uuid}"` : ''}><span class="dor">${pl.dorsal}</span>${esc(title(pl.name))}${pl.starting ? '<span class="st" title="Titular"></span>' : ''}</td>
       <td>${c.min || mmss(c.seconds)}</td><td class="cellbar" style="--w:${a.pts / ptsMax * 70}%"><span style="font-weight:600">${a.pts}</span></td><td>${a.t2m}</td><td>${a.t3m}</td><td>${a.ftm}<span class="sub">/${a.fta}</span></td><td style="${a.fc >= 5 ? 'color:var(--red);font-weight:600' : ''}">${a.fc}</td><td>${pmHtml(c.onCourtPlusMinus)}</td></tr>`; }).join('')}
     <tr class="tot"><td>Total</td><td></td><td>${sideBox.accumulated.pts}</td><td>${sideBox.accumulated.t2m}</td><td>${sideBox.accumulated.t3m}</td><td>${sideBox.accumulated.ftm}/${sideBox.accumulated.fta}</td><td>${sideBox.accumulated.fc}</td><td></td></tr></tbody></table></div>
-    <div class="lg"><span><span class="st" style="margin:0"></span>Titular</span></div>`;
+`;
 
   // rotation rows
   const rows = G.box.us.players.filter(p => (p.computed || {}).seconds > 0).map(pl => {
@@ -1033,10 +1079,10 @@ function viewPartidos() {
 
   return strip + `<div class="grid">
     <section class="card s12 fade">${board}</section>
-    ${card('s12', 'Evolución del marcador', chart((el, W) => flowChart(el, W, G)), '', 'diferencia Claret − ' + esc(G.code))}
+    ${card('s12', 'Marcador', chart((el, W) => flowChart(el, W, G)))}
     ${card('s12', 'Estadísticas', lead + box, seg('box', [['us', 'Claret'], ['them', esc(G.code)]], S.box))}
-    ${card('s12', 'Rotaciones', chart((el, W) => gantt(el, W, G, rows, W < 520 ? 70 : 110)), '', 'color = +/− del tramo · ① faltas')}
-    ${card('s12', 'Carta de tiro', `<div class="split"><div>${court(shs, s => s.type === 'T3' ? '#eb6834' : cA, `<span><i class="c" style="background:${cA}"></i>2P</span><span><i class="c" style="background:#eb6834"></i>3P</span><span class="muted">solo anotadas</span>`)}</div><div>${hbars(['pin', 'med', 'tri'].map(z => ({ label: ZN[z], v: shs.filter(s => s.zone === z).length, color: z === 'tri' ? '#eb6834' : cA })), { max: Math.max(1, ...['pin', 'med', 'tri'].map(z => shs.filter(s => s.zone === z).length)), fmt: v => nf(v, 0) })}</div></div>`, seg('mshot', [['us', 'Claret'], ['them', esc(G.code)]], S.mshot))}
+    ${card('s12', 'Rotaciones', chart((el, W) => gantt(el, W, G, rows, W < 520 ? 70 : 110)))}
+    ${card('s12', 'Carta de tiro', `<div class="split"><div>${court(shs, s => s.type === 'T3' ? '#eb6834' : cA, `<span><i class="c" style="background:${cA}"></i>2P</span><span><i class="c" style="background:#eb6834"></i>3P</span>`)}</div><div>${hbars(['pin', 'med', 'tri'].map(z => ({ label: ZN[z], v: shs.filter(s => s.zone === z).length, color: z === 'tri' ? '#eb6834' : cA })), { max: Math.max(1, ...['pin', 'med', 'tri'].map(z => shs.filter(s => s.zone === z).length)), fmt: v => nf(v, 0) })}</div></div>`, seg('mshot', [['us', 'Claret'], ['them', esc(G.code)]], S.mshot))}
   </div>`;
 }
 
@@ -1060,14 +1106,14 @@ function viewSimular() {
   const B = { P: { ...A.P, [p.id]: q } };
   const simPts = sm.t2m * 2 + sm.t3m * 3 + sm.ftm;
 
-  const inputs = `<div class="simgrid">${SIMF.map(([k, l, mn, mx]) => `<div class="inp"><label>${l}${k === 'n' ? '' : ' / partido'}</label><div class="stp"><button data-act="sim" data-k="${k}" data-d="-1" aria-label="menos">−</button><input type="number" inputmode="numeric" data-act="simIn" data-k="${k}" min="${mn}" max="${mx}" value="${sm[k]}"><button data-act="sim" data-k="${k}" data-d="1" aria-label="más">+</button></div></div>`).join('')}</div>
-    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px"><span class="muted" style="font-size:12px">Atajos</span><div class="presets">
+  const inputs = `<div class="simgrid">${SIMF.map(([k, l, mn, mx]) => `<div class="inp"><label>${l}</label><div class="stp"><button data-act="sim" data-k="${k}" data-d="-1" aria-label="menos">−</button><input type="number" inputmode="numeric" data-act="simIn" data-k="${k}" min="${mn}" max="${mx}" value="${sm[k]}"><button data-act="sim" data-k="${k}" data-d="1" aria-label="más">+</button></div></div>`).join('')}</div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:16px"><div class="presets">
       <button class="pbtn" data-act="preset" data-v="avg">Mi media</button><button class="pbtn" data-act="preset" data-v="best">Mi mejor partido</button><button class="pbtn" data-act="preset" data-v="up">Media +20%</button><button class="pbtn" data-act="preset" data-v="zero">No juego</button></div>
-      <div class="sp" style="flex:1"></div><span style="font-size:13px">= <b>${simPts}</b> pts por partido simulado</span></div>`;
+      <div class="sp" style="flex:1"></div><span style="font-size:13px;color:var(--text2)"><b style="color:var(--text)">${simPts}</b> pts / partido</span></div>`;
 
-  const rowsDef = [['min', 'Minutos / partido', 'pg', 1], ['pts', 'Puntos / partido', 'pg', 1], ['pts', "Puntos / 40'", 'p40', 1], ['t2m', 'Canastas de 2 / partido', 'pg', 1], ['t3m', 'Triples / partido', 'pg', 1], ['ftp', 'TL %', 'pg', 0], ['fc', 'Faltas / partido', 'pg', 1], ['fc', "Faltas / 40'", 'p40', 1], ['pm', '+/− total', 'tot', 0], ['pm', "+/− / 40'", 'p40', 1], ['pts', 'Puntos totales', 'tot', 0]];
+  const rowsDef = [['min', 'Minutos', 'pg', 1], ['pts', 'Puntos', 'pg', 1], ['pts', "Puntos / 40'", 'p40', 1], ['t2m', 'Canastas de 2', 'pg', 1], ['t3m', 'Triples', 'pg', 1], ['ftp', 'TL %', 'pg', 0], ['fc', 'Faltas', 'pg', 1], ['fc', "Faltas / 40'", 'p40', 1], ['pm', '+/− total', 'tot', 0], ['pm', "+/− / 40'", 'p40', 1], ['pts', 'Puntos totales', 'tot', 0]];
   const val = (pp, k, m) => k === 'min' ? pp.sec / 60 / pp.gp : mv(pp, k, m);
-  const res = `<div class="tw"><table><thead><tr><th>Estadística</th><th>Ahora</th><th>Simulado</th><th>Cambio</th><th>Ranking</th></tr></thead><tbody>
+  const res = `<div class="tw"><table><thead><tr><th></th><th>Ahora</th><th>Después</th><th></th><th>Ranking</th></tr></thead><tbody>
     ${rowsDef.map(([k, l, m, d]) => {
       const a = val(p, k, m), b = val(q, k, m), df = ok(a) && ok(b) ? b - a : null, low = MET[k] && MET[k].low;
       const ra = rank(A, p.id, k, k === 'min' ? 'pg' : m, low), rb = rank(B, p.id, k, k === 'min' ? 'pg' : m, low);
@@ -1083,17 +1129,27 @@ function viewSimular() {
     vbars(el, W, { items, avg: q.pts / q.gp, H: 200 });
   });
 
-  const head = `<div class="phead"><div class="psel"><select data-act="player">${playerOptions(A, p.id)}</select></div><div class="pmeta"><span>Base: <b>${p.gp}</b>partidos seleccionados</span></div></div>`;
+  const head = `<div class="phead"><div class="psel"><select data-act="player">${playerOptions(A, p.id)}</select></div></div>`;
   return head + `<div class="grid">
-    ${card('s12', 'Próximos partidos', inputs, '', 'qué números harías')}
-    ${card('s7', 'Cómo cambiarían tus números', res)}
-    ${card('s5', 'Puntos por partido', chartSim, '', 'reales + simulados')}
+    ${card('s12', 'Si en los próximos partidos hago…', inputs)}
+    ${card('s7', 'Resultado', res)}
+    ${card('s5', 'Puntos por partido', chartSim)}
   </div>`;
 }
 
 /* ================= render ================= */
 const TABS = [['jugadora', 'Jugadora'], ['equipo', 'Equipo'], ['partidos', 'Partidos'], ['simular', 'Simular']];
 function renderFilters() {
+  if (!M || S.view === 'partidos') { $('#filters').innerHTML = ''; return; }
+  const selF = new Set(S.sel || M.games.map(g => g.n)), nAct = activeGames().length, act = nAct !== M.games.length;
+  const ico = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4h12M4.5 8h7M7 12h2"/></svg>';
+  $('#filters').innerHTML = `<button class="fbtn ${act ? 'act' : ''} ${S.fopen ? 'open' : ''}" data-act="fopen">${ico}<span class="ftx">${act ? nAct + ' de ' + M.games.length + ' partidos' : 'Partidos'}</span></button>
+    <div class="fpop ${S.fopen ? 'open' : ''}"><span class="fl">Partidos</span>
+    ${M.games.map(g => { const locOk = S.loc === 'all' || (S.loc === 'home') === g.home;
+      return `<button class="frow ${selF.has(g.n) ? 'on' : ''} ${locOk ? '' : 'dis'}" data-act="tg" data-n="${g.n}"><span class="cb"></span>J${g.j} ${g.home ? '' : '@'}${esc(g.code)}<span class="sc">${g.pf}–${g.pa}</span></button>`; }).join('')}
+    <div class="ft">${seg('loc', [['all', 'Todos'], ['home', 'Casa'], ['away', 'Fuera']], S.loc)}${act ? '<button class="linkbtn" data-act="selAll">Restablecer</button>' : ''}</div></div>`;
+}
+function renderFiltersOld() {
   if (!M || S.view === 'partidos') { $('#filters').innerHTML = '<div style="height:12px"></div>'; return; }
   const sel = new Set(S.sel || M.games.map(g => g.n));
   const chips = M.games.map(g => {
@@ -1123,6 +1179,7 @@ function header() {
 /* ================= events ================= */
 function go(push) { const h = '#' + S.view + (S.view === 'partidos' && S.game != null ? '/' + S.game : ''); if (location.hash !== h) history.replaceState(null, '', h); render(); }
 document.addEventListener('click', e => {
+  if (S.fopen && !e.target.closest('.fwrap')) { S.fopen = false; renderFilters(); }
   const t = e.target.closest('[data-act]'); if (!t || t.tagName === 'SELECT' || t.tagName === 'INPUT') return;
   const a = t.dataset.act;
   if (a === 'view') { S.view = t.dataset.v; go(); }
@@ -1135,7 +1192,8 @@ document.addEventListener('click', e => {
     if (sel.has(n)) { if (sel.size > 1) sel.delete(n); } else sel.add(n);
     S.sel = sel.size === M.games.length ? null : [...sel]; store.set('sel', S.sel); render();
   }
-  else if (a === 'selAll') { S.sel = null; store.set('sel', null); render(); }
+  else if (a === 'selAll') { S.sel = null; S.loc = 'all'; store.set('sel', null); store.set('loc', 'all'); render(); }
+  else if (a === 'fopen') { S.fopen = !S.fopen; renderFilters(); }
   else if (a === 'sim') { const f = SIMF.find(x => x[0] === t.dataset.k); S.sim[f[0]] = clamp((+S.sim[f[0]] || 0) + +t.dataset.d, f[2], f[3]); if (f[0] === 'ftm') S.sim.fta = Math.max(S.sim.fta, S.sim.ftm); if (f[0] === 'fta') S.sim.ftm = Math.min(S.sim.ftm, S.sim.fta); render(); }
   else if (a === 'preset') {
     const A = agg(activeGames()), p = A.P[S.player]; if (!p) return;
