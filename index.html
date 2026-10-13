@@ -1,0 +1,941 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Claret Stats</title>
+<meta name="theme-color" content="#0b101b">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23ff7a1a'/%3E%3Cpath d='M2 32h60M32 2v60M12 10c12 10 12 34 0 44M52 10c-12 10-12 34 0 44' stroke='%230b101b' stroke-width='3' fill='none'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#0a0f1a;--bg2:#0e1524;--panel:#121a2b;--panel2:#172136;--line:#1f2a42;--line2:#2a3854;
+  --text:#eaf0f8;--muted:#8a97ae;--dim:#58657e;
+  --accent:#ff7a1a;--accent2:#ffb36b;--blue:#4aa8ff;--pos:#2fd39a;--neg:#ff5d6c;
+  --court:#0e1626;--courtline:#2b3b5a;--shadow:0 1px 0 rgba(255,255,255,.03) inset,0 10px 30px rgba(0,0,0,.25);
+  --r:18px;--num:'Barlow Condensed',system-ui,sans-serif;--ui:'Inter',system-ui,sans-serif;
+  color-scheme:dark;
+}
+:root[data-theme=light]{
+  --bg:#f2f4f9;--bg2:#e9edf5;--panel:#ffffff;--panel2:#f5f7fb;--line:#e4e9f1;--line2:#d2dae7;
+  --text:#0e1930;--muted:#5b6983;--dim:#9aa5ba;--court:#f6f8fc;--courtline:#c8d2e2;
+  --shadow:0 1px 2px rgba(16,24,40,.04),0 8px 24px rgba(16,24,40,.06);color-scheme:light;
+}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--text);font:400 14px/1.45 var(--ui);min-height:100vh;
+  background-image:radial-gradient(900px 400px at 85% -120px,color-mix(in srgb,var(--accent) 12%,transparent),transparent 70%),
+  radial-gradient(700px 360px at -10% -80px,color-mix(in srgb,var(--blue) 10%,transparent),transparent 70%);background-repeat:no-repeat}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+select{font:inherit;color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+
+/* top */
+.top{display:flex;align-items:center;gap:14px;padding:18px 0 10px}
+.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#ff4d1a);display:grid;place-items:center;flex:none;box-shadow:0 6px 18px color-mix(in srgb,var(--accent) 35%,transparent)}
+.logo svg{width:26px;height:26px}
+.brand{min-width:0}
+.brand h1{font:700 24px/1 var(--num);letter-spacing:.01em;text-transform:uppercase}
+.brand p{color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top .sp{flex:1}
+.rec{display:flex;gap:6px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:15px;background:var(--panel);border:1px solid var(--line);font:600 13px var(--ui);white-space:nowrap}
+.pill b{font:700 17px var(--num)}
+.ibtn{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:var(--panel);border:1px solid var(--line);color:var(--muted)}
+.ibtn:hover{color:var(--text)}
+.sync{color:var(--dim);font-size:11px}
+
+/* tabs */
+.tabs{position:sticky;top:0;z-index:20;padding:8px 0 12px;background:linear-gradient(var(--bg) 70%,transparent)}
+.tabs .in{display:flex;gap:4px;padding:4px;border-radius:14px;background:var(--panel);border:1px solid var(--line);width:max-content;max-width:100%;overflow:auto;scrollbar-width:none}
+.tab{height:36px;padding:0 16px;border-radius:10px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:8px;white-space:nowrap}
+.tab svg{width:16px;height:16px;opacity:.9}
+.tab.on{background:var(--text);color:var(--bg)}
+.tab:not(.on):hover{color:var(--text)}
+
+/* layout */
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;padding-bottom:40px}
+.s12{grid-column:span 12}.s8{grid-column:span 8}.s7{grid-column:span 7}.s6{grid-column:span 6}.s5{grid-column:span 5}.s4{grid-column:span 4}
+@media (max-width:900px){.s8,.s7,.s6,.s5,.s4{grid-column:span 12}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);min-width:0}
+.ch{display:flex;align-items:center;gap:10px;margin-bottom:12px;min-height:28px}
+.ch h3{font:700 15px/1 var(--num);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.ch .sp{flex:1}
+.tag{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);border:1px solid var(--line2);border-radius:6px;padding:2px 6px}
+.seg{display:inline-flex;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:2px}
+.seg button{height:26px;padding:0 10px;border-radius:8px;font-size:12px;font-weight:600;color:var(--muted)}
+.seg button.on{background:var(--panel);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.chart{width:100%;min-height:40px}
+.chart svg{display:block;overflow:visible}
+
+/* svg text */
+.ax{fill:var(--dim);font:500 10px var(--ui)}
+.axb{fill:var(--muted);font:700 12px var(--num);letter-spacing:.03em}
+.gl{stroke:var(--line);stroke-width:1}
+.gl0{stroke:var(--line2);stroke-width:1}
+.vl{fill:var(--text);font:700 15px var(--num)}
+.vls{font:600 11px var(--num)}
+.rl{fill:var(--muted);font:600 12px var(--ui)}
+.rl.me{fill:var(--accent)}
+.st{fill:var(--text);font:700 11px var(--num);pointer-events:none}
+.track{fill:var(--line)}
+
+/* player strip */
+.strip{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 12px;scrollbar-width:none;margin:0 -2px}
+.strip::-webkit-scrollbar,.tabs .in::-webkit-scrollbar{display:none}
+.chip{display:flex;align-items:center;gap:8px;height:40px;padding:0 14px 0 5px;border-radius:20px;background:var(--panel);border:1px solid var(--line);white-space:nowrap;font-weight:600;color:var(--muted);flex:none}
+.chip .dn{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--panel2);font:700 15px var(--num);color:var(--text)}
+.chip.on{border-color:var(--accent);color:var(--text);background:color-mix(in srgb,var(--accent) 12%,var(--panel))}
+.chip.on .dn{background:var(--accent);color:#fff}
+.chip .star{color:var(--accent);font-size:11px}
+
+/* hero */
+.hero{position:relative;overflow:hidden;padding:22px;background:
+  linear-gradient(120deg,color-mix(in srgb,var(--accent) 18%,var(--panel)) 0%,var(--panel) 55%)}
+.hero .big{position:absolute;right:-6px;top:-34px;font:800 220px/1 var(--num);color:color-mix(in srgb,var(--accent) 16%,transparent);pointer-events:none;letter-spacing:-.04em}
+.hero .who{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;position:relative}
+.hero h2{font:700 40px/1 var(--num);text-transform:uppercase;letter-spacing:.01em}
+.hero h2 span{color:var(--accent)}
+.hero .sub{color:var(--muted);font-weight:500}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:20px;position:relative}
+@media (max-width:900px){.kpis{grid-template-columns:repeat(3,1fr)}}
+.kpi{background:color-mix(in srgb,var(--bg) 35%,transparent);border:1px solid var(--line);border-radius:14px;padding:12px 12px 10px;min-width:0;backdrop-filter:blur(6px)}
+:root[data-theme=light] .kpi{background:rgba(255,255,255,.7)}
+.kpi .l{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;gap:4px}
+.kpi .v{font:700 34px/1.05 var(--num);margin-top:4px;white-space:nowrap}
+.kpi .v small{font-size:15px;color:var(--muted);font-weight:600;margin-left:2px}
+.kpi .v small.x{margin-left:8px;font-size:14px}
+.kpi .rk{font:700 11px var(--num);color:var(--accent);letter-spacing:.04em}
+.kpi svg{display:block;margin-top:6px}
+.pos{color:var(--pos)}.neg{color:var(--neg)}
+
+/* heat */
+.heat{display:grid;gap:6px}
+.heat .hr{display:grid;gap:6px;align-items:stretch}
+.heat .lab{font:700 13px var(--num);color:var(--muted);display:flex;flex-direction:column;justify-content:center;letter-spacing:.03em}
+.heat .lab small{font:500 10px var(--ui);color:var(--dim)}
+.heat .hd{font:700 12px var(--num);color:var(--dim);text-align:center;letter-spacing:.06em}
+.cell{border-radius:10px;padding:8px 4px;text-align:center;border:1px solid var(--line);min-height:52px;display:flex;flex-direction:column;justify-content:center}
+.cell b{font:700 20px/1 var(--num)}
+.cell span{font:600 10px var(--ui);color:var(--muted);margin-top:3px;white-space:nowrap}
+.cell.off{background:repeating-linear-gradient(45deg,transparent 0 6px,var(--line) 6px 7px);opacity:.6}
+
+/* lists */
+.bars{display:flex;flex-direction:column;gap:8px}
+.br{display:grid;grid-template-columns:92px 1fr 46px;align-items:center;gap:10px;font-size:13px}
+.br .n{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.br .t{height:22px;border-radius:7px;background:var(--panel2);position:relative;overflow:hidden}
+.br .t i{position:absolute;top:0;bottom:0;border-radius:7px}
+.br .t .mid{position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--line2)}
+.br .v{font:700 16px var(--num);text-align:right}
+.br .t em{position:absolute;left:8px;top:50%;transform:translateY(-50%);font:600 11px var(--ui);color:var(--muted);font-style:normal}
+
+/* table */
+.tw{overflow-x:auto;margin:0 -16px;padding:0 16px}
+table{width:100%;border-collapse:separate;border-spacing:0;font-variant-numeric:tabular-nums}
+th{font:700 11px var(--ui);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);text-align:right;padding:8px 8px;border-bottom:1px solid var(--line);white-space:nowrap;cursor:pointer;user-select:none}
+th:first-child,td:first-child{text-align:left}
+th.on{color:var(--text)}
+td{padding:9px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;font:600 14px var(--num);letter-spacing:.02em}
+td.nm{font:600 13px var(--ui);letter-spacing:0}
+tr.me td{background:color-mix(in srgb,var(--accent) 9%,transparent)}
+tr.me td.nm{color:var(--accent)}
+tr:last-child td{border-bottom:0}
+tr.tot td{color:var(--muted);border-top:1px solid var(--line2)}
+.dor{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--panel2);font:700 13px var(--num);margin-right:8px;color:var(--text)}
+tr.me .dor{background:var(--accent);color:#fff}
+.dot5{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-left:6px;vertical-align:middle}
+td.cl{cursor:pointer}
+
+/* games */
+.games{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.game{flex:none;min-width:190px;text-align:left;border-radius:14px;padding:12px 14px;background:var(--panel2);border:1px solid var(--line);transition:border-color .15s,transform .15s}
+.game:hover{transform:translateY(-2px);border-color:var(--line2)}
+.game.on{border-color:var(--accent)}
+.game .gt{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.game .go{font:700 17px/1.1 var(--num);text-transform:uppercase;margin:6px 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+.game .gs{display:flex;align-items:baseline;gap:8px}
+.game .gs b{font:700 26px/1 var(--num)}
+.wl{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:6px;font:800 12px var(--num);color:#fff}
+.wl.W{background:var(--pos)}.wl.L{background:var(--neg)}.wl.D{background:var(--dim)}
+
+/* scoreboard */
+.board{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding:6px 0 4px}
+.board .tm{font:700 22px/1.05 var(--num);text-transform:uppercase}
+.board .tm small{display:block;font:600 11px var(--ui);color:var(--dim);letter-spacing:.06em;margin-bottom:4px}
+.board .tm.r{text-align:right}
+.board .sc{font:800 54px/1 var(--num);letter-spacing:.02em;white-space:nowrap}
+.board .sc i{font-style:normal;color:var(--dim);margin:0 6px;font-weight:600}
+.qs{display:flex;justify-content:center;gap:6px;margin-top:12px;flex-wrap:wrap}
+.q{min-width:62px;text-align:center;border-radius:10px;background:var(--panel2);border:1px solid var(--line);padding:6px 8px}
+.q small{display:block;font:700 10px var(--ui);color:var(--dim);letter-spacing:.08em}
+.q b{font:700 16px var(--num)}
+.facts{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.fact{font:600 12px var(--ui);color:var(--muted);background:var(--panel2);border-radius:20px;padding:5px 12px;border:1px solid var(--line)}
+.fact b{font:700 15px var(--num);color:var(--text);margin-left:4px}
+
+/* lineups */
+.lus{display:flex;flex-direction:column;gap:8px}
+.lu{display:grid;grid-template-columns:1fr 54px 110px;gap:10px;align-items:center}
+.lu .ps{display:flex;gap:4px}
+.lu .ps span{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--panel2);font:700 13px var(--num);border:1px solid var(--line)}
+.lu .ps span.me{background:var(--accent);color:#fff;border-color:var(--accent)}
+.lu .m{font:600 14px var(--num);color:var(--muted);text-align:right}
+
+/* share */
+.share{display:flex;height:34px;border-radius:10px;overflow:hidden;gap:2px}
+.share i{display:grid;place-items:center;font:700 13px var(--num);color:rgba(255,255,255,.92);min-width:0;overflow:hidden}
+
+/* quarters */
+.qrow{display:grid;grid-template-columns:34px 1fr 1fr 46px;gap:8px;align-items:center;margin-bottom:8px}
+.qrow .p{font:700 14px var(--num);color:var(--muted)}
+.qrow .l,.qrow .r{height:24px;position:relative}
+.qrow .l i{position:absolute;right:0;top:0;bottom:0;border-radius:7px 0 0 7px;background:color-mix(in srgb,var(--neg) 70%,transparent)}
+.qrow .r i{position:absolute;left:0;top:0;bottom:0;border-radius:0 7px 7px 0;background:color-mix(in srgb,var(--pos) 70%,transparent)}
+.qrow em{position:absolute;top:50%;transform:translateY(-50%);font:700 13px var(--num);font-style:normal;color:var(--text)}
+.qrow .l em{left:6px}.qrow .r em{right:6px}
+.qrow .d{font:700 15px var(--num);text-align:right}
+
+/* compare */
+.cmp-h{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;margin-bottom:16px}
+.sel{position:relative}
+.sel select{appearance:none;width:100%;height:52px;border-radius:14px;padding:0 40px 0 16px;background:var(--panel2);border:1px solid var(--line);font:700 20px var(--num);text-transform:uppercase;cursor:pointer}
+.sel.a select{border-color:var(--accent);color:var(--accent)}
+.sel.b select{border-color:var(--blue);color:var(--blue);text-align:right;text-align-last:right}
+.sel:after{content:'';position:absolute;right:16px;top:50%;width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.sel.b:after{right:auto;left:16px}
+.sel.b select{padding:0 16px 0 40px}
+.vs{font:800 18px var(--num);color:var(--dim)}
+.mrow{display:grid;grid-template-columns:56px 1fr 120px 1fr 56px;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line)}
+.mrow:last-child{border:0}
+.mrow .lab{text-align:center;font:700 12px var(--ui);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.mrow .va{font:700 20px var(--num);text-align:left}
+.mrow .vb{font:700 20px var(--num);text-align:right}
+.mrow .ta,.mrow .tb{height:14px;position:relative;background:var(--panel2);border-radius:7px}
+.mrow .ta i{position:absolute;right:0;top:0;bottom:0;border-radius:7px;background:var(--accent)}
+.mrow .tb i{position:absolute;left:0;top:0;bottom:0;border-radius:7px;background:var(--blue)}
+.mrow .win{filter:drop-shadow(0 0 6px currentColor)}
+
+/* donut legend */
+.dl{display:flex;flex-direction:column;gap:10px}
+.dl div{display:flex;align-items:center;gap:10px}
+.dl i{width:10px;height:10px;border-radius:3px}
+.dl b{font:700 22px var(--num);min-width:34px}
+.dl span{color:var(--muted);font-weight:600;font-size:12px}
+
+/* misc */
+.empty{padding:60px 20px;text-align:center;color:var(--muted)}
+.empty svg{width:52px;height:52px;opacity:.5;margin-bottom:12px}
+.empty b{display:block;color:var(--text);font:700 22px var(--num);text-transform:uppercase;margin-bottom:4px}
+#tip{position:fixed;z-index:100;pointer-events:none;background:var(--text);color:var(--bg);padding:7px 10px;border-radius:10px;font:500 12px/1.35 var(--ui);max-width:240px;opacity:0;transform:translateY(4px);transition:opacity .12s,transform .12s;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+#tip.show{opacity:1;transform:none}
+#tip b{font-weight:700}
+.court{width:100%;max-width:520px;display:block;margin:0 auto}
+.court .sh{transition:r .1s}
+.court .sh:hover{r:260}
+.legend{display:flex;gap:14px;justify-content:center;margin-top:10px;font:600 12px var(--ui);color:var(--muted);flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.fade{animation:fd .35s ease both}
+@keyframes fd{from{opacity:0;transform:translateY(6px)}}
+@media (max-width:600px){
+  .hero h2{font-size:32px}.hero .big{font-size:170px;top:-20px}
+  .kpi .v{font-size:28px}
+  .board .sc{font-size:40px}.board .tm{font-size:16px}
+  .rec .pill:not(:first-child){display:none}
+  .br{grid-template-columns:78px 1fr 40px}
+  .mrow{grid-template-columns:44px 1fr 84px 1fr 44px;gap:6px}
+  .mrow .va,.mrow .vb{font-size:17px}
+  .sel select{font-size:16px;height:46px}
+  .tab{padding:0 12px}
+  .tab svg{display:none}
+  .tabs .in{width:100%;justify-content:space-between}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="logo"><svg viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="2.2"><circle cx="16" cy="16" r="13"/><path d="M3 16h26M16 3v26M7 7c6 5 6 13 0 18M25 7c-6 5-6 13 0 18"/></svg></div>
+    <div class="brand"><h1 id="tname">Claret</h1><p id="tsub"></p></div>
+    <div class="sp"></div>
+    <div class="rec" id="rec"></div>
+    <button class="ibtn" id="theme" title="Tema"></button>
+  </header>
+  <nav class="tabs"><div class="in" id="tabs"></div></nav>
+  <main id="app"></main>
+</div>
+<div id="tip"></div>
+
+<script>
+'use strict';
+const CFG = { me: '4d69104c-591f-4d9a-a082-375e3c9cd842', data: './data/' };
+
+/* ---------------- helpers ---------------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const nf = (v, d = 1) => (v == null || !isFinite(v)) ? '—' : v.toLocaleString('es-ES', { minimumFractionDigits: d, maximumFractionDigits: d });
+const sgn = (v, d = 0) => (v == null || !isFinite(v)) ? '—' : (v > 0 ? '+' : v < 0 ? '−' : '±') + nf(Math.abs(v), d);
+const pct = (m, a) => a ? m / a * 100 : null;
+const mmss = s => { s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+const title = s => String(s).toLocaleLowerCase('es').replace(/(^|[\s\-·(.])(\p{L})/gu, (m, a, b) => a + b.toLocaleUpperCase('es'));
+const fdate = d => { const [y, m, dd] = d.split('-'); return `${+dd}/${+m}`; };
+const store = { get(k, d) { try { const v = localStorage.getItem('cs.' + k); return v == null ? d : JSON.parse(v); } catch (_) { return d; } }, set(k, v) { try { localStorage.setItem('cs.' + k, JSON.stringify(v)); } catch (_) {} } };
+const per40 = (v, sec) => sec > 0 ? v / sec * 2400 : null;
+const pLabel = p => p <= 4 ? 'P' + p : (p === 5 ? 'PR' : 'PR' + (p - 4));
+function shortCode(name) {
+  const w = name.replace(/[^\p{L}\s']/gu, ' ').split(/\s+/).filter(x => x.length > 1 && !/^(DE|DEL|LA|EL|LES|ELS|CB|BC|UE|AE|SE|CE)$/i.test(x));
+  if (w.length >= 2) return w.slice(0, 3).map(x => x[0]).join('').toUpperCase();
+  return (w[0] || name).slice(0, 3).toUpperCase();
+}
+function rbar(x, y, w, h, r) { // bar with rounded top
+  if (h <= 0) return '';
+  r = Math.min(r, w / 2, h);
+  return `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`;
+}
+const ICON = {
+  me: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>',
+  team: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M2 20c1-3 3.5-5 6-5s5 2 6 5M12 18c.8-2 2.3-3 4-3 2.5 0 4.5 2 6 5"/></svg>',
+  game: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M12 4v16M3 12h4M17 12h4"/><circle cx="12" cy="12" r="2.5"/></svg>',
+  cmp: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 4v16M16 4v16M4 8h4M4 14h4M16 10h4M16 17h4"/></svg>',
+  sun: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+  moon: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>',
+  sync: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 12a8 8 0 0 1-14 5.3M4 12a8 8 0 0 1 14-5.3M18 3v4h-4M6 21v-4h4"/></svg>',
+};
+
+/* ---------------- state ---------------- */
+const S = {
+  view: 'yo', player: store.get('player', CFG.me), game: null,
+  cmp: store.get('cmp', [CFG.me, null]),
+  shot: 'off', mode: 'avg', sort: { k: 'pts', d: -1 }, box: 'us',
+};
+let D = null;
+
+/* ---------------- data ---------------- */
+async function getJSON(path) {
+  const r = await fetch(CFG.data + path + '?v=' + Date.now(), { cache: 'no-store' });
+  if (!r.ok) throw new Error(r.status + ' ' + path);
+  return r.json();
+}
+async function load() {
+  const team = await getJSON('team.json');
+  let meta = null; try { meta = await getJSON('index.json'); } catch (_) {}
+  const matches = {};
+  await Promise.all((team.games || []).map(async g => {
+    try { matches[g.matchCallUuid] = await getJSON('matches/' + g.matchCallUuid + '.json'); } catch (_) {}
+  }));
+  D = build(team, matches, meta);
+}
+
+function build(team, matches, meta) {
+  const tu = team.header.team.uuid;
+  const P = {};
+  team.roster.forEach(r => {
+    const name = title(r.name), w = name.split(' ');
+    const c = r.totals.computed, a = r.totals.accumulated;
+    P[r.uuid] = { uuid: r.uuid, name, first: w[0], sur: w[1] || '', dorsal: r.dorsal, gp: r.gamesPlayed, a, sec: c.seconds || 0, on: c.onCourtPlusMinus || 0, off: c.offCourtPlusMinus || 0, mbg: r.minutesByGame || {}, g: {} };
+  });
+  const cnt = {}; Object.values(P).forEach(p => cnt[p.first] = (cnt[p.first] || 0) + 1);
+  Object.values(P).forEach(p => p.nick = cnt[p.first] > 1 ? `${p.first} ${p.sur[0] || ''}.` : p.first);
+  const byDorsal = {}; Object.values(P).forEach(p => byDorsal[p.dorsal] = p);
+
+  const games = (team.games || []).slice().sort((a, b) => a.gameNumber - b.gameNumber).map(g => {
+    const G = { n: g.gameNumber, j: g.matchDayNum, uuid: g.matchCallUuid, date: g.date, home: g.home, opp: title(g.opponent.name), code: shortCode(g.opponent.name),
+      pf: g.pointsFor, pa: g.pointsAgainst, diff: g.differential, res: g.result, acc: g.accumulated || {}, oacc: (g.opponentStats || {}).accumulated || {} };
+    const m = matches[g.matchCallUuid];
+    if (m && m.stats && m.stats.boxscore) {
+      const h = m.stats.header, side = h.localTeam.uuid === tu ? 'local' : 'visitor', op = side === 'local' ? 'visitor' : 'local';
+      G.side = side; G.op = op; G.code = h[op + 'Team'].shortName || G.code;
+      const per = m.stats.boxscore.filter(b => b.period > 0).sort((a, b) => a.period - b.period);
+      let t = 0;
+      G.periods = per.map(b => { const len = b[side].computed.seconds || (b.period <= 4 ? 600 : 300); const x = { p: b.period, len, start: t, us: b[side].accumulated.pts, them: b[op].accumulated.pts }; t += len; return x; });
+      G.len = t;
+      const b0 = m.stats.boxscore.find(b => b.period === 0);
+      G.box = { us: b0[side], them: b0[op] };
+      b0[side].players.forEach(pl => {
+        const p = P[pl.uuid]; if (!p) return;
+        const a = pl.accumulated, c = pl.computed;
+        p.g[G.n] = { sec: c.seconds, pts: a.pts, t2m: a.t2m, t3m: a.t3m, ftm: a.ftm, fta: a.fta, fc: a.fc, pm: c.onCourtPlusMinus, start: pl.starting, per: {} };
+      });
+      per.forEach(b => b[side].players.forEach(pl => {
+        const x = P[pl.uuid] && P[pl.uuid].g[G.n]; if (!x) return;
+        x.per[b.period] = { sec: pl.computed.seconds, pts: pl.accumulated.pts, fc: pl.accumulated.fc, pm: pl.computed.onCourtPlusMinus };
+      }));
+      G.stints = {}; ((m.stats.stints || {})[side] || []).forEach(s => G.stints[s.uuid] = s.stints);
+      // score flow
+      const pStart = {}, pLen = {}; G.periods.forEach(x => { pStart[x.p] = x.start; pLen[x.p] = x.len; });
+      let flow = [{ t: 0, us: 0, them: 0 }];
+      (m.stats.scoreEvolution || []).forEach(e => {
+        if (pStart[e.period] == null) return;
+        const rem = (e.minute || 0) * 60 + (e.second || 0);
+        flow.push({ t: pStart[e.period] + pLen[e.period] - rem, us: side === 'local' ? e.local : e.visitor, them: side === 'local' ? e.visitor : e.local, p: e.period, rem });
+      });
+      flow = flow.map((x, i) => ({ ...x, i })).sort((a, b) => a.t - b.t || a.i - b.i);
+      G.flow = flow;
+      // facts
+      let maxL = 0, maxT = 0, run = { who: null, pts: 0 }, best = { us: 0, them: 0 }, ties = 0, chg = 0, lastSign = 0;
+      for (let i = 1; i < flow.length; i++) {
+        const d = flow[i].us - flow[i].them; maxL = Math.max(maxL, d); maxT = Math.min(maxT, d);
+        const du = flow[i].us - flow[i - 1].us, dt = flow[i].them - flow[i - 1].them;
+        const who = du > 0 ? 'us' : dt > 0 ? 'them' : null; if (!who) continue;
+        const pts = du + dt;
+        run = run.who === who ? { who, pts: run.pts + pts } : { who, pts };
+        best[who] = Math.max(best[who], run.pts);
+        const sg = Math.sign(d); if (sg === 0) ties++; if (sg && lastSign && sg !== lastSign) chg++; if (sg) lastSign = sg;
+      }
+      G.facts = { maxL, maxT: -maxT, runUs: best.us, runThem: best.them, ties, chg };
+    } else {
+      Object.values(P).forEach(p => { if (p.mbg[G.n] != null) p.g[G.n] = { sec: p.mbg[G.n], partial: true }; });
+    }
+    return G;
+  });
+
+  const teamSec = Object.values(P).reduce((s, p) => s + p.sec, 0) / 5;
+  const shot = (s, isDef) => {
+    const depth = Math.abs(s.x), lat = s.x < 0 ? -s.y : s.y;
+    return { cx: lat, cy: depth, type: s.type, made: s.made, p: isDef ? null : byDorsal[s.dorsal], g: s.gameNumber, per: s.period };
+  };
+  const shots = { off: ((team.shots || {}).offense || []).map(s => shot(s)), def: ((team.shots || {}).defense || []).map(s => shot(s, true)) };
+  const hd = team.header;
+  return { team, tu, name: title(hd.team.name), sub: [title(hd.categoryName || ''), (hd.competitions || []).map(c => title(c.competitionName) + ' · ' + c.groupName).join(' / ')].filter(Boolean).join(' · '),
+    rec: hd.record || {}, P, games, teamSec, shots, lineups: team.lineups || [], splits: team.splits || {}, meta, season: team.season };
+}
+
+/* ---------------- derived ---------------- */
+const players = () => Object.values(D.P).filter(p => p.gp > 0).sort((a, b) => b.sec - a.sec);
+const cur = () => D.P[S.player] || D.P[CFG.me] || players()[0];
+function metrics(p) {
+  const gp = p.gp || 1, a = p.a;
+  const offSec = D.teamSec - p.sec;
+  return {
+    ppg: a.pts / gp, mpg: p.sec / gp / 60, p40: per40(a.pts, p.sec), ft: pct(a.ftm, a.fta), ftm: a.ftm, fta: a.fta,
+    fpg: a.fc / gp, f40: per40(a.fc, p.sec), pm: p.on, on40: per40(p.on, p.sec), off40: per40(p.off, offSec),
+    net40: (per40(p.on, p.sec) ?? 0) - (per40(p.off, offSec) ?? 0), t2: a.t2m, t3: a.t3m,
+  };
+}
+function rankOf(p, key, dir = -1) {
+  const arr = players().map(x => ({ id: x.uuid, v: metrics(x)[key] })).filter(x => x.v != null && isFinite(x.v));
+  arr.sort((a, b) => dir < 0 ? b.v - a.v : a.v - b.v);
+  const i = arr.findIndex(x => x.id === p.uuid);
+  return i < 0 ? null : i + 1;
+}
+function partners(u) {
+  const m = {};
+  D.lineups.forEach(l => {
+    const ids = l.players.map(x => x.uuid); if (!ids.includes(u)) return;
+    ids.forEach(id => { if (id === u) return; const x = m[id] || (m[id] = { sec: 0, pm: 0 }); x.sec += l.seconds || 0; x.pm += l.plusMinus || 0; });
+  });
+  return Object.entries(m).map(([id, x]) => ({ p: D.P[id], ...x })).filter(x => x.p).sort((a, b) => b.sec - a.sec);
+}
+
+/* ---------------- tooltip ---------------- */
+const tip = $('#tip'); let tipT;
+function showTip(html, x, y) {
+  tip.innerHTML = html; tip.classList.add('show');
+  const r = tip.getBoundingClientRect();
+  let left = x + 14, top = y + 14;
+  if (left + r.width > innerWidth - 8) left = x - r.width - 14;
+  if (top + r.height > innerHeight - 8) top = y - r.height - 14;
+  tip.style.left = Math.max(8, left) + 'px'; tip.style.top = Math.max(8, top) + 'px';
+}
+const hideTip = () => tip.classList.remove('show');
+document.addEventListener('pointermove', e => {
+  const t = e.target.closest && e.target.closest('[data-tip]');
+  if (t) showTip(t.getAttribute('data-tip'), e.clientX, e.clientY); else if (!e.target.closest('.flowhit')) hideTip();
+});
+document.addEventListener('pointerdown', e => {
+  const t = e.target.closest && e.target.closest('[data-tip]');
+  if (t && e.pointerType !== 'mouse') { showTip(t.getAttribute('data-tip'), e.clientX, e.clientY); clearTimeout(tipT); tipT = setTimeout(hideTip, 2500); }
+});
+document.addEventListener('scroll', hideTip, { passive: true });
+
+/* ---------------- charts ---------------- */
+const CH = {};
+
+function spark(vals, color, w = 110, h = 26) {
+  const v = vals.filter(x => x != null);
+  if (v.length < 2) return '';
+  const mx = Math.max(...v), mn = Math.min(...v, 0), rg = (mx - mn) || 1;
+  const xs = i => 3 + i * (w - 6) / (vals.length - 1), ys = x => h - 3 - (x - mn) / rg * (h - 6);
+  let d = '', pts = '';
+  vals.forEach((x, i) => { if (x == null) return; d += (d ? 'L' : 'M') + xs(i).toFixed(1) + ',' + ys(x).toFixed(1); });
+  const li = vals.length - 1 - [...vals].reverse().findIndex(x => x != null);
+  pts = `<circle cx="${xs(li)}" cy="${ys(vals[li])}" r="2.6" fill="${color}"/>`;
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><path d="${d}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>${pts}</svg>`;
+}
+
+CH.perGame = (el, W) => {
+  const p = cur(), gs = D.games, H = 220, pl = 28, pr = 30, pt = 24, pb = 46;
+  const iw = W - pl - pr, ih = H - pt - pb, bw = iw / Math.max(gs.length, 1);
+  const rows = gs.map(g => ({ g, x: p.g[g.n] }));
+  const yM = Math.max(10, Math.ceil(Math.max(0, ...rows.map(r => r.x && r.x.pts || 0)) / 5) * 5);
+  const mM = Math.max(40, ...rows.map(r => (r.x && r.x.sec || 0) / 60));
+  const y = v => pt + ih - v / yM * ih, ym = v => pt + ih - v / mM * ih;
+  let s = `<svg width="${W}" height="${H}">`;
+  [0, yM / 2, yM].forEach(v => s += `<line x1="${pl}" x2="${W - pr}" y1="${y(v)}" y2="${y(v)}" class="${v ? 'gl' : 'gl0'}"/><text x="${pl - 8}" y="${y(v) + 3.5}" class="ax" text-anchor="end">${v}</text>`);
+  [20, 40].forEach(v => v <= mM && (s += `<text x="${W - pr + 8}" y="${ym(v) + 3.5}" class="ax" fill="var(--blue)" style="fill:var(--blue);opacity:.8">${v}'</text>`));
+  const bW = Math.min(36, bw * .44);
+  let line = '', dots = '', labels = '';
+  rows.forEach((r, i) => {
+    const cx = pl + bw * i + bw / 2, x = r.x;
+    const wl = r.g.res;
+    if (x && x.pts != null) {
+      s += `<path d="${rbar(cx - bW / 2, y(x.pts), bW, ih - (y(x.pts) - pt), 6)}" fill="url(#gbar)"/>`;
+      const ly = y(x.pts) - 8, dy = x.sec ? ym(x.sec / 60) : -99, inside = Math.abs(dy - ly + 5) < 14 && ih - (y(x.pts) - pt) > 26;
+      labels += inside ? `<text x="${cx}" y="${y(x.pts) + 18}" class="vl" text-anchor="middle" style="fill:#fff">${x.pts}</text>`
+        : `<text x="${cx}" y="${Math.abs(dy - ly + 5) < 14 ? Math.min(ly, dy - 10) : ly}" class="vl" text-anchor="middle" style="paint-order:stroke;stroke:var(--panel);stroke-width:4px">${x.pts}</text>`;
+    } else if (x) {
+      s += `<rect x="${cx - bW / 2}" y="${pt + ih - 20}" width="${bW}" height="20" rx="5" fill="none" stroke="var(--line2)" stroke-dasharray="3 3"/>`;
+    }
+    if (x && x.sec) {
+      const yy = ym(x.sec / 60);
+      line += (line ? 'L' : 'M') + cx + ',' + yy;
+      dots += `<circle cx="${cx}" cy="${yy}" r="4" fill="var(--panel)" stroke="var(--blue)" stroke-width="2"/>`;
+    }
+    s += `<text x="${cx}" y="${H - pb + 18}" class="axb" text-anchor="middle" style="fill:${wl === 'W' ? 'var(--pos)' : wl === 'L' ? 'var(--neg)' : 'var(--muted)'}">J${r.g.j}</text>`;
+    s += `<text x="${cx}" y="${H - pb + 32}" class="ax" text-anchor="middle">${r.g.home ? '' : '@'}${esc(r.g.code)}</text>`;
+    const tipH = x ? `<b>J${r.g.j} · ${esc(r.g.opp)}</b><br>${x.pts != null ? x.pts + ' pts · ' : ''}${mmss(x.sec)} min${x.pm != null ? ' · ' + sgn(x.pm) : ''}${x.fta != null ? '<br>TL ' + x.ftm + '/' + x.fta + ' · ' + x.fc + ' faltas' : ''}` : `<b>J${r.g.j} · ${esc(r.g.opp)}</b><br>No jugó`;
+    s += `<rect x="${pl + bw * i}" y="${pt - 10}" width="${bw}" height="${ih + 10}" fill="transparent" data-tip="${esc(tipH)}"/>`;
+  });
+  if (line) s += `<path d="${line}" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linejoin="round" opacity=".7"/>${dots}`;
+  s += labels;
+  s += `<defs><linearGradient id="gbar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--accent)" stop-opacity=".45"/></linearGradient></defs></svg>`;
+  el.innerHTML = s + `<div class="legend"><span><i style="background:var(--accent)"></i>Puntos</span><span><i style="background:var(--blue)"></i>Minutos</span></div>`;
+};
+
+function ganttSVG(W, G, rows, lw = 76, rh = 26) {
+  const H = rows.length * rh + 24, iw = W - lw - 6, x = t => lw + t / G.len * iw;
+  let s = `<svg width="${W}" height="${H}">`;
+  G.periods.forEach((p, i) => {
+    s += `<text x="${x(p.start + p.len / 2)}" y="12" class="ax" text-anchor="middle">${pLabel(p.p)}</text>`;
+    s += `<line x1="${x(p.start)}" x2="${x(p.start)}" y1="18" y2="${H}" class="gl"/>`;
+  });
+  s += `<line x1="${x(G.len)}" x2="${x(G.len)}" y1="18" y2="${H}" class="gl"/>`;
+  rows.forEach((r, i) => {
+    const yy = 22 + i * rh;
+    s += `<text x="${lw - 10}" y="${yy + rh / 2 + 4}" text-anchor="end" class="rl ${r.me ? 'me' : ''}">${esc(r.label)}</text>`;
+    s += `<rect x="${lw}" y="${yy + rh / 2 - 1}" width="${iw}" height="2" rx="1" class="track"/>`;
+    (r.stints || []).forEach(st => {
+      const x1 = x(st.startSeconds), w = Math.max(2, x(st.endSeconds) - x1), pm = (st.computed || {}).onCourtPlusMinus || 0;
+      const col = pm > 0 ? 'var(--pos)' : pm < 0 ? 'var(--neg)' : 'var(--muted)';
+      const op = pm === 0 ? .35 : Math.min(.95, .4 + Math.abs(pm) * .07);
+      const tp = `<b>${esc(r.full || r.label)}</b><br>${pLabel(st.startPeriod)} → ${pLabel(st.endPeriod)} · ${mmss(st.endSeconds - st.startSeconds)} min<br>${sgn(pm)} en pista`;
+      s += `<rect x="${x1}" y="${yy + 4}" width="${w}" height="${rh - 8}" rx="5" fill="${col}" fill-opacity="${op}" data-tip="${esc(tp)}"/>`;
+      if (w > 26) s += `<text x="${x1 + w / 2}" y="${yy + rh / 2 + 4}" class="st" text-anchor="middle">${sgn(pm)}</text>`;
+    });
+  });
+  return s + '</svg>';
+}
+
+CH.rotation = (el, W) => {
+  const p = cur();
+  const gs = D.games.filter(g => g.periods && g.stints[p.uuid]);
+  if (!gs.length) { el.innerHTML = `<div class="empty" style="padding:24px">—</div>`; return; }
+  el.innerHTML = gs.map(g => {
+    const x = p.g[g.n] || {};
+    return ganttSVG(W, g, [{ label: `J${g.j} ${g.code}`, full: `J${g.j} · ${g.opp}`, stints: g.stints[p.uuid], me: false }], 76, 30);
+  }).join('');
+};
+
+CH.gantt = (el, W, n) => {
+  const G = D.games.find(g => g.n == n); if (!G || !G.periods) return;
+  const rows = G.box.us.players.filter(pl => pl.computed.seconds > 0).map(pl => {
+    const p = D.P[pl.uuid]; const st = G.stints[pl.uuid] || [];
+    return { label: (p ? p.nick : title(pl.name).split(' ')[0]), full: title(pl.name), stints: st, me: pl.uuid === CFG.me, s0: st.length ? st[0].startSeconds : 1e9, start: pl.starting };
+  }).sort((a, b) => (b.start - a.start) || a.s0 - b.s0);
+  el.innerHTML = ganttSVG(W, G, rows, W < 500 ? 70 : 96, 28);
+};
+
+CH.flow = (el, W, n) => {
+  const G = D.games.find(g => g.n == n); if (!G || !G.flow) return;
+  const H = 240, pl = 34, pr = 12, pt = 26, pb = 16, iw = W - pl - pr, ih = H - pt - pb;
+  const F = G.flow, yM = Math.max(6, Math.ceil(Math.max(...F.map(f => Math.abs(f.us - f.them))) / 4) * 4);
+  const x = t => pl + t / G.len * iw, y = d => pt + (yM - d) / (2 * yM) * ih;
+  let d = `M${x(0)},${y(0)}`;
+  F.forEach(f => d += `H${x(f.t).toFixed(1)}V${y(f.us - f.them).toFixed(1)}`);
+  d += `H${x(G.len)}`;
+  const area = d + `V${y(0)}H${x(0)}Z`;
+  const id = 'fl' + n;
+  let s = `<svg width="${W}" height="${H}"><defs>
+    <clipPath id="${id}a"><rect x="0" y="0" width="${W}" height="${y(0)}"/></clipPath>
+    <clipPath id="${id}b"><rect x="0" y="${y(0)}" width="${W}" height="${H}"/></clipPath>
+    <linearGradient id="${id}g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--pos)" stop-opacity=".5"/><stop offset="1" stop-color="var(--pos)" stop-opacity=".05"/></linearGradient>
+    <linearGradient id="${id}g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--neg)" stop-opacity=".05"/><stop offset="1" stop-color="var(--neg)" stop-opacity=".5"/></linearGradient></defs>`;
+  [-yM, -yM / 2, yM / 2, yM].forEach(v => s += `<line x1="${pl}" x2="${W - pr}" y1="${y(v)}" y2="${y(v)}" class="gl" stroke-dasharray="2 4"/><text x="${pl - 8}" y="${y(v) + 3.5}" class="ax" text-anchor="end">${sgn(v)}</text>`);
+  G.periods.forEach((p, i) => {
+    if (i) s += `<line x1="${x(p.start)}" x2="${x(p.start)}" y1="${pt - 8}" y2="${H - pb}" class="gl"/>`;
+    s += `<text x="${x(p.start + p.len / 2)}" y="12" class="ax" text-anchor="middle">${pLabel(p.p)}</text>`;
+  });
+  s += `<path d="${area}" fill="url(#${id}g1)" clip-path="url(#${id}a)"/><path d="${area}" fill="url(#${id}g2)" clip-path="url(#${id}b)"/>`;
+  s += `<line x1="${pl}" x2="${W - pr}" y1="${y(0)}" y2="${y(0)}" class="gl0"/>`;
+  s += `<path d="${d}" fill="none" stroke="var(--text)" stroke-width="1.6" stroke-linejoin="round" opacity=".9"/>`;
+  s += `<line class="cur" x1="0" x2="0" y1="${pt - 8}" y2="${H - pb}" stroke="var(--accent)" stroke-width="1.5" opacity="0"/><circle class="cdot" r="5" fill="var(--accent)" stroke="var(--panel)" stroke-width="2" opacity="0"/>`;
+  s += `<rect class="flowhit" x="${pl}" y="0" width="${iw}" height="${H}" fill="transparent"/></svg>`;
+  el.innerHTML = s;
+  const svg = el.querySelector('svg'), cl = svg.querySelector('.cur'), cd = svg.querySelector('.cdot'), hit = svg.querySelector('.flowhit');
+  const move = e => {
+    const r = svg.getBoundingClientRect(), t = (e.clientX - r.left - pl) / iw * G.len;
+    let f = F[0]; for (const q of F) { if (q.t <= t) f = q; else break; }
+    const per = G.periods.find(p => t >= p.start && t < p.start + p.len) || G.periods[G.periods.length - 1];
+    const rem = per.start + per.len - t, xx = x(Math.max(0, Math.min(G.len, t))), dd = f.us - f.them;
+    cl.setAttribute('x1', xx); cl.setAttribute('x2', xx); cl.setAttribute('opacity', 1);
+    cd.setAttribute('cx', xx); cd.setAttribute('cy', y(dd)); cd.setAttribute('opacity', 1);
+    showTip(`<b>${pLabel(per.p)} · ${mmss(rem)}</b><br>${f.us} – ${f.them} <b>${sgn(dd)}</b>`, e.clientX, e.clientY);
+  };
+  hit.addEventListener('pointermove', move); hit.addEventListener('pointerdown', move);
+  hit.addEventListener('pointerleave', () => { cl.setAttribute('opacity', 0); cd.setAttribute('opacity', 0); hideTip(); });
+};
+
+function courtSVG(shots, colorFn) {
+  const L = 'var(--courtline)';
+  let s = `<svg class="court" viewBox="-7700 -1800 15400 10600" role="img">
+  <rect x="-7500" y="-1575" width="15000" height="10375" rx="260" fill="var(--court)" stroke="${L}" stroke-width="40"/>
+  <rect x="-2450" y="-1575" width="4900" height="5800" fill="color-mix(in srgb,var(--accent) 5%,transparent)" stroke="${L}" stroke-width="40"/>
+  <circle cx="0" cy="4225" r="1800" fill="none" stroke="${L}" stroke-width="40"/>
+  <path d="M-6600,-1575V1416A6750,6750 0 0 0 6600,1416V-1575" fill="none" stroke="${L}" stroke-width="40"/>
+  <path d="M-1250,0A1250,1250 0 0 0 1250,0" fill="none" stroke="${L}" stroke-width="40"/>
+  <line x1="-900" x2="900" y1="-375" y2="-375" stroke="var(--muted)" stroke-width="70"/>
+  <circle cx="0" cy="0" r="225" fill="none" stroke="var(--accent)" stroke-width="45"/>`;
+  shots.forEach(sh => {
+    const c = colorFn(sh);
+    s += `<circle class="sh" cx="${sh.cx}" cy="${sh.cy}" r="200" fill="${c}" fill-opacity=".85" stroke="var(--panel)" stroke-width="45" data-tip="${esc(sh.tip)}"/>`;
+  });
+  return s + '</svg>';
+}
+
+function donut(parts, size = 132, w = 18) {
+  const tot = parts.reduce((s, p) => s + p.v, 0) || 1, r = (size - w) / 2, C = 2 * Math.PI * r;
+  let off = 0, s = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="var(--panel2)" stroke-width="${w}"/>`;
+  parts.forEach(p => {
+    const len = p.v / tot * C;
+    if (len > 0) s += `<circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="${p.c}" stroke-width="${w}" stroke-dasharray="${Math.max(0, len - 2)} ${C}" stroke-dashoffset="${-off}" transform="rotate(-90 ${size / 2} ${size / 2})" stroke-linecap="butt" data-tip="${esc(p.tip)}"/>`;
+    off += len;
+  });
+  return s + `<text x="50%" y="50%" dy="6" text-anchor="middle" style="font:700 30px var(--num);fill:var(--text)">${tot}</text></svg>`;
+}
+
+/* ---------------- views ---------------- */
+function card(span, title, body, extra = '') {
+  return `<section class="card ${span} fade"><div class="ch"><h3>${title}</h3><div class="sp"></div>${extra}</div>${body}</section>`;
+}
+const seg = (key, opts, val) => `<div class="seg">${opts.map(([v, l]) => `<button data-act="set" data-k="${key}" data-v="${v}" class="${val === v ? 'on' : ''}">${l}</button>`).join('')}</div>`;
+
+function viewYo() {
+  const p = cur(), m = metrics(p), gs = D.games;
+  const isMe = p.uuid === CFG.me;
+  const strip = players().slice().sort((a, b) => (b.uuid === CFG.me) - (a.uuid === CFG.me) || +a.dorsal - +b.dorsal)
+    .map(x => `<button class="chip ${x.uuid === p.uuid ? 'on' : ''}" data-act="player" data-id="${x.uuid}"><span class="dn">${x.dorsal}</span>${esc(x.nick)}${x.uuid === CFG.me ? '<span class="star">★</span>' : ''}</button>`).join('');
+
+  const series = k => gs.map(g => { const x = p.g[g.n]; if (!x) return null; return k(x); });
+  const rk = (key, dir) => { const r = rankOf(p, key, dir); return r ? `<span class="rk">#${r}</span>` : ''; };
+  const kp = (l, v, extra, rkk, sp) => `<div class="kpi"><div class="l"><span>${l}</span>${rkk || ''}</div><div class="v">${v}${extra ? `<small class="${extra.includes('/') && extra.length > 2 ? 'x' : ''}">${extra}</small>` : ''}</div>${sp || ''}</div>`;
+  const kpis = [
+    kp('Puntos', nf(m.ppg), '/p', rk('ppg'), spark(series(x => x.pts ?? null), 'var(--accent)')),
+    kp('Minutos', nf(m.mpg), "'", rk('mpg'), spark(series(x => x.sec / 60), 'var(--blue)')),
+    kp('Pts · 40\'', nf(m.p40), '', rk('p40')),
+    kp('+/-', `<span class="${m.pm > 0 ? 'pos' : m.pm < 0 ? 'neg' : ''}">${sgn(m.pm)}</span>`, '', rk('pm'), spark(series(x => x.pm ?? null), 'var(--pos)')),
+    kp('TL', m.ft == null ? '—' : nf(m.ft, 0) + '<small>%</small>', `${m.ftm}/${m.fta}`, rk('ft')),
+    kp('Faltas', nf(m.fpg), '/p', '', spark(series(x => x.fc ?? null), 'var(--neg)')),
+  ].join('');
+
+  const hero = `<section class="card s12 hero fade"><div class="big">${p.dorsal}</div>
+    <div class="who"><h2>${esc(p.first)} <span>${esc(p.name.split(' ').slice(1).join(' '))}</span></h2></div>
+    <div class="sub" style="position:relative">#${p.dorsal} · ${p.gp} PJ · ${mmss(p.sec)} min</div>
+    <div class="kpis">${kpis}</div></section>`;
+
+  // quarters heat
+  const mg = gs.filter(g => g.periods && p.g[g.n]);
+  const maxP = Math.max(4, ...gs.filter(g => g.periods).map(g => g.periods.length));
+  const cols = `grid-template-columns:64px repeat(${maxP},1fr)`;
+  let heat = `<div class="heat"><div class="hr" style="${cols}"><div></div>${Array.from({ length: maxP }, (_, i) => `<div class="hd">${pLabel(i + 1)}</div>`).join('')}</div>`;
+  mg.forEach(g => {
+    const x = p.g[g.n];
+    heat += `<div class="hr" style="${cols}"><div class="lab">J${g.j}<small>${g.home ? '' : '@'}${esc(g.code)}</small></div>`;
+    for (let i = 1; i <= maxP; i++) {
+      const per = g.periods.find(q => q.p === i), q = x.per[i];
+      if (!per) { heat += `<div class="cell off" style="opacity:.25"></div>`; continue; }
+      if (!q || !q.sec) { heat += `<div class="cell off"></div>`; continue; }
+      const f = q.sec / per.len, a = Math.round(10 + f * 60);
+      const tp = `<b>J${g.j} · ${pLabel(i)}</b><br>${mmss(q.sec)} min · ${q.pts} pts · ${sgn(q.pm)}${q.fc ? ' · ' + q.fc + ' F' : ''}`;
+      heat += `<div class="cell" style="background:color-mix(in srgb,var(--accent) ${a}%,var(--panel2));border-color:color-mix(in srgb,var(--accent) ${a / 2}%,var(--line))" data-tip="${esc(tp)}"><b>${Math.round(q.sec / 60)}'</b><span>${q.pts ? q.pts + 'p · ' : ''}<em class="${q.pm > 0 ? 'pos' : q.pm < 0 ? 'neg' : ''}" style="font-style:normal">${sgn(q.pm)}</em></span></div>`;
+    }
+    heat += `</div>`;
+  });
+  heat += `</div>`;
+  if (!mg.length) heat = `<div class="empty" style="padding:24px">—</div>`;
+
+  // shots
+  const myShots = D.shots.off.filter(s => s.p && s.p.uuid === p.uuid).map(s => ({ ...s, tip: `<b>${s.type === 'T3' ? 'Triple' : 'Canasta de 2'}</b><br>J${(D.games.find(g => g.n === s.g) || {}).j || s.g} · ${pLabel(s.per)}` }));
+  const court = courtSVG(myShots, s => s.type === 'T3' ? 'var(--blue)' : 'var(--accent)') +
+    `<div class="legend"><span><i style="background:var(--accent)"></i>2P · ${m.t2}</span><span><i style="background:var(--blue)"></i>3P · ${m.t3}</span><span><i style="background:var(--muted)"></i>TL · ${m.ftm}/${m.fta}</span></div>`;
+
+  // points mix
+  const a = p.a;
+  const mix = `<div style="display:flex;align-items:center;gap:22px;justify-content:center;padding:6px 0">${donut([
+    { v: a.t2m * 2, c: 'var(--accent)', tip: `2P · ${a.t2m * 2} pts` }, { v: a.t3m * 3, c: 'var(--blue)', tip: `3P · ${a.t3m * 3} pts` }, { v: a.ftm, c: 'var(--muted)', tip: `TL · ${a.ftm} pts` }])}
+    <div class="dl"><div><i style="background:var(--accent)"></i><b>${a.t2m * 2}</b><span>2P</span></div><div><i style="background:var(--blue)"></i><b>${a.t3m * 3}</b><span>3P</span></div><div><i style="background:var(--muted)"></i><b>${a.ftm}</b><span>TL</span></div></div></div>`;
+
+  // on/off
+  const oo = [['En pista', m.on40], ['En el banquillo', m.off40]];
+  const mx = Math.max(5, ...oo.map(o => Math.abs(o[1] || 0)));
+  const onoff = `<div class="bars">${oo.map(([l, v]) => `<div class="br" style="grid-template-columns:110px 1fr 52px"><span class="n" style="color:var(--muted)">${l}</span><div class="t"><span class="mid"></span><i style="${v >= 0 ? 'left:50%' : `right:50%`};width:${Math.abs(v || 0) / mx * 50}%;background:${v >= 0 ? 'var(--pos)' : 'var(--neg)'};border-radius:${v >= 0 ? '0 7px 7px 0' : '7px 0 0 7px'}"></i></div><span class="v ${v > 0 ? 'pos' : v < 0 ? 'neg' : ''}">${sgn(v, 1)}</span></div>`).join('')}</div>
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)"><span style="font-weight:600;color:var(--muted)">Impacto neto · 40'</span><span style="font:700 34px var(--num)" class="${m.net40 > 0 ? 'pos' : m.net40 < 0 ? 'neg' : ''}">${sgn(m.net40, 1)}</span></div>`;
+
+  // chemistry
+  const pr = partners(p.uuid).slice(0, 10);
+  const pmx = Math.max(4, ...pr.map(x => Math.abs(x.pm))), smx = Math.max(...pr.map(x => x.sec), 1);
+  const chem = pr.length ? `<div class="bars">${pr.map(x => `<div class="br" data-tip="${esc(`<b>${x.p.name}</b><br>${mmss(x.sec)} min juntas · ${sgn(x.pm)}`)}"><span class="n">${esc(x.p.nick)}</span><div class="t"><i style="left:0;width:${x.sec / smx * 100}%;background:color-mix(in srgb,var(--blue) 18%,transparent)"></i><span class="mid"></span><i style="${x.pm >= 0 ? 'left:50%' : 'right:50%'};width:${Math.abs(x.pm) / pmx * 48}%;top:6px;bottom:6px;background:${x.pm >= 0 ? 'var(--pos)' : 'var(--neg)'}"></i><em>${Math.round(x.sec / 60)}'</em></div><span class="v ${x.pm > 0 ? 'pos' : x.pm < 0 ? 'neg' : ''}">${sgn(x.pm)}</span></div>`).join('')}</div>` : '—';
+
+  return `<div class="strip">${strip}</div><div class="grid">${hero}
+    ${card('s8', 'Partido a partido', `<div class="chart" data-c="perGame"></div>`)}
+    ${card('s4', 'Impacto en pista', onoff)}
+    ${card('s7', 'Minutos por cuarto', heat)}
+    ${card('s5', 'Puntos', mix)}
+    ${card('s12', 'Rotación', `<div class="chart" data-c="rotation"></div>`, `<span class="tag">+/- por tramo</span>`)}
+    ${card('s6', 'Canastas', court, `<span class="tag">solo anotadas</span>`)}
+    ${card('s6', 'Química', chem, `<span class="tag">minutos · +/- juntas</span>`)}
+  </div>`;
+}
+
+function viewEquipo() {
+  const r = D.rec, gs = D.games;
+  const pf = gs.reduce((s, g) => s + g.pf, 0), pa = gs.reduce((s, g) => s + g.pa, 0), n = gs.length || 1;
+  const ftm = gs.reduce((s, g) => s + (g.acc.ftm || 0), 0), fta = gs.reduce((s, g) => s + (g.acc.fta || 0), 0);
+  const fc = gs.reduce((s, g) => s + (g.acc.fc || 0), 0);
+  const kp = (l, v, extra = '') => `<div class="kpi"><div class="l"><span>${l}</span></div><div class="v">${v}${extra ? `<small>${extra}</small>` : ''}</div></div>`;
+  const kpis = `<section class="card s12 hero fade" style="padding:18px 22px"><div class="kpis" style="margin-top:0">
+    ${kp('Balance', `${r.wins || 0}<span style="color:var(--dim)">–</span>${r.losses || 0}`)}
+    ${kp('A favor', nf(pf / n), '/p')}${kp('En contra', nf(pa / n), '/p')}
+    ${kp('Diferencia', `<span class="${pf - pa > 0 ? 'pos' : pf - pa < 0 ? 'neg' : ''}">${sgn((pf - pa) / n, 1)}</span>`, '/p')}
+    ${kp('Tiros libres', fta ? nf(ftm / fta * 100, 0) + '<small>%</small><small class="x">' + ftm + '/' + fta + '</small>' : '—')}
+    ${kp('Faltas', nf(fc / n), '/p')}</div></section>`;
+
+  const games = `<div class="games">${gs.slice().reverse().map(g => `<button class="game" data-act="game" data-n="${g.n}">
+    <div class="gt"><span>J${g.j} · ${fdate(g.date)}</span><span>${g.home ? 'Casa' : 'Fuera'}</span></div>
+    <div class="go">${esc(g.opp)}</div>
+    <div class="gs"><span class="wl ${g.res}">${g.res === 'W' ? 'V' : g.res === 'L' ? 'D' : 'E'}</span><b>${g.pf}–${g.pa}</b><span class="${g.diff > 0 ? 'pos' : 'neg'}" style="font:700 15px var(--num)">${sgn(g.diff)}</span></div></button>`).join('')}</div>`;
+
+  // quarters
+  const pbp = (D.splits.pointsByPeriod || []);
+  const qm = Math.max(10, ...pbp.map(q => Math.max(q.pointsPerGame, q.opponentPointsPerGame)));
+  const quarters = pbp.map(q => {
+    const d = q.pointsPerGame - q.opponentPointsPerGame;
+    return `<div class="qrow"><span class="p">${pLabel(q.period)}</span><div class="l"><i style="width:${q.opponentPointsPerGame / qm * 100}%"></i><em>${nf(q.opponentPointsPerGame)}</em></div><div class="r"><i style="width:${q.pointsPerGame / qm * 100}%"></i><em>${nf(q.pointsPerGame)}</em></div><span class="d ${d > 0 ? 'pos' : d < 0 ? 'neg' : ''}">${sgn(d, 1)}</span></div>`;
+  }).join('') + `<div class="legend" style="justify-content:space-between;padding:0 54px 0 42px"><span><i style="background:var(--neg)"></i>Rival</span><span><i style="background:var(--pos)"></i>Claret</span></div>`;
+
+  // roster table
+  const avg = S.mode === 'avg';
+  const cols = [
+    ['dor', '#', p => +p.dorsal, p => `<span class="dor">${p.dorsal}</span>`],
+    ['name', 'Jugadora', p => p.name, null],
+    ['gp', 'PJ', p => p.gp, p => p.gp],
+    ['min', 'Min', p => avg ? p.sec / p.gp / 60 : p.sec, p => avg ? nf(p.sec / p.gp / 60) : mmss(p.sec)],
+    ['pts', 'Pts', p => avg ? p.a.pts / p.gp : p.a.pts, p => avg ? nf(p.a.pts / p.gp) : p.a.pts],
+    ['t2', '2P', p => avg ? p.a.t2m / p.gp : p.a.t2m, p => avg ? nf(p.a.t2m / p.gp) : p.a.t2m],
+    ['t3', '3P', p => avg ? p.a.t3m / p.gp : p.a.t3m, p => avg ? nf(p.a.t3m / p.gp) : p.a.t3m],
+    ['tl', 'TL', p => p.a.ftm, p => `${p.a.ftm}<span style="color:var(--dim)">/${p.a.fta}</span>`],
+    ['tlp', 'TL%', p => p.a.fta ? p.a.ftm / p.a.fta : -1, p => p.a.fta ? nf(p.a.ftm / p.a.fta * 100, 0) : '—'],
+    ['fc', 'F', p => avg ? p.a.fc / p.gp : p.a.fc, p => avg ? nf(p.a.fc / p.gp) : p.a.fc],
+    ['pm', avg ? "+/-·40'" : '+/-', p => avg ? per40(p.on, p.sec) : p.on, p => { const v = avg ? per40(p.on, p.sec) : p.on; return `<span class="${v > 0 ? 'pos' : v < 0 ? 'neg' : ''}">${sgn(v, avg ? 1 : 0)}</span>`; }],
+  ];
+  const sc = cols.find(c => c[0] === S.sort.k) || cols[4];
+  const rows = players().slice().sort((a, b) => { const va = sc[2](a), vb = sc[2](b); return (typeof va === 'string' ? va.localeCompare(vb) : va - vb) * S.sort.d; });
+  const heatCols = ['min', 'pts', 'pm'];
+  const ranges = {}; heatCols.forEach(k => { const c = cols.find(x => x[0] === k); const v = rows.map(c[2]).filter(isFinite); ranges[k] = [Math.min(...v), Math.max(...v)]; });
+  const tint = (k, v) => { const [a, b] = ranges[k]; if (!(b > a)) return ''; const f = (v - a) / (b - a); const col = k === 'pm' ? (v >= 0 ? 'var(--pos)' : 'var(--neg)') : 'var(--accent)'; const al = k === 'pm' ? Math.round(Math.abs(v) / Math.max(Math.abs(a), Math.abs(b)) * 22) : Math.round(f * 22); return `background:color-mix(in srgb,${col} ${al}%,transparent)`; };
+  const table = `<div class="tw"><table><thead><tr>${cols.map(c => c[0] === 'dor' ? '' : `<th data-act="sort" data-k="${c[0]}" class="${S.sort.k === c[0] ? 'on' : ''}">${c[1]}${S.sort.k === c[0] ? (S.sort.d < 0 ? ' ↓' : ' ↑') : ''}</th>`).join('')}</tr></thead><tbody>
+    ${rows.map(p => `<tr class="${p.uuid === CFG.me ? 'me' : ''}">${cols.map(c => {
+      if (c[0] === 'dor') return '';
+      if (c[0] === 'name') return `<td class="nm cl" data-act="player" data-id="${p.uuid}"><span class="dor">${p.dorsal}</span>${esc(p.name)}</td>`;
+      return `<td style="${heatCols.includes(c[0]) ? tint(c[0], c[2](p)) : ''}">${c[3](p)}</td>`;
+    }).join('')}</tr>`).join('')}</tbody></table></div>`;
+
+  // minutes share
+  const tot = players().reduce((s, p) => s + p.sec, 0) || 1;
+  const pal = ['#ff7a1a', '#4aa8ff', '#2fd39a', '#b48cff', '#ffc94a', '#ff5d8f', '#3dd6d0', '#8fa3c7', '#ff9f6b', '#7aa7ff', '#6ee7b7', '#d4a5ff', '#ffd98a', '#9fb0c9'];
+  const share = `<div class="share">${players().map((p, i) => `<i style="flex:${p.sec};background:${p.uuid === CFG.me ? 'var(--accent)' : `color-mix(in srgb,${pal[(i + 1) % pal.length]} 60%,var(--panel2))`}" data-tip="${esc(`<b>${p.name}</b><br>${mmss(p.sec)} min · ${nf(p.sec / tot * 100)}%`)}">${p.sec / tot > .045 ? p.dorsal : ''}</i>`).join('')}</div>`;
+
+  // lineups
+  const lus = D.lineups.slice().sort((a, b) => b.seconds - a.seconds).slice(0, 8);
+  const lmx = Math.max(4, ...lus.map(l => Math.abs(l.plusMinus || 0)));
+  const lineups = `<div class="lus">${lus.map(l => {
+    const pm = l.plusMinus || 0;
+    const ps = l.players.slice().sort((a, b) => +a.dorsal - +b.dorsal).map(x => `<span class="${x.uuid === CFG.me ? 'me' : ''}" data-tip="${esc(title(x.name))}">${x.dorsal}</span>`).join('');
+    return `<div class="lu"><div class="ps">${ps}</div><span class="m">${l.min || mmss(l.seconds)}</span><div class="br" style="grid-template-columns:1fr 34px;gap:8px"><div class="t" style="height:14px"><span class="mid"></span><i style="${pm >= 0 ? 'left:50%' : 'right:50%'};width:${Math.abs(pm) / lmx * 50}%;background:${pm >= 0 ? 'var(--pos)' : 'var(--neg)'}"></i></div><span class="v ${pm > 0 ? 'pos' : pm < 0 ? 'neg' : ''}" style="font-size:15px">${sgn(pm)}</span></div></div>`;
+  }).join('')}</div>`;
+
+  // shots
+  const sh = (S.shot === 'off' ? D.shots.off : D.shots.def).map(s => ({ ...s, tip: `<b>${s.type === 'T3' ? 'Triple' : 'Canasta de 2'}</b>${s.p ? '<br>' + esc(s.p.name) : ''}<br>J${(D.games.find(g => g.n === s.g) || {}).j || s.g} · ${pLabel(s.per)}` }));
+  const c2 = sh.filter(s => s.type === 'T2').length, c3 = sh.filter(s => s.type === 'T3').length;
+  const col2 = S.shot === 'off' ? 'var(--accent)' : 'var(--neg)', col3 = S.shot === 'off' ? 'var(--blue)' : '#b48cff';
+  const court = courtSVG(sh, s => s.p && s.p.uuid === CFG.me ? 'var(--text)' : s.type === 'T3' ? col3 : col2) +
+    `<div class="legend"><span><i style="background:${col2}"></i>2P · ${c2}</span><span><i style="background:${col3}"></i>3P · ${c3}</span>${S.shot === 'off' ? `<span><i style="background:var(--text)"></i>${esc(D.P[CFG.me] ? D.P[CFG.me].first : '')}</span>` : ''}</div>`;
+
+  return `<div class="grid">${kpis}
+    ${card('s12', 'Partidos', games)}
+    ${card('s12', 'Plantilla', table, seg('mode', [['avg', 'Media'], ['tot', 'Total']], S.mode))}
+    ${card('s12', 'Reparto de minutos', share)}
+    ${card('s5', 'Por cuartos', quarters, '<span class="tag">media</span>')}
+    ${card('s7', 'Quintetos', lineups, '<span class="tag">más usados</span>')}
+    ${card('s12', 'Carta de tiro', court, `<span class="tag">solo anotadas</span>${seg('shot', [['off', 'Ataque'], ['def', 'Defensa']], S.shot)}`)}
+  </div>`;
+}
+
+function viewPartidos() {
+  const gs = D.games;
+  if (!gs.length) return emptyView();
+  if (S.game == null || !gs.find(g => g.n == S.game)) S.game = (gs.slice().reverse().find(g => g.periods) || gs[gs.length - 1]).n;
+  const G = gs.find(g => g.n == S.game);
+  const chips = `<div class="games" style="margin-bottom:14px">${gs.slice().reverse().map(g => `<button class="game ${g.n == G.n ? 'on' : ''}" data-act="game" data-n="${g.n}" style="min-width:150px;padding:10px 12px">
+    <div class="gt"><span>J${g.j}</span><span>${fdate(g.date)}</span></div>
+    <div class="gs" style="margin-top:6px"><span class="wl ${g.res}">${g.res === 'W' ? 'V' : g.res === 'L' ? 'D' : 'E'}</span><b style="font-size:20px">${g.home ? '' : '@'}${esc(g.code)}</b><span style="color:var(--muted);font:700 15px var(--num)">${g.pf}–${g.pa}</span></div></button>`).join('')}</div>`;
+
+  const us = D.name, them = G.opp;
+  const board = `<div class="board"><div class="tm"><small>${G.home ? 'CASA' : 'FUERA'}</small>${esc(us)}</div>
+    <div class="sc">${G.pf}<i>–</i>${G.pa}</div><div class="tm r"><small>J${G.j} · ${fdate(G.date)}</small>${esc(them)}</div></div>
+    ${G.periods ? `<div class="qs">${G.periods.map(q => { const d = q.us - q.them; return `<div class="q"><small>${pLabel(q.p)}</small><b>${q.us}–${q.them}</b><div style="font:700 12px var(--num)" class="${d > 0 ? 'pos' : d < 0 ? 'neg' : ''}">${sgn(d)}</div></div>`; }).join('')}</div>` : ''}
+    ${G.facts ? `<div class="facts"><span class="fact">Máx. ventaja<b class="pos">${sgn(G.facts.maxL)}</b></span><span class="fact">Máx. desventaja<b class="neg">${G.facts.maxT ? '−' + G.facts.maxT : '±0'}</b></span><span class="fact">Mejor parcial<b>${G.facts.runUs}–0</b></span><span class="fact">Peor parcial<b>0–${G.facts.runThem}</b></span><span class="fact">Cambios de líder<b>${G.facts.chg}</b></span></div>` : ''}`;
+
+  if (!G.periods) {
+    return `${chips}<div class="grid"><section class="card s12 fade">${board}</section><section class="card s12 fade"><div class="empty">${ICON.sync}<b>Sin detalle</b>Sincroniza para cargar este partido</div></section></div>`;
+  }
+
+  const side = S.box === 'us' ? G.box.us : G.box.them;
+  const pls = side.players.filter(p => p.computed.seconds > 0).sort((a, b) => b.starting - a.starting || b.computed.seconds - a.computed.seconds);
+  const box = `<div class="tw"><table><thead><tr><th>Jugadora</th><th>Min</th><th>Pts</th><th>2P</th><th>3P</th><th>TL</th><th>F</th><th>+/-</th></tr></thead><tbody>
+    ${pls.map(pl => { const a = pl.accumulated, c = pl.computed, me = pl.uuid === CFG.me; const pm = c.onCourtPlusMinus;
+      return `<tr class="${me ? 'me' : ''}"><td class="nm ${S.box === 'us' ? 'cl' : ''}" ${S.box === 'us' && D.P[pl.uuid] ? `data-act="player" data-id="${pl.uuid}"` : ''}><span class="dor">${pl.dorsal}</span>${esc(title(pl.name))}${pl.starting ? '<span class="dot5" title="Titular"></span>' : ''}</td>
+      <td>${c.min || mmss(c.seconds)}</td><td style="font-size:16px">${a.pts}</td><td>${a.t2m}</td><td>${a.t3m}</td><td>${a.ftm}<span style="color:var(--dim)">/${a.fta}</span></td><td style="${a.fc >= 5 ? 'color:var(--neg)' : ''}">${a.fc}</td><td class="${pm > 0 ? 'pos' : pm < 0 ? 'neg' : ''}">${sgn(pm)}</td></tr>`; }).join('')}
+    <tr class="tot"><td class="nm">Total</td><td></td><td style="font-size:16px;color:var(--text)">${side.accumulated.pts}</td><td>${side.accumulated.t2m}</td><td>${side.accumulated.t3m}</td><td>${side.accumulated.ftm}/${side.accumulated.fta}</td><td>${side.accumulated.fc}</td><td></td></tr>
+    </tbody></table></div>`;
+
+  return `${chips}<div class="grid">
+    <section class="card s12 fade">${board}</section>
+    ${card('s12', 'Marcador', `<div class="chart" data-c="flow" data-a="${G.n}"></div>`, '<span class="tag">diferencia</span>')}
+    ${card('s12', 'Estadísticas', box, seg('box', [['us', 'Claret'], ['them', G.code]], S.box))}
+    ${card('s12', 'Rotaciones', `<div class="chart" data-c="gantt" data-a="${G.n}"></div>`, '<span class="tag">+/- por tramo</span>')}
+  </div>`;
+}
+
+function viewComparar() {
+  const ps = players();
+  let [a, b] = S.cmp;
+  if (!D.P[a]) a = CFG.me in D.P ? CFG.me : ps[0].uuid;
+  if (!D.P[b] || b === a) b = (ps.find(p => p.uuid !== a) || ps[0]).uuid;
+  S.cmp = [a, b];
+  const A = D.P[a], B = D.P[b], ma = metrics(A), mb = metrics(B);
+  const opt = sel => ps.map(p => `<option value="${p.uuid}" ${p.uuid === sel ? 'selected' : ''}>${p.dorsal} · ${esc(p.nick)}</option>`).join('');
+  const rows = [
+    ['Partidos', A.gp, B.gp, 0, false],
+    ['Min/p', ma.mpg, mb.mpg, 1, false],
+    ['Pts/p', ma.ppg, mb.ppg, 1, false],
+    ["Pts·40'", ma.p40, mb.p40, 1, false],
+    ['2P', ma.t2, mb.t2, 0, false],
+    ['3P', ma.t3, mb.t3, 0, false],
+    ['TL %', ma.ft, mb.ft, 0, false],
+    ["Faltas·40'", ma.f40, mb.f40, 1, false, true],
+    ['+/-', ma.pm, mb.pm, 0, true],
+    ["+/-·40'", ma.on40, mb.on40, 1, true],
+    ["Impacto", ma.net40, mb.net40, 1, true],
+  ];
+  const body = rows.map(([l, va, vb, d, signed, lowBetter]) => {
+    const mx = Math.max(Math.abs(va || 0), Math.abs(vb || 0)) || 1;
+    const fa = signed ? sgn(va, d) : nf(va, d), fb = signed ? sgn(vb, d) : nf(vb, d);
+    const better = va == null || vb == null || va === vb ? 0 : ((va > vb) !== !!lowBetter ? -1 : 1);
+    const ca = signed && va < 0 ? 'var(--neg)' : 'var(--accent)', cb = signed && vb < 0 ? 'var(--neg)' : 'var(--blue)';
+    return `<div class="mrow"><span class="va" style="color:${better < 0 ? 'var(--accent)' : 'var(--muted)'}">${fa}</span>
+      <div class="ta"><i style="width:${Math.abs(va || 0) / mx * 100}%;background:${ca};opacity:${better < 0 ? 1 : .45}"></i></div>
+      <span class="lab">${l}</span>
+      <div class="tb"><i style="width:${Math.abs(vb || 0) / mx * 100}%;background:${cb};opacity:${better > 0 ? 1 : .45}"></i></div>
+      <span class="vb" style="color:${better > 0 ? 'var(--blue)' : 'var(--muted)'}">${fb}</span></div>`;
+  }).join('');
+
+  // per-game duel
+  const duel = D.games.map(g => {
+    const xa = A.g[g.n], xb = B.g[g.n];
+    return `<div class="mrow" style="grid-template-columns:56px 1fr 120px 1fr 56px"><span class="va" style="font-size:17px">${xa && xa.pts != null ? xa.pts : '—'}</span>
+      <div class="ta" style="height:10px"><i style="width:${xa && xa.pts ? xa.pts / 25 * 100 : 0}%"></i></div>
+      <span class="lab" style="letter-spacing:.02em">J${g.j} ${g.home ? '' : '@'}${esc(g.code)}</span>
+      <div class="tb" style="height:10px"><i style="width:${xb && xb.pts ? xb.pts / 25 * 100 : 0}%"></i></div>
+      <span class="vb" style="font-size:17px">${xb && xb.pts != null ? xb.pts : '—'}</span></div>`;
+  }).join('');
+
+  return `<div class="grid"><section class="card s12 fade">
+    <div class="cmp-h"><div class="sel a"><select data-act="cmp" data-i="0">${opt(a)}</select></div><span class="vs">VS</span><div class="sel b"><select data-act="cmp" data-i="1">${opt(b)}</select></div></div>
+    ${body}</section>
+    ${card('s12', 'Puntos por partido', duel)}</div>`;
+}
+
+function emptyView() {
+  return `<div class="card fade"><div class="empty">${ICON.sync}<b>Sin datos todavía</b>Pulsa «Sincronizar» en basquetcatala.cat</div></div>`;
+}
+
+/* ---------------- render ---------------- */
+const TABS = [['yo', 'Yo', ICON.me], ['equipo', 'Equipo', ICON.team], ['partidos', 'Partidos', ICON.game], ['comparar', 'Comparar', ICON.cmp]];
+function render() {
+  $('#tabs').innerHTML = TABS.map(([k, l, ic]) => `<button class="tab ${S.view === k ? 'on' : ''}" data-act="view" data-v="${k}">${ic}${k === 'yo' && D && S.player !== CFG.me && D.P[S.player] ? esc(D.P[S.player].first) : l}</button>`).join('');
+  if (!D) { $('#app').innerHTML = emptyView(); return; }
+  const v = { yo: viewYo, equipo: viewEquipo, partidos: viewPartidos, comparar: viewComparar }[S.view] || viewYo;
+  $('#app').innerHTML = v();
+  mountCharts();
+}
+function mountCharts() {
+  document.querySelectorAll('.chart[data-c]').forEach(el => {
+    const W = Math.floor(el.clientWidth);
+    if (W > 0 && CH[el.dataset.c]) CH[el.dataset.c](el, W, el.dataset.a);
+  });
+}
+let rT, lastW = innerWidth;
+addEventListener('resize', () => { if (innerWidth === lastW) return; lastW = innerWidth; clearTimeout(rT); rT = setTimeout(mountCharts, 120); });
+
+function header() {
+  $('#tname').textContent = D.name;
+  $('#tsub').textContent = D.sub;
+  const r = D.rec, gs = D.games;
+  const streak = gs.slice(-5).map(g => `<span class="wl ${g.res}" style="width:14px;height:14px;border-radius:4px;font-size:9px" data-tip="${esc(`J${g.j} · ${g.opp}<br>${g.pf}–${g.pa}`)}">${''}</span>`).join('');
+  const sync = D.meta && D.meta.syncedAt ? new Date(D.meta.syncedAt) : null;
+  $('#rec').innerHTML = `<span class="pill"><b>${r.wins || 0}–${r.losses || 0}</b></span><span class="pill" style="gap:4px">${streak}</span>${sync ? `<span class="sync" title="Última sincronización">${sync.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</span>` : ''}`;
+}
+
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-act]'); if (!t || t.tagName === 'SELECT') return;
+  const a = t.dataset.act;
+  if (a === 'view') { S.view = t.dataset.v; go(); }
+  else if (a === 'player') { S.player = t.dataset.id; store.set('player', S.player); S.view = 'yo'; go(); scrollTo({ top: 0, behavior: 'smooth' }); }
+  else if (a === 'game') { S.game = +t.dataset.n; S.view = 'partidos'; go(); }
+  else if (a === 'set') { S[t.dataset.k] = t.dataset.v; render(); }
+  else if (a === 'sort') { const k = t.dataset.k; S.sort = { k, d: S.sort.k === k ? -S.sort.d : (k === 'name' ? 1 : -1) }; render(); }
+});
+document.addEventListener('change', e => {
+  const t = e.target; if (t.dataset.act !== 'cmp') return;
+  S.cmp[+t.dataset.i] = t.value; store.set('cmp', S.cmp); render();
+});
+function go() {
+  const h = S.view === 'partidos' && S.game != null ? `#partidos/${S.game}` : '#' + S.view;
+  if (location.hash !== h) history.replaceState(null, '', h);
+  render();
+}
+function readHash() {
+  const [v, n] = location.hash.slice(1).split('/');
+  if (TABS.some(t => t[0] === v)) S.view = v;
+  if (n != null && n !== '') S.game = +n;
+}
+addEventListener('hashchange', () => { readHash(); render(); });
+
+/* theme */
+function setTheme(t) {
+  document.documentElement.dataset.theme = t; store.set('theme', t);
+  $('#theme').innerHTML = t === 'dark' ? ICON.sun : ICON.moon;
+  document.querySelector('meta[name=theme-color]').content = t === 'dark' ? '#0a0f1a' : '#f2f4f9';
+}
+setTheme(store.get('theme', matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'));
+$('#theme').onclick = () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
+
+/* boot */
+readHash();
+render();
+load().then(() => { header(); render(); }).catch(err => { console.error(err); render(); });
+</script>
+</body>
+</html>
