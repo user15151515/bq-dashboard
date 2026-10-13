@@ -4,266 +4,284 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Claret Stats</title>
-<meta name="theme-color" content="#0b101b">
+<meta name="theme-color" content="#f6f6f4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121211" media="(prefers-color-scheme: dark)">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23ff7a1a'/%3E%3Cpath d='M2 32h60M32 2v60M12 10c12 10 12 34 0 44M52 10c-12 10-12 34 0 44' stroke='%230b101b' stroke-width='3' fill='none'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0b0b'/%3E%3Cpath d='M8 22V10h5a4 4 0 0 1 0 8H8' stroke='%23fff' stroke-width='2.4' fill='none'/%3E%3Ccircle cx='23' cy='21' r='2.5' fill='%23eb6834'/%3E%3C/svg%3E">
 <style>
 :root{
-  --bg:#0a0f1a;--bg2:#0e1524;--panel:#121a2b;--panel2:#172136;--line:#1f2a42;--line2:#2a3854;
-  --text:#eaf0f8;--muted:#8a97ae;--dim:#58657e;
-  --accent:#ff7a1a;--accent2:#ffb36b;--blue:#4aa8ff;--pos:#2fd39a;--neg:#ff5d6c;
-  --court:#0e1626;--courtline:#2b3b5a;--shadow:0 1px 0 rgba(255,255,255,.03) inset,0 10px 30px rgba(0,0,0,.25);
-  --r:18px;--num:'Barlow Condensed',system-ui,sans-serif;--ui:'Inter',system-ui,sans-serif;
+  color-scheme:light;
+  --bg:#f6f6f4;--surface:#fcfcfb;--surface2:#f1f1ee;--surface3:#e9e8e4;
+  --border:#e4e3de;--border2:#d3d2cc;--grid:#ecebe7;
+  --text:#0b0b0b;--text2:#52514e;--text3:#8a8984;
+  --blue:#2a78d6;--blue-soft:#cde2fb;--red:#e34948;--red-soft:#f8d2d1;--me:#eb6834;--mid:#c9c8c2;
+  --font:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme=light]){
+    color-scheme:dark;
+    --bg:#121211;--surface:#1a1a19;--surface2:#222220;--surface3:#2a2a28;
+    --border:#2c2c2a;--border2:#3a3a37;--grid:#262624;
+    --text:#f0efec;--text2:#c3c2b7;--text3:#8b8a84;
+    --blue:#3987e5;--blue-soft:#1c3556;--red:#e66767;--red-soft:#4a2526;--me:#d95926;--mid:#4a4a46;
+  }
+}
+:root[data-theme=dark]{
   color-scheme:dark;
+  --bg:#121211;--surface:#1a1a19;--surface2:#222220;--surface3:#2a2a28;
+  --border:#2c2c2a;--border2:#3a3a37;--grid:#262624;
+  --text:#f0efec;--text2:#c3c2b7;--text3:#8b8a84;
+  --blue:#3987e5;--blue-soft:#1c3556;--red:#e66767;--red-soft:#4a2526;--me:#d95926;--mid:#4a4a46;
 }
-:root[data-theme=light]{
-  --bg:#f2f4f9;--bg2:#e9edf5;--panel:#ffffff;--panel2:#f5f7fb;--line:#e4e9f1;--line2:#d2dae7;
-  --text:#0e1930;--muted:#5b6983;--dim:#9aa5ba;--court:#f6f8fc;--courtline:#c8d2e2;
-  --shadow:0 1px 2px rgba(16,24,40,.04),0 8px 24px rgba(16,24,40,.06);color-scheme:light;
-}
-*{box-sizing:border-box;margin:0}
+*{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
-body{background:var(--bg);color:var(--text);font:400 14px/1.45 var(--ui);min-height:100vh;
-  background-image:radial-gradient(900px 400px at 85% -120px,color-mix(in srgb,var(--accent) 12%,transparent),transparent 70%),
-  radial-gradient(700px 360px at -10% -80px,color-mix(in srgb,var(--blue) 10%,transparent),transparent 70%);background-repeat:no-repeat}
-button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-select{font:inherit;color:inherit}
-.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+body{background:var(--bg);color:var(--text);font:400 14px/1.45 var(--font);font-feature-settings:'tnum' 1,'cv11' 1;min-height:100vh;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+button{background:none;border:0;cursor:pointer}
+.wrap{max-width:1200px;margin:0 auto;padding:0 16px}
+.num{font-variant-numeric:tabular-nums}
 
-/* top */
-.top{display:flex;align-items:center;gap:14px;padding:18px 0 10px}
-.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#ff4d1a);display:grid;place-items:center;flex:none;box-shadow:0 6px 18px color-mix(in srgb,var(--accent) 35%,transparent)}
-.logo svg{width:26px;height:26px}
-.brand{min-width:0}
-.brand h1{font:700 24px/1 var(--num);letter-spacing:.01em;text-transform:uppercase}
-.brand p{color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* header */
+header.top{display:flex;align-items:center;gap:12px;padding:18px 0 14px}
+.mark{width:32px;height:32px;border-radius:8px;background:#0b0b0b;box-shadow:inset 0 0 0 1px var(--border2);display:grid;place-items:center;flex:none}
+.mark svg{width:18px;height:18px}
+.ttl{min-width:0}
+.ttl b{display:block;font-weight:700;font-size:15px;letter-spacing:-.01em}
+.ttl span{display:block;font-size:12px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .top .sp{flex:1}
-.rec{display:flex;gap:6px;align-items:center}
-.pill{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:15px;background:var(--panel);border:1px solid var(--line);font:600 13px var(--ui);white-space:nowrap}
-.pill b{font:700 17px var(--num)}
-.ibtn{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:var(--panel);border:1px solid var(--line);color:var(--muted)}
-.ibtn:hover{color:var(--text)}
-.sync{color:var(--dim);font-size:11px}
+.rec{white-space:nowrap;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--text2)}
+.rec b{font-size:15px;color:var(--text);font-weight:700}
+.form{display:flex;gap:3px}
+.form i{width:8px;height:8px;border-radius:2px;background:var(--mid)}
+.form i.W{background:var(--blue)}.form i.L{background:var(--red)}
 
-/* tabs */
-.tabs{position:sticky;top:0;z-index:20;padding:8px 0 12px;background:linear-gradient(var(--bg) 70%,transparent)}
-.tabs .in{display:flex;gap:4px;padding:4px;border-radius:14px;background:var(--panel);border:1px solid var(--line);width:max-content;max-width:100%;overflow:auto;scrollbar-width:none}
-.tab{height:36px;padding:0 16px;border-radius:10px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:8px;white-space:nowrap}
-.tab svg{width:16px;height:16px;opacity:.9}
-.tab.on{background:var(--text);color:var(--bg)}
-.tab:not(.on):hover{color:var(--text)}
+/* nav */
+nav.tabs{display:flex;gap:2px;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;position:sticky;top:0;z-index:30;background:var(--bg)}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{position:relative;height:42px;padding:0 14px;font-weight:600;font-size:13px;color:var(--text3);white-space:nowrap}
+.tab:hover{color:var(--text)}
+.tab.on{color:var(--text)}
+.tab.on:after{content:'';position:absolute;left:10px;right:10px;bottom:-1px;height:2px;background:var(--text);border-radius:2px}
+
+/* filter bar */
+.filters{display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap;padding:12px 0}
+.fl{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text3)}
+.fgroup{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.gchip{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px 0 8px;border-radius:7px;border:1px solid var(--border2);background:var(--surface);font-size:12px;font-weight:600;color:var(--text2)}
+.gchip .cb{width:14px;height:14px;border-radius:4px;border:1.5px solid var(--border2);display:grid;place-items:center}
+.gchip.on{color:var(--text);border-color:var(--text2)}
+.gchip.on .cb{background:var(--text);border-color:var(--text)}
+.gchip.on .cb:after{content:'';width:7px;height:4px;border-left:2px solid var(--surface);border-bottom:2px solid var(--surface);transform:rotate(-45deg) translate(1px,-1px)}
+.gchip.dis{opacity:.4;pointer-events:none}
+.gchip .r{font-size:10px;font-weight:700;padding:1px 4px;border-radius:3px;color:#fff}
+.gchip .r.W{background:var(--blue)}.gchip .r.L{background:var(--red)}
+.linkbtn{font-size:12px;font-weight:600;color:var(--text3);text-decoration:underline;text-underline-offset:3px}
+.linkbtn:hover{color:var(--text)}
+
+.seg{display:inline-flex;border:1px solid var(--border2);border-radius:7px;padding:2px;background:var(--surface);flex:none}
+.seg button{height:24px;padding:0 10px;border-radius:5px;font-size:12px;font-weight:600;color:var(--text3);white-space:nowrap}
+.seg button.on{background:var(--text);color:var(--surface)}
+.seg button:not(.on):hover{color:var(--text)}
 
 /* layout */
-.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;padding-bottom:40px}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px;padding-bottom:48px}
 .s12{grid-column:span 12}.s8{grid-column:span 8}.s7{grid-column:span 7}.s6{grid-column:span 6}.s5{grid-column:span 5}.s4{grid-column:span 4}
-@media (max-width:900px){.s8,.s7,.s6,.s5,.s4{grid-column:span 12}}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);min-width:0}
-.ch{display:flex;align-items:center;gap:10px;margin-bottom:12px;min-height:28px}
-.ch h3{font:700 15px/1 var(--num);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:920px){.s8,.s7,.s6,.s5,.s4{grid-column:span 12}}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;min-width:0}
+.ch{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;min-height:28px}
+.ch h3{font-size:13px;font-weight:600;letter-spacing:-.005em}
+.ch .sub{font-size:12px;color:var(--text3)}
 .ch .sp{flex:1}
-.tag{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);border:1px solid var(--line2);border-radius:6px;padding:2px 6px}
-.seg{display:inline-flex;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:2px}
-.seg button{height:26px;padding:0 10px;border-radius:8px;font-size:12px;font-weight:600;color:var(--muted)}
-.seg button.on{background:var(--panel);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.15)}
-.chart{width:100%;min-height:40px}
+.chart{width:100%}
 .chart svg{display:block;overflow:visible}
+.muted{color:var(--text3)}
+.empty{padding:28px 8px;text-align:center;color:var(--text3);font-size:13px}
 
-/* svg text */
-.ax{fill:var(--dim);font:500 10px var(--ui)}
-.axb{fill:var(--muted);font:700 12px var(--num);letter-spacing:.03em}
-.gl{stroke:var(--line);stroke-width:1}
-.gl0{stroke:var(--line2);stroke-width:1}
-.vl{fill:var(--text);font:700 15px var(--num)}
-.vls{font:600 11px var(--num)}
-.rl{fill:var(--muted);font:600 12px var(--ui)}
-.rl.me{fill:var(--accent)}
-.st{fill:var(--text);font:700 11px var(--num);pointer-events:none}
-.track{fill:var(--line)}
+/* svg */
+.ax{fill:var(--text3);font:500 10.5px var(--font)}
+.axs{fill:var(--text2);font:600 11px var(--font)}
+.gl{stroke:var(--grid);stroke-width:1}
+.gl0{stroke:var(--border2);stroke-width:1}
+.vl{fill:var(--text);font:600 11.5px var(--font)}
+.vlw{fill:#fff;font:600 10.5px var(--font);pointer-events:none}
+.rl{fill:var(--text2);font:500 12px var(--font)}
+.rl.me{fill:var(--text);font-weight:700}
+.trk{fill:var(--surface2)}
 
-/* player strip */
-.strip{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 12px;scrollbar-width:none;margin:0 -2px}
-.strip::-webkit-scrollbar,.tabs .in::-webkit-scrollbar{display:none}
-.chip{display:flex;align-items:center;gap:8px;height:40px;padding:0 14px 0 5px;border-radius:20px;background:var(--panel);border:1px solid var(--line);white-space:nowrap;font-weight:600;color:var(--muted);flex:none}
-.chip .dn{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--panel2);font:700 15px var(--num);color:var(--text)}
-.chip.on{border-color:var(--accent);color:var(--text);background:color-mix(in srgb,var(--accent) 12%,var(--panel))}
-.chip.on .dn{background:var(--accent);color:#fff}
-.chip .star{color:var(--accent);font-size:11px}
+/* player head */
+.phead{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:4px 0 14px}
+.psel{position:relative}
+.psel select{appearance:none;height:40px;padding:0 38px 0 12px;border-radius:8px;border:1px solid var(--border2);background:var(--surface);font-size:16px;font-weight:700;letter-spacing:-.01em;cursor:pointer;max-width:80vw}
+.psel:after{content:'';position:absolute;right:14px;top:50%;width:7px;height:7px;border-right:2px solid var(--text2);border-bottom:2px solid var(--text2);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.pmeta{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--text3)}
+.pmeta b{color:var(--text);font-weight:600;font-size:13px;margin-right:3px}
+.phead .sp{flex:1}
 
-/* hero */
-.hero{position:relative;overflow:hidden;padding:22px;background:
-  linear-gradient(120deg,color-mix(in srgb,var(--accent) 18%,var(--panel)) 0%,var(--panel) 55%)}
-.hero .big{position:absolute;right:-6px;top:-34px;font:800 220px/1 var(--num);color:color-mix(in srgb,var(--accent) 16%,transparent);pointer-events:none;letter-spacing:-.04em}
-.hero .who{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;position:relative}
-.hero h2{font:700 40px/1 var(--num);text-transform:uppercase;letter-spacing:.01em}
-.hero h2 span{color:var(--accent)}
-.hero .sub{color:var(--muted);font-weight:500}
-.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:20px;position:relative}
-@media (max-width:900px){.kpis{grid-template-columns:repeat(3,1fr)}}
-.kpi{background:color-mix(in srgb,var(--bg) 35%,transparent);border:1px solid var(--line);border-radius:14px;padding:12px 12px 10px;min-width:0;backdrop-filter:blur(6px)}
-:root[data-theme=light] .kpi{background:rgba(255,255,255,.7)}
-.kpi .l{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;gap:4px}
-.kpi .v{font:700 34px/1.05 var(--num);margin-top:4px;white-space:nowrap}
-.kpi .v small{font-size:15px;color:var(--muted);font-weight:600;margin-left:2px}
-.kpi .v small.x{margin-left:8px;font-size:14px}
-.kpi .rk{font:700 11px var(--num);color:var(--accent);letter-spacing:.04em}
-.kpi svg{display:block;margin-top:6px}
-.pos{color:var(--pos)}.neg{color:var(--neg)}
+/* kpis */
+.kpis{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+@media (max-width:1000px){.kpis{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:560px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.kpi{background:var(--surface);padding:12px 14px 12px;min-width:0}
+.kpi .l{display:flex;justify-content:space-between;align-items:baseline;gap:6px;font-size:11px;font-weight:600;color:var(--text3);letter-spacing:.02em}
+.kpi .rk{font-size:11px;font-weight:600;color:var(--text2)}
+.kpi .rk.top{color:var(--text);}
+.kpi .v{font-size:26px;font-weight:700;letter-spacing:-.025em;margin-top:4px;line-height:1.1;white-space:nowrap}
+.kpi .v small{font-size:13px;font-weight:500;color:var(--text3);letter-spacing:0;margin-left:4px}
+.kpi .f{margin-top:6px;font-size:11.5px;color:var(--text3);display:flex;align-items:center;gap:4px;white-space:nowrap;min-height:16px}
+.kpi .f b{color:var(--text2);font-weight:600}
+.arr{display:inline-block;font-size:10px;width:14px;height:14px;line-height:14px;text-align:center;border-radius:3px;background:var(--surface2);color:var(--text2)}
+.arr.up{background:var(--blue-soft);color:var(--blue)}.arr.dn{background:var(--red-soft);color:var(--red)}
+
+/* tables */
+.tw{overflow-x:auto;margin:0 -16px;padding:0 16px}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th{font-size:11px;font-weight:600;color:var(--text3);text-align:right;padding:8px 8px;border-bottom:1px solid var(--border2);white-space:nowrap;user-select:none}
+th.s{cursor:pointer}th.s:hover,th.on{color:var(--text)}
+th:first-child,td:first-child{text-align:left;padding-left:0}
+th:last-child,td:last-child{padding-right:0}
+td{padding:8px 8px;text-align:right;border-bottom:1px solid var(--border);white-space:nowrap;font-size:13px}
+tbody tr:last-child td{border-bottom:0}
+tr.me td{background:color-mix(in srgb,var(--me) 7%,transparent)}
+tr.me td:first-child{box-shadow:inset 3px 0 0 var(--me)}
+tr.me td.nm{padding-left:10px}
+tr.tot td{border-top:1px solid var(--border2);font-weight:600;color:var(--text2)}
+td.nm{font-weight:500;cursor:pointer}
+td.nm:hover{text-decoration:underline;text-underline-offset:3px}
+.dor{display:inline-block;min-width:22px;font-size:11px;font-weight:600;color:var(--text3)}
+.st{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--text);margin-left:6px;vertical-align:middle}
+.pmv{display:inline-flex;align-items:center;gap:6px;justify-content:flex-end}
+.pmv i{width:6px;height:6px;border-radius:50%;background:var(--mid)}
+.pmv i.p{background:var(--blue)}.pmv i.n{background:var(--red)}
+td .sub{color:var(--text3)}
+.cellbar{position:relative}
+.cellbar:before{content:'';position:absolute;right:0;top:4px;bottom:4px;width:var(--w);background:var(--blue-soft);border-radius:3px;opacity:.75}
+.cellbar span{position:relative}
+
+/* lists / bars */
+.hb{display:grid;grid-template-columns:minmax(80px,140px) minmax(0,1fr) max-content;gap:10px;align-items:center;padding:5px 0;font-size:13px}
+.hb .n{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text2);font-weight:500}
+.hb .n.me{color:var(--text);font-weight:700}
+.hb .t{position:relative;height:16px}
+.hb .t i{position:absolute;top:0;bottom:0;border-radius:3px}
+.hb .t .z{position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--border2)}
+.hb .v{text-align:right;font-weight:600;white-space:nowrap;min-width:48px}
+.hb .v small{font-weight:500;color:var(--text3);margin-left:4px}
+
+/* games strip */
+.games{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(170px,1fr);gap:8px;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px}
+.game{text-align:left;border:1px solid var(--border);border-radius:8px;padding:10px 12px;background:var(--surface);transition:border-color .12s}
+.game:hover{border-color:var(--border2)}
+.game.on{border-color:var(--text);box-shadow:inset 0 0 0 1px var(--text)}
+.game.off{opacity:.45}
+.game .gt{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);font-weight:500}
+.game .go{font-weight:600;font-size:13px;margin:4px 0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.game .gs{display:flex;align-items:center;gap:8px}
+.game .gs b{font-size:18px;font-weight:700;letter-spacing:-.02em}
+.wl{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:4px;font-size:10px;font-weight:700;color:#fff;background:var(--mid)}
+.wl.W{background:var(--blue)}.wl.L{background:var(--red)}
+.dif{font-size:12px;font-weight:600;color:var(--text2)}
 
 /* heat */
-.heat{display:grid;gap:6px}
-.heat .hr{display:grid;gap:6px;align-items:stretch}
-.heat .lab{font:700 13px var(--num);color:var(--muted);display:flex;flex-direction:column;justify-content:center;letter-spacing:.03em}
-.heat .lab small{font:500 10px var(--ui);color:var(--dim)}
-.heat .hd{font:700 12px var(--num);color:var(--dim);text-align:center;letter-spacing:.06em}
-.cell{border-radius:10px;padding:8px 4px;text-align:center;border:1px solid var(--line);min-height:52px;display:flex;flex-direction:column;justify-content:center}
-.cell b{font:700 20px/1 var(--num)}
-.cell span{font:600 10px var(--ui);color:var(--muted);margin-top:3px;white-space:nowrap}
-.cell.off{background:repeating-linear-gradient(45deg,transparent 0 6px,var(--line) 6px 7px);opacity:.6}
+.heat{display:grid;gap:4px;font-variant-numeric:tabular-nums}
+.heat .hr{display:grid;gap:4px}
+.heat .hd{font-size:11px;font-weight:600;color:var(--text3);text-align:center;padding-bottom:2px}
+.heat .lab{display:flex;flex-direction:column;justify-content:center;font-size:12px;font-weight:600}
+.heat .lab small{font-size:11px;font-weight:500;color:var(--text3)}
+.cell{border-radius:5px;min-height:44px;display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:13px;font-weight:600}
+.cell small{font-size:10.5px;font-weight:500;opacity:.85;margin-top:1px}
+.cell.na{background:repeating-linear-gradient(135deg,transparent 0 5px,var(--surface2) 5px 6px);border:1px dashed var(--border)}
+.cell.zero{background:var(--surface2);color:var(--text3)}
+.heat .hr.avg .cell{min-height:34px}
 
-/* lists */
-.bars{display:flex;flex-direction:column;gap:8px}
-.br{display:grid;grid-template-columns:92px 1fr 46px;align-items:center;gap:10px;font-size:13px}
-.br .n{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.br .t{height:22px;border-radius:7px;background:var(--panel2);position:relative;overflow:hidden}
-.br .t i{position:absolute;top:0;bottom:0;border-radius:7px}
-.br .t .mid{position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--line2)}
-.br .v{font:700 16px var(--num);text-align:right}
-.br .t em{position:absolute;left:8px;top:50%;transform:translateY(-50%);font:600 11px var(--ui);color:var(--muted);font-style:normal}
+/* legend */
+.lg{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--text2);margin-top:10px}
+.lg span{display:inline-flex;align-items:center;gap:6px}
+.lg i{width:10px;height:10px;border-radius:2px;display:inline-block}
+.lg i.c{border-radius:50%}
 
-/* table */
-.tw{overflow-x:auto;margin:0 -16px;padding:0 16px}
-table{width:100%;border-collapse:separate;border-spacing:0;font-variant-numeric:tabular-nums}
-th{font:700 11px var(--ui);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);text-align:right;padding:8px 8px;border-bottom:1px solid var(--line);white-space:nowrap;cursor:pointer;user-select:none}
-th:first-child,td:first-child{text-align:left}
-th.on{color:var(--text)}
-td{padding:9px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;font:600 14px var(--num);letter-spacing:.02em}
-td.nm{font:600 13px var(--ui);letter-spacing:0}
-tr.me td{background:color-mix(in srgb,var(--accent) 9%,transparent)}
-tr.me td.nm{color:var(--accent)}
-tr:last-child td{border-bottom:0}
-tr.tot td{color:var(--muted);border-top:1px solid var(--line2)}
-.dor{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--panel2);font:700 13px var(--num);margin-right:8px;color:var(--text)}
-tr.me .dor{background:var(--accent);color:#fff}
-.dot5{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-left:6px;vertical-align:middle}
-td.cl{cursor:pointer}
-
-/* games */
-.games{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
-.game{flex:none;min-width:190px;text-align:left;border-radius:14px;padding:12px 14px;background:var(--panel2);border:1px solid var(--line);transition:border-color .15s,transform .15s}
-.game:hover{transform:translateY(-2px);border-color:var(--line2)}
-.game.on{border-color:var(--accent)}
-.game .gt{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
-.game .go{font:700 17px/1.1 var(--num);text-transform:uppercase;margin:6px 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
-.game .gs{display:flex;align-items:baseline;gap:8px}
-.game .gs b{font:700 26px/1 var(--num)}
-.wl{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:6px;font:800 12px var(--num);color:#fff}
-.wl.W{background:var(--pos)}.wl.L{background:var(--neg)}.wl.D{background:var(--dim)}
+/* stacked share */
+.stack{display:flex;gap:2px;height:28px;border-radius:5px;overflow:hidden}
+.stack i{font-style:normal;display:grid;place-items:center;font-size:11px;font-weight:600;color:#fff;min-width:0;overflow:hidden;white-space:nowrap}
 
 /* scoreboard */
-.board{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding:6px 0 4px}
-.board .tm{font:700 22px/1.05 var(--num);text-transform:uppercase}
-.board .tm small{display:block;font:600 11px var(--ui);color:var(--dim);letter-spacing:.06em;margin-bottom:4px}
+.board{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px}
+.board .tm{font-weight:700;font-size:16px;letter-spacing:-.01em}
+.board .tm small{display:block;font-size:11px;font-weight:600;color:var(--text3);letter-spacing:.04em;margin-bottom:2px}
 .board .tm.r{text-align:right}
-.board .sc{font:800 54px/1 var(--num);letter-spacing:.02em;white-space:nowrap}
-.board .sc i{font-style:normal;color:var(--dim);margin:0 6px;font-weight:600}
-.qs{display:flex;justify-content:center;gap:6px;margin-top:12px;flex-wrap:wrap}
-.q{min-width:62px;text-align:center;border-radius:10px;background:var(--panel2);border:1px solid var(--line);padding:6px 8px}
-.q small{display:block;font:700 10px var(--ui);color:var(--dim);letter-spacing:.08em}
-.q b{font:700 16px var(--num)}
-.facts{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
-.fact{font:600 12px var(--ui);color:var(--muted);background:var(--panel2);border-radius:20px;padding:5px 12px;border:1px solid var(--line)}
-.fact b{font:700 15px var(--num);color:var(--text);margin-left:4px}
+.board .sc{font-size:40px;font-weight:700;letter-spacing:-.03em;white-space:nowrap}
+.board .sc i{font-style:normal;color:var(--text3);font-weight:400;margin:0 8px}
+.qtab{margin:14px auto 0;width:auto;border-collapse:collapse}
+.qtab th,.qtab td{padding:5px 12px;text-align:center;font-size:12px}
+.qtab td:first-child,.qtab th:first-child{text-align:left;padding-left:0;font-weight:600}
+.qtab tr:last-child td{border-bottom:0}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:16px}
+.facts div{background:var(--surface);padding:10px 12px}
+.facts span{display:block;font-size:11px;color:var(--text3);font-weight:500}
+.facts b{font-size:16px;font-weight:700}
+.facts b small{font-size:11px;font-weight:500;color:var(--text3);margin-left:4px}
 
-/* lineups */
-.lus{display:flex;flex-direction:column;gap:8px}
-.lu{display:grid;grid-template-columns:1fr 54px 110px;gap:10px;align-items:center}
-.lu .ps{display:flex;gap:4px}
-.lu .ps span{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--panel2);font:700 13px var(--num);border:1px solid var(--line)}
-.lu .ps span.me{background:var(--accent);color:#fff;border-color:var(--accent)}
-.lu .m{font:600 14px var(--num);color:var(--muted);text-align:right}
+/* lineup chips */
+.lu{display:flex;gap:3px}
+.lu span{min-width:22px;height:22px;padding:0 4px;border-radius:4px;display:grid;place-items:center;background:var(--surface2);font-size:11px;font-weight:600;color:var(--text2)}
+.lu span.me{background:var(--me);color:#fff}
 
-/* share */
-.share{display:flex;height:34px;border-radius:10px;overflow:hidden;gap:2px}
-.share i{display:grid;place-items:center;font:700 13px var(--num);color:rgba(255,255,255,.92);min-width:0;overflow:hidden}
+/* sim */
+.simgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media (max-width:700px){.simgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.inp{border:1px solid var(--border);border-radius:8px;padding:10px 12px;background:var(--surface)}
+.inp label{display:block;font-size:11px;font-weight:600;color:var(--text3);margin-bottom:6px}
+.stp{display:flex;align-items:center;gap:6px}
+.stp button{width:30px;height:30px;border-radius:6px;border:1px solid var(--border2);font-size:16px;font-weight:600;color:var(--text2);flex:none}
+.stp button:hover{color:var(--text);border-color:var(--text3)}
+.stp input{width:100%;min-width:0;height:30px;border:0;background:transparent;text-align:center;font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;-moz-appearance:textfield}
+.stp input::-webkit-outer-spin-button,.stp input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.stp input:focus{outline:2px solid var(--blue);outline-offset:2px;border-radius:4px}
+.delta{font-weight:600}
+.delta.up{color:var(--blue)}.delta.dn{color:var(--red)}
+.presets{display:flex;gap:6px;flex-wrap:wrap}
+.pbtn{height:28px;padding:0 10px;border-radius:6px;border:1px solid var(--border2);font-size:12px;font-weight:600;color:var(--text2);background:var(--surface)}
+.pbtn:hover{color:var(--text);border-color:var(--text3)}
 
-/* quarters */
-.qrow{display:grid;grid-template-columns:34px 1fr 1fr 46px;gap:8px;align-items:center;margin-bottom:8px}
-.qrow .p{font:700 14px var(--num);color:var(--muted)}
-.qrow .l,.qrow .r{height:24px;position:relative}
-.qrow .l i{position:absolute;right:0;top:0;bottom:0;border-radius:7px 0 0 7px;background:color-mix(in srgb,var(--neg) 70%,transparent)}
-.qrow .r i{position:absolute;left:0;top:0;bottom:0;border-radius:0 7px 7px 0;background:color-mix(in srgb,var(--pos) 70%,transparent)}
-.qrow em{position:absolute;top:50%;transform:translateY(-50%);font:700 13px var(--num);font-style:normal;color:var(--text)}
-.qrow .l em{left:6px}.qrow .r em{right:6px}
-.qrow .d{font:700 15px var(--num);text-align:right}
+/* stats mini */
+.mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:14px}
+.mini div{background:var(--surface);padding:9px 12px}
+.mini span{display:block;font-size:11px;color:var(--text3);font-weight:500}
+.mini b{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.mini b small{font-size:11px;color:var(--text3);font-weight:500;margin-left:3px}
 
-/* compare */
-.cmp-h{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;margin-bottom:16px}
-.sel{position:relative}
-.sel select{appearance:none;width:100%;height:52px;border-radius:14px;padding:0 40px 0 16px;background:var(--panel2);border:1px solid var(--line);font:700 20px var(--num);text-transform:uppercase;cursor:pointer}
-.sel.a select{border-color:var(--accent);color:var(--accent)}
-.sel.b select{border-color:var(--blue);color:var(--blue);text-align:right;text-align-last:right}
-.sel:after{content:'';position:absolute;right:16px;top:50%;width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:translateY(-70%) rotate(45deg);pointer-events:none}
-.sel.b:after{right:auto;left:16px}
-.sel.b select{padding:0 16px 0 40px}
-.vs{font:800 18px var(--num);color:var(--dim)}
-.mrow{display:grid;grid-template-columns:56px 1fr 120px 1fr 56px;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line)}
-.mrow:last-child{border:0}
-.mrow .lab{text-align:center;font:700 12px var(--ui);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
-.mrow .va{font:700 20px var(--num);text-align:left}
-.mrow .vb{font:700 20px var(--num);text-align:right}
-.mrow .ta,.mrow .tb{height:14px;position:relative;background:var(--panel2);border-radius:7px}
-.mrow .ta i{position:absolute;right:0;top:0;bottom:0;border-radius:7px;background:var(--accent)}
-.mrow .tb i{position:absolute;left:0;top:0;bottom:0;border-radius:7px;background:var(--blue)}
-.mrow .win{filter:drop-shadow(0 0 6px currentColor)}
+.court{width:100%;max-width:440px;display:block;margin:0 auto}
+.split{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:20px;align-items:center}
+@media (max-width:700px){.split{grid-template-columns:1fr}}
+.ctrls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ctrls select{height:28px;border:1px solid var(--border2);border-radius:7px;background:var(--surface);padding:0 8px;font-size:12px;font-weight:600;color:var(--text2)}
 
-/* donut legend */
-.dl{display:flex;flex-direction:column;gap:10px}
-.dl div{display:flex;align-items:center;gap:10px}
-.dl i{width:10px;height:10px;border-radius:3px}
-.dl b{font:700 22px var(--num);min-width:34px}
-.dl span{color:var(--muted);font-weight:600;font-size:12px}
-
-/* misc */
-.empty{padding:60px 20px;text-align:center;color:var(--muted)}
-.empty svg{width:52px;height:52px;opacity:.5;margin-bottom:12px}
-.empty b{display:block;color:var(--text);font:700 22px var(--num);text-transform:uppercase;margin-bottom:4px}
-#tip{position:fixed;z-index:100;pointer-events:none;background:var(--text);color:var(--bg);padding:7px 10px;border-radius:10px;font:500 12px/1.35 var(--ui);max-width:240px;opacity:0;transform:translateY(4px);transition:opacity .12s,transform .12s;box-shadow:0 8px 24px rgba(0,0,0,.3)}
-#tip.show{opacity:1;transform:none}
-#tip b{font-weight:700}
-.court{width:100%;max-width:520px;display:block;margin:0 auto}
-.court .sh{transition:r .1s}
-.court .sh:hover{r:260}
-.legend{display:flex;gap:14px;justify-content:center;margin-top:10px;font:600 12px var(--ui);color:var(--muted);flex-wrap:wrap}
-.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
-.fade{animation:fd .35s ease both}
-@keyframes fd{from{opacity:0;transform:translateY(6px)}}
+#tip{position:fixed;z-index:100;pointer-events:none;background:var(--text);color:var(--surface);padding:7px 10px;border-radius:7px;font-size:12px;line-height:1.4;max-width:260px;opacity:0;transition:opacity .1s;box-shadow:0 6px 20px rgba(0,0,0,.18)}
+#tip.show{opacity:1}
+#tip b{font-weight:600}
+#tip .tm{opacity:.7}
+.fade{animation:fd .25s ease both}
+@keyframes fd{from{opacity:0;transform:translateY(3px)}}
 @media (max-width:600px){
-  .hero h2{font-size:32px}.hero .big{font-size:170px;top:-20px}
-  .kpi .v{font-size:28px}
-  .board .sc{font-size:40px}.board .tm{font-size:16px}
-  .rec .pill:not(:first-child){display:none}
-  .br{grid-template-columns:78px 1fr 40px}
-  .mrow{grid-template-columns:44px 1fr 84px 1fr 44px;gap:6px}
-  .mrow .va,.mrow .vb{font-size:17px}
-  .sel select{font-size:16px;height:46px}
-  .tab{padding:0 12px}
-  .tab svg{display:none}
-  .tabs .in{width:100%;justify-content:space-between}
+  .board .sc{font-size:30px}.board .tm{font-size:13px}
+  .hb{grid-template-columns:76px minmax(0,1fr) max-content}
+  .rec .lbl{display:none}
+  .cell small{display:none}
+  .kpis .kpi:last-child:nth-child(odd){grid-column:span 2}
 }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="top">
-    <div class="logo"><svg viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="2.2"><circle cx="16" cy="16" r="13"/><path d="M3 16h26M16 3v26M7 7c6 5 6 13 0 18M25 7c-6 5-6 13 0 18"/></svg></div>
-    <div class="brand"><h1 id="tname">Claret</h1><p id="tsub"></p></div>
+    <div class="mark"><svg viewBox="0 0 24 24" fill="none"><path d="M5 18V6h5.5a4 4 0 0 1 0 8H5" stroke="#fff" stroke-width="2.2"/><circle cx="18" cy="17" r="2.2" fill="#eb6834"/></svg></div>
+    <div class="ttl"><b id="tname">Claret Stats</b><span id="tsub">&nbsp;</span></div>
     <div class="sp"></div>
     <div class="rec" id="rec"></div>
-    <button class="ibtn" id="theme" title="Tema"></button>
   </header>
-  <nav class="tabs"><div class="in" id="tabs"></div></nav>
+  <nav class="tabs" id="tabs"></nav>
+  <div id="filters"></div>
   <main id="app"></main>
 </div>
 <div id="tip"></div>
@@ -272,670 +290,879 @@ td.cl{cursor:pointer}
 'use strict';
 const CFG = { me: '4d69104c-591f-4d9a-a082-375e3c9cd842', data: './data/' };
 
-/* ---------------- helpers ---------------- */
+/* ================= utils ================= */
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const nf = (v, d = 1) => (v == null || !isFinite(v)) ? '—' : v.toLocaleString('es-ES', { minimumFractionDigits: d, maximumFractionDigits: d });
-const sgn = (v, d = 0) => (v == null || !isFinite(v)) ? '—' : (v > 0 ? '+' : v < 0 ? '−' : '±') + nf(Math.abs(v), d);
-const pct = (m, a) => a ? m / a * 100 : null;
-const mmss = s => { s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
-const title = s => String(s).toLocaleLowerCase('es').replace(/(^|[\s\-·(.])(\p{L})/gu, (m, a, b) => a + b.toLocaleUpperCase('es'));
-const fdate = d => { const [y, m, dd] = d.split('-'); return `${+dd}/${+m}`; };
-const store = { get(k, d) { try { const v = localStorage.getItem('cs.' + k); return v == null ? d : JSON.parse(v); } catch (_) { return d; } }, set(k, v) { try { localStorage.setItem('cs.' + k, JSON.stringify(v)); } catch (_) {} } };
+const ok = v => v != null && isFinite(v);
+const nf = (v, d = 1) => !ok(v) ? '—' : v.toLocaleString('es-ES', { minimumFractionDigits: d, maximumFractionDigits: d });
+const sgn = (v, d = 0) => !ok(v) ? '—' : (Math.round(v * 10 ** d) === 0 ? '0' : (v > 0 ? '+' : '−') + nf(Math.abs(v), d));
+const mmss = s => { s = Math.max(0, Math.round(s || 0)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
 const per40 = (v, sec) => sec > 0 ? v / sec * 2400 : null;
-const pLabel = p => p <= 4 ? 'P' + p : (p === 5 ? 'PR' : 'PR' + (p - 4));
+const pct = (a, b) => b > 0 ? a / b * 100 : null;
+const title = s => String(s || '').toLocaleLowerCase('es').replace(/(^|[\s\-·(.'’])(\p{L})/gu, (m, a, b) => a + b.toLocaleUpperCase('es')).replace(/\b(Cb|Bc|Ue|Ae|Ce|Cn|Cd|Ud|Ab|Cbf)\b/g, m => m.toUpperCase());
+const pLabel = p => p <= 4 ? 'C' + p : (p === 5 ? 'Pró' : 'Pró' + (p - 4));
+const fdate = d => { const [y, m, dd] = String(d).slice(0, 10).split('-'); return `${+dd}/${+m}`; };
+const store = { get(k, d) { try { const v = localStorage.getItem('cs2.' + k); return v == null ? d : JSON.parse(v); } catch (_) { return d; } }, set(k, v) { try { localStorage.setItem('cs2.' + k, JSON.stringify(v)); } catch (_) {} } };
+const sum = (a, f) => a.reduce((s, x) => s + (f ? f(x) : x), 0);
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const pmCls = v => v > 0 ? 'p' : v < 0 ? 'n' : '';
+const pmCol = v => v > 0 ? 'var(--blue)' : v < 0 ? 'var(--red)' : 'var(--mid)';
+const pmHtml = (v, d = 0) => `<span class="pmv"><i class="${pmCls(v)}"></i>${sgn(v, d)}</span>`;
 function shortCode(name) {
-  const w = name.replace(/[^\p{L}\s']/gu, ' ').split(/\s+/).filter(x => x.length > 1 && !/^(DE|DEL|LA|EL|LES|ELS|CB|BC|UE|AE|SE|CE)$/i.test(x));
-  if (w.length >= 2) return w.slice(0, 3).map(x => x[0]).join('').toUpperCase();
-  return (w[0] || name).slice(0, 3).toUpperCase();
+  const w = String(name).replace(/[^\p{L}\s']/gu, ' ').split(/\s+/).filter(x => x.length > 1 && !/^(DE|DEL|LA|EL|LES|ELS|CB|BC|UE|AE|SE|CE|A|B)$/i.test(x));
+  return w.length >= 2 ? w.slice(0, 3).map(x => x[0]).join('').toUpperCase() : (w[0] || name).slice(0, 3).toUpperCase();
 }
-function rbar(x, y, w, h, r) { // bar with rounded top
-  if (h <= 0) return '';
-  r = Math.min(r, w / 2, h);
-  return `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`;
-}
-const ICON = {
-  me: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>',
-  team: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M2 20c1-3 3.5-5 6-5s5 2 6 5M12 18c.8-2 2.3-3 4-3 2.5 0 4.5 2 6 5"/></svg>',
-  game: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M12 4v16M3 12h4M17 12h4"/><circle cx="12" cy="12" r="2.5"/></svg>',
-  cmp: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 4v16M16 4v16M4 8h4M4 14h4M16 10h4M16 17h4"/></svg>',
-  sun: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
-  moon: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>',
-  sync: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 12a8 8 0 0 1-14 5.3M4 12a8 8 0 0 1 14-5.3M18 3v4h-4M6 21v-4h4"/></svg>',
-};
+const isFoul = c => /^(P\d?|T\d+|C\d+|AT|U\d*|AD)$/.test(c) && c !== 'TM';
 
-/* ---------------- state ---------------- */
-const S = {
-  view: 'yo', player: store.get('player', CFG.me), game: null,
-  cmp: store.get('cmp', [CFG.me, null]),
-  shot: 'off', mode: 'avg', sort: { k: 'pts', d: -1 }, box: 'us',
-};
-let D = null;
-
-/* ---------------- data ---------------- */
-async function getJSON(path) {
-  const r = await fetch(CFG.data + path + '?v=' + Date.now(), { cache: 'no-store' });
-  if (!r.ok) throw new Error(r.status + ' ' + path);
-  return r.json();
-}
+/* ================= data ================= */
+let RAW = null, M = null;
+async function getJSON(p) { const r = await fetch(CFG.data + p + '?v=' + Date.now(), { cache: 'no-store' }); if (!r.ok) throw new Error(r.status + ' ' + p); return r.json(); }
 async function load() {
   const team = await getJSON('team.json');
   let meta = null; try { meta = await getJSON('index.json'); } catch (_) {}
   const matches = {};
-  await Promise.all((team.games || []).map(async g => {
-    try { matches[g.matchCallUuid] = await getJSON('matches/' + g.matchCallUuid + '.json'); } catch (_) {}
-  }));
-  D = build(team, matches, meta);
+  await Promise.all((team.games || []).map(async g => { try { matches[g.matchCallUuid] = await getJSON('matches/' + g.matchCallUuid + '.json'); } catch (_) {} }));
+  RAW = { team, matches, meta };
+  M = buildModel(RAW);
 }
 
-function build(team, matches, meta) {
-  const tu = team.header.team.uuid;
-  const P = {};
-  team.roster.forEach(r => {
-    const name = title(r.name), w = name.split(' ');
-    const c = r.totals.computed, a = r.totals.accumulated;
-    P[r.uuid] = { uuid: r.uuid, name, first: w[0], sur: w[1] || '', dorsal: r.dorsal, gp: r.gamesPlayed, a, sec: c.seconds || 0, on: c.onCourtPlusMinus || 0, off: c.offCourtPlusMinus || 0, mbg: r.minutesByGame || {}, g: {} };
-  });
-  const cnt = {}; Object.values(P).forEach(p => cnt[p.first] = (cnt[p.first] || 0) + 1);
-  Object.values(P).forEach(p => p.nick = cnt[p.first] > 1 ? `${p.first} ${p.sur[0] || ''}.` : p.first);
-  const byDorsal = {}; Object.values(P).forEach(p => byDorsal[p.dorsal] = p);
+function buildModel({ team, matches, meta }) {
+  const TU = team.header.team.uuid;
+  const names = {};
+  (team.roster || []).forEach(r => names[r.uuid] = { name: title(r.name), dorsal: r.dorsal });
+  const byDorsal = {}; (team.roster || []).forEach(r => byDorsal[r.dorsal] = r.uuid);
 
-  const games = (team.games || []).slice().sort((a, b) => a.gameNumber - b.gameNumber).map(g => {
-    const G = { n: g.gameNumber, j: g.matchDayNum, uuid: g.matchCallUuid, date: g.date, home: g.home, opp: title(g.opponent.name), code: shortCode(g.opponent.name),
-      pf: g.pointsFor, pa: g.pointsAgainst, diff: g.differential, res: g.result, acc: g.accumulated || {}, oacc: (g.opponentStats || {}).accumulated || {} };
+  const games = (team.games || []).slice().sort((a, b) => (a.date || '').localeCompare(b.date || '') || a.gameNumber - b.gameNumber).map((g, idx) => {
+    const G = { idx, n: g.gameNumber, j: g.matchDayNum, uuid: g.matchCallUuid, date: g.date, home: !!g.home,
+      opp: title(g.opponent.name), code: shortCode(g.opponent.name), pf: g.pointsFor, pa: g.pointsAgainst, diff: g.differential ?? (g.pointsFor - g.pointsAgainst),
+      res: g.result, acc: g.accumulated || {}, oacc: (g.opponentStats || {}).accumulated || {}, players: {}, detail: false, len: 2400 };
     const m = matches[g.matchCallUuid];
-    if (m && m.stats && m.stats.boxscore) {
-      const h = m.stats.header, side = h.localTeam.uuid === tu ? 'local' : 'visitor', op = side === 'local' ? 'visitor' : 'local';
-      G.side = side; G.op = op; G.code = h[op + 'Team'].shortName || G.code;
-      const per = m.stats.boxscore.filter(b => b.period > 0).sort((a, b) => a.period - b.period);
-      let t = 0;
-      G.periods = per.map(b => { const len = b[side].computed.seconds || (b.period <= 4 ? 600 : 300); const x = { p: b.period, len, start: t, us: b[side].accumulated.pts, them: b[op].accumulated.pts }; t += len; return x; });
-      G.len = t;
-      const b0 = m.stats.boxscore.find(b => b.period === 0);
-      G.box = { us: b0[side], them: b0[op] };
-      b0[side].players.forEach(pl => {
-        const p = P[pl.uuid]; if (!p) return;
-        const a = pl.accumulated, c = pl.computed;
-        p.g[G.n] = { sec: c.seconds, pts: a.pts, t2m: a.t2m, t3m: a.t3m, ftm: a.ftm, fta: a.fta, fc: a.fc, pm: c.onCourtPlusMinus, start: pl.starting, per: {} };
-      });
-      per.forEach(b => b[side].players.forEach(pl => {
-        const x = P[pl.uuid] && P[pl.uuid].g[G.n]; if (!x) return;
-        x.per[b.period] = { sec: pl.computed.seconds, pts: pl.accumulated.pts, fc: pl.accumulated.fc, pm: pl.computed.onCourtPlusMinus };
-      }));
-      G.stints = {}; ((m.stats.stints || {})[side] || []).forEach(s => G.stints[s.uuid] = s.stints);
-      // score flow
-      const pStart = {}, pLen = {}; G.periods.forEach(x => { pStart[x.p] = x.start; pLen[x.p] = x.len; });
-      let flow = [{ t: 0, us: 0, them: 0 }];
-      (m.stats.scoreEvolution || []).forEach(e => {
-        if (pStart[e.period] == null) return;
-        const rem = (e.minute || 0) * 60 + (e.second || 0);
-        flow.push({ t: pStart[e.period] + pLen[e.period] - rem, us: side === 'local' ? e.local : e.visitor, them: side === 'local' ? e.visitor : e.local, p: e.period, rem });
-      });
-      flow = flow.map((x, i) => ({ ...x, i })).sort((a, b) => a.t - b.t || a.i - b.i);
-      G.flow = flow;
-      // facts
-      let maxL = 0, maxT = 0, run = { who: null, pts: 0 }, best = { us: 0, them: 0 }, ties = 0, chg = 0, lastSign = 0;
-      for (let i = 1; i < flow.length; i++) {
-        const d = flow[i].us - flow[i].them; maxL = Math.max(maxL, d); maxT = Math.min(maxT, d);
-        const du = flow[i].us - flow[i - 1].us, dt = flow[i].them - flow[i - 1].them;
-        const who = du > 0 ? 'us' : dt > 0 ? 'them' : null; if (!who) continue;
-        const pts = du + dt;
-        run = run.who === who ? { who, pts: run.pts + pts } : { who, pts };
-        best[who] = Math.max(best[who], run.pts);
-        const sg = Math.sign(d); if (sg === 0) ties++; if (sg && lastSign && sg !== lastSign) chg++; if (sg) lastSign = sg;
-      }
-      G.facts = { maxL, maxT: -maxT, runUs: best.us, runThem: best.them, ties, chg };
-    } else {
-      Object.values(P).forEach(p => { if (p.mbg[G.n] != null) p.g[G.n] = { sec: p.mbg[G.n], partial: true }; });
+    const sh = team.shots || {};
+    const gm = matches[g.matchCallUuid], gDor = {};
+    try { const hh = gm.stats.header, sd = hh.localTeam.uuid === TU ? 'local' : 'visitor'; gm.stats.boxscore.find(b => b.period === 0)[sd].players.forEach(pl => gDor[pl.dorsal] = pl.uuid); } catch (_) {}
+    G.shotsUs = (sh.offense || []).filter(s => s.gameNumber === g.gameNumber).map(s => mkShot(s, gDor[s.dorsal] || byDorsal[s.dorsal]));
+    G.shotsThem = (sh.defense || []).filter(s => s.gameNumber === g.gameNumber).map(s => mkShot(s, null));
+    if (!(m && m.stats && m.stats.boxscore)) {
+      (team.roster || []).forEach(r => { const s = (r.minutesByGame || {})[g.gameNumber]; if (s) G.players[r.uuid] = { sec: s, partial: true }; });
+      return G;
     }
+    G.detail = true;
+    const S = m.stats, h = S.header;
+    const side = h.localTeam.uuid === TU ? 'local' : 'visitor', op = side === 'local' ? 'visitor' : 'local';
+    G.code = h[op + 'Team'].shortName || G.code;
+    const per = S.boxscore.filter(b => b.period > 0).sort((a, b) => a.period - b.period);
+    let t = 0;
+    G.periods = per.map(b => { const len = (b[side].computed || {}).seconds || (b.period <= 4 ? 600 : 300); const x = { p: b.period, len, start: t, us: b[side].accumulated.pts, them: b[op].accumulated.pts }; t += len; return x; });
+    G.len = t;
+    const b0 = S.boxscore.find(b => b.period === 0);
+    G.box = { us: b0[side], them: b0[op] };
+    b0[side].players.forEach(pl => {
+      const a = pl.accumulated || {}, c = pl.computed || {};
+      if (!names[pl.uuid]) names[pl.uuid] = { name: title(pl.name), dorsal: pl.dorsal };
+      G.players[pl.uuid] = { sec: c.seconds || 0, pts: a.pts || 0, t2m: a.t2m || 0, t3m: a.t3m || 0, ftm: a.ftm || 0, fta: a.fta || 0, fc: a.fc || 0, pm: c.onCourtPlusMinus || 0, start: !!pl.starting, per: {} };
+    });
+    per.forEach(b => b[side].players.forEach(pl => {
+      const x = G.players[pl.uuid]; if (!x) return;
+      x.per[b.period] = { sec: (pl.computed || {}).seconds || 0, pts: (pl.accumulated || {}).pts || 0, pm: (pl.computed || {}).onCourtPlusMinus || 0, fc: (pl.accumulated || {}).fc || 0 };
+    }));
+    G.stints = {};
+    ((S.stints || {})[side] || []).forEach(s => G.stints[s.uuid] = (s.stints || []).map(x => ({ s: x.startSeconds, e: x.endSeconds, pm: (x.computed || {}).onCourtPlusMinus || 0, sp: x.startPeriod, ep: x.endPeriod })));
+    G.lineups = ((S.lineups || {})[side] || []).map(l => ({ ids: l.players.map(p => p.uuid).sort(), sec: l.seconds || 0, pm: l.onCourtPlusMinus ?? l.plusMinus ?? 0 }));
+    // timeline helpers
+    const pStart = {}, pLen = {}; G.periods.forEach(x => { pStart[x.p] = x.start; pLen[x.p] = x.len; });
+    const tAt = (p, mi, se) => pStart[p] == null ? null : pStart[p] + pLen[p] - ((mi || 0) * 60 + (se || 0));
+    // flow
+    let flow = [{ t: 0, us: 0, them: 0, k: 0 }];
+    (S.scoreEvolution || []).forEach((e, i) => {
+      const tt = tAt(e.period, e.minute, e.second); if (tt == null) return;
+      flow.push({ t: tt, us: side === 'local' ? e.local : e.visitor, them: side === 'local' ? e.visitor : e.local, k: i + 1 });
+    });
+    flow.sort((a, b) => a.t - b.t || a.k - b.k);
+    G.flow = flow;
+    // pbp: fouls + scorers
+    G.fouls = []; G.scores = [];
+    ((m.pbp || {}).playByPlay || []).forEach(e => {
+      const tt = tAt(e.period, e.minute, e.second); if (tt == null) return;
+      if (e.teamUuid === TU && isFoul(e.eventTypeCode) && e.uuid) G.fouls.push({ id: e.uuid, t: tt, p: e.period, code: e.eventTypeCode });
+      if (/^D[123]$/.test(e.eventTypeCode)) G.scores.push({ t: tt, us: e.teamUuid === TU, id: e.uuid, v: +e.eventTypeCode[1], name: title(e.actorName || '') });
+    });
+    // facts
+    let maxL = 0, maxT = 0, cur = { w: null, n: 0 }, best = { us: 0, them: 0 }, chg = 0, last = 0, tied = 0;
+    for (let i = 1; i < flow.length; i++) {
+      const d = flow[i].us - flow[i].them; maxL = Math.max(maxL, d); maxT = Math.min(maxT, d);
+      const du = flow[i].us - flow[i - 1].us, dt = flow[i].them - flow[i - 1].them;
+      const w = du > 0 ? 'us' : dt > 0 ? 'them' : null; if (!w) continue;
+      cur = cur.w === w ? { w, n: cur.n + du + dt } : { w, n: du + dt }; best[w] = Math.max(best[w], cur.n);
+      const sg = Math.sign(d); if (!sg) tied++; if (sg && last && sg !== last) chg++; if (sg) last = sg;
+    }
+    // time leading
+    let lead = 0, trail = 0;
+    for (let i = 0; i < flow.length; i++) { const d = flow[i].us - flow[i].them, nt = i + 1 < flow.length ? flow[i + 1].t : G.len, dt = nt - flow[i].t; if (d > 0) lead += dt; else if (d < 0) trail += dt; }
+    G.facts = { maxL, maxT: -maxT, runUs: best.us, runThem: best.them, chg, tied, lead, trail };
     return G;
   });
 
-  const teamSec = Object.values(P).reduce((s, p) => s + p.sec, 0) / 5;
-  const shot = (s, isDef) => {
+  function mkShot(s, id) {
     const depth = Math.abs(s.x), lat = s.x < 0 ? -s.y : s.y;
-    return { cx: lat, cy: depth, type: s.type, made: s.made, p: isDef ? null : byDorsal[s.dorsal], g: s.gameNumber, per: s.period };
-  };
-  const shots = { off: ((team.shots || {}).offense || []).map(s => shot(s)), def: ((team.shots || {}).defense || []).map(s => shot(s, true)) };
+    const dist = Math.hypot(lat, depth);
+    const zone = s.type === 'T3' ? 'tri' : (Math.abs(lat) <= 2450 && depth <= 4225 ? 'pin' : 'med');
+    return { cx: lat, cy: depth, type: s.type, made: s.made !== false, id, dorsal: s.dorsal, g: s.gameNumber, per: s.period, dist, zone };
+  }
+
   const hd = team.header;
-  return { team, tu, name: title(hd.team.name), sub: [title(hd.categoryName || ''), (hd.competitions || []).map(c => title(c.competitionName) + ' · ' + c.groupName).join(' / ')].filter(Boolean).join(' · '),
-    rec: hd.record || {}, P, games, teamSec, shots, lineups: team.lineups || [], splits: team.splits || {}, meta, season: team.season };
+  return { TU, names, games, meta, rec: hd.record || {}, season: team.season,
+    name: title(hd.team.name), sub: [title(hd.categoryName || ''), (hd.competitions || []).map(c => title(c.competitionName) + ' · Grupo ' + c.groupName).join(' / ')].filter(Boolean).join(' · ') };
 }
 
-/* ---------------- derived ---------------- */
-const players = () => Object.values(D.P).filter(p => p.gp > 0).sort((a, b) => b.sec - a.sec);
-const cur = () => D.P[S.player] || D.P[CFG.me] || players()[0];
-function metrics(p) {
-  const gp = p.gp || 1, a = p.a;
-  const offSec = D.teamSec - p.sec;
-  return {
-    ppg: a.pts / gp, mpg: p.sec / gp / 60, p40: per40(a.pts, p.sec), ft: pct(a.ftm, a.fta), ftm: a.ftm, fta: a.fta,
-    fpg: a.fc / gp, f40: per40(a.fc, p.sec), pm: p.on, on40: per40(p.on, p.sec), off40: per40(p.off, offSec),
-    net40: (per40(p.on, p.sec) ?? 0) - (per40(p.off, offSec) ?? 0), t2: a.t2m, t3: a.t3m,
-  };
-}
-function rankOf(p, key, dir = -1) {
-  const arr = players().map(x => ({ id: x.uuid, v: metrics(x)[key] })).filter(x => x.v != null && isFinite(x.v));
-  arr.sort((a, b) => dir < 0 ? b.v - a.v : a.v - b.v);
-  const i = arr.findIndex(x => x.id === p.uuid);
-  return i < 0 ? null : i + 1;
-}
-function partners(u) {
-  const m = {};
-  D.lineups.forEach(l => {
-    const ids = l.players.map(x => x.uuid); if (!ids.includes(u)) return;
-    ids.forEach(id => { if (id === u) return; const x = m[id] || (m[id] = { sec: 0, pm: 0 }); x.sec += l.seconds || 0; x.pm += l.plusMinus || 0; });
+/* ================= aggregation ================= */
+function agg(games) {
+  const P = {};
+  const T = { gp: games.length, w: 0, l: 0, pf: 0, pa: 0, sec: 0, ftm: 0, fta: 0, fc: 0, t2m: 0, t3m: 0, ofc: 0, per: {} };
+  games.forEach(G => {
+    T.pf += G.pf; T.pa += G.pa; T.sec += G.len; if (G.res === 'W') T.w++; else if (G.res === 'L') T.l++;
+    T.ftm += G.acc.ftm || 0; T.fta += G.acc.fta || 0; T.fc += G.acc.fc || 0; T.t2m += G.acc.t2m || 0; T.t3m += G.acc.t3m || 0; T.ofc += G.oacc.fc || 0;
+    (G.periods || []).forEach(q => { const x = T.per[q.p] || (T.per[q.p] = { n: 0, us: 0, them: 0 }); x.n++; x.us += q.us; x.them += q.them; });
+    Object.entries(G.players).forEach(([id, x]) => {
+      if (!(x.sec > 0)) return;
+      const p = P[id] || (P[id] = { id, gp: 0, gs: 0, sec: 0, pts: 0, t2m: 0, t3m: 0, ftm: 0, fta: 0, fc: 0, pm: 0, offPm: 0, offSec: 0, partial: 0, per: {}, games: [] });
+      p.gp++; p.games.push(G.n); if (x.start) p.gs++;
+      p.sec += x.sec;
+      if (x.partial) { p.partial++; return; }
+      p.pts += x.pts; p.t2m += x.t2m; p.t3m += x.t3m; p.ftm += x.ftm; p.fta += x.fta; p.fc += x.fc; p.pm += x.pm;
+      p.offPm += G.diff - x.pm; p.offSec += G.len - x.sec;
+      Object.entries(x.per || {}).forEach(([k, q]) => { const y = p.per[k] || (p.per[k] = { sec: 0, pts: 0, pm: 0, fc: 0, n: 0 }); y.sec += q.sec; y.pts += q.pts; y.pm += q.pm; y.fc += q.fc; y.n++; });
+    });
   });
-  return Object.entries(m).map(([id, x]) => ({ p: D.P[id], ...x })).filter(x => x.p).sort((a, b) => b.sec - a.sec);
+  Object.values(P).forEach(p => { const n = M.names[p.id] || {}; p.name = n.name || '—'; p.dorsal = n.dorsal || ''; const w = p.name.split(' '); p.first = w[0]; p.sur = w.slice(1).join(' '); });
+  const cnt = {}; Object.values(P).forEach(p => cnt[p.first] = (cnt[p.first] || 0) + 1);
+  Object.values(P).forEach(p => p.nick = cnt[p.first] > 1 ? `${p.first} ${(p.sur[0] || '')}.` : p.first);
+  // lineups
+  const L = {};
+  games.forEach(G => (G.lineups || []).forEach(l => { const k = l.ids.join('|'); const x = L[k] || (L[k] = { ids: l.ids, sec: 0, pm: 0, g: new Set() }); x.sec += l.sec; x.pm += l.pm; x.g.add(G.n); }));
+  return { P, T, L: Object.values(L), games };
 }
 
-/* ---------------- tooltip ---------------- */
+/* metric access */
+const MET = {
+  min: { l: 'Minutos', tot: p => p.sec / 60, d: 1, fmtT: p => mmss(p.sec) },
+  pts: { l: 'Puntos', k: 'pts' },
+  t2m: { l: 'Canastas de 2', k: 't2m' },
+  t3m: { l: 'Triples', k: 't3m' },
+  ftm: { l: 'TL anotados', k: 'ftm' },
+  fta: { l: 'TL intentados', k: 'fta' },
+  ftp: { l: 'TL %', pctOnly: true },
+  fc: { l: 'Faltas', k: 'fc', low: true },
+  pm: { l: '+/−', k: 'pm', signed: true },
+};
+function mv(p, key, mode) {
+  if (!p || !p.gp) return null;
+  if (key === 'ftp') return pct(p.ftm, p.fta);
+  if (key === 'min') return mode === 'tot' ? p.sec / 60 : mode === 'pg' ? p.sec / 60 / p.gp : p.sec / 60 / p.gp;
+  if (key === 'net') { const on = per40(p.pm, p.sec), off = per40(p.offPm, p.offSec); return ok(on) && ok(off) ? on - off : on; }
+  const v = p[MET[key].k];
+  return mode === 'tot' ? v : mode === 'pg' ? v / (p.gp - p.partial || 1) : per40(v, p.sec);
+}
+function rank(A, id, key, mode, low) {
+  const arr = Object.values(A.P).filter(p => p.gp > 0 && (key !== 'ftp' || p.fta > 0)).map(p => ({ id: p.id, v: mv(p, key, mode) })).filter(x => ok(x.v));
+  arr.sort((a, b) => low ? a.v - b.v : b.v - a.v);
+  const i = arr.findIndex(x => x.id === id); if (i < 0) return null;
+  let r = i; while (r > 0 && arr[r - 1].v === arr[i].v) r--;
+  return { r: r + 1, n: arr.length };
+}
+
+/* ================= state ================= */
+const S = {
+  view: 'jugadora', player: store.get('player', CFG.me),
+  sel: store.get('sel', null), loc: store.get('loc', 'all'),
+  mode: store.get('mode', 'pg'), tmode: store.get('tmode', 'pg'), pgMetric: 'pts', share: 'tot',
+  sort: { k: 'min', d: -1 }, game: null, box: 'us', shot: 'us', mshot: 'us', shotP: 'all', shotT: 'all', shotQ: 'all',
+  luMin: 'all', luSort: 'sec', chem: 'sec', sim: null,
+};
+function activeGames() {
+  const sel = new Set(S.sel || M.games.map(g => g.n));
+  return M.games.filter(g => sel.has(g.n) && (S.loc === 'all' || (S.loc === 'home') === g.home));
+}
+
+/* ================= tooltip ================= */
 const tip = $('#tip'); let tipT;
 function showTip(html, x, y) {
   tip.innerHTML = html; tip.classList.add('show');
   const r = tip.getBoundingClientRect();
-  let left = x + 14, top = y + 14;
-  if (left + r.width > innerWidth - 8) left = x - r.width - 14;
-  if (top + r.height > innerHeight - 8) top = y - r.height - 14;
-  tip.style.left = Math.max(8, left) + 'px'; tip.style.top = Math.max(8, top) + 'px';
+  let l = x + 14, t = y + 14;
+  if (l + r.width > innerWidth - 8) l = x - r.width - 14;
+  if (t + r.height > innerHeight - 8) t = y - r.height - 14;
+  tip.style.left = Math.max(8, l) + 'px'; tip.style.top = Math.max(8, t) + 'px';
 }
 const hideTip = () => tip.classList.remove('show');
 document.addEventListener('pointermove', e => {
   const t = e.target.closest && e.target.closest('[data-tip]');
-  if (t) showTip(t.getAttribute('data-tip'), e.clientX, e.clientY); else if (!e.target.closest('.flowhit')) hideTip();
+  if (t) showTip(t.getAttribute('data-tip'), e.clientX, e.clientY); else if (!e.target.closest('[data-hover]')) hideTip();
 });
 document.addEventListener('pointerdown', e => {
   const t = e.target.closest && e.target.closest('[data-tip]');
-  if (t && e.pointerType !== 'mouse') { showTip(t.getAttribute('data-tip'), e.clientX, e.clientY); clearTimeout(tipT); tipT = setTimeout(hideTip, 2500); }
+  if (t && e.pointerType !== 'mouse') { showTip(t.getAttribute('data-tip'), e.clientX, e.clientY); clearTimeout(tipT); tipT = setTimeout(hideTip, 2600); }
 });
-document.addEventListener('scroll', hideTip, { passive: true });
+addEventListener('scroll', hideTip, { passive: true });
 
-/* ---------------- charts ---------------- */
-const CH = {};
-
-function spark(vals, color, w = 110, h = 26) {
-  const v = vals.filter(x => x != null);
-  if (v.length < 2) return '';
-  const mx = Math.max(...v), mn = Math.min(...v, 0), rg = (mx - mn) || 1;
-  const xs = i => 3 + i * (w - 6) / (vals.length - 1), ys = x => h - 3 - (x - mn) / rg * (h - 6);
-  let d = '', pts = '';
-  vals.forEach((x, i) => { if (x == null) return; d += (d ? 'L' : 'M') + xs(i).toFixed(1) + ',' + ys(x).toFixed(1); });
-  const li = vals.length - 1 - [...vals].reverse().findIndex(x => x != null);
-  pts = `<circle cx="${xs(li)}" cy="${ys(vals[li])}" r="2.6" fill="${color}"/>`;
-  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><path d="${d}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>${pts}</svg>`;
-}
-
-CH.perGame = (el, W) => {
-  const p = cur(), gs = D.games, H = 220, pl = 28, pr = 30, pt = 24, pb = 46;
-  const iw = W - pl - pr, ih = H - pt - pb, bw = iw / Math.max(gs.length, 1);
-  const rows = gs.map(g => ({ g, x: p.g[g.n] }));
-  const yM = Math.max(10, Math.ceil(Math.max(0, ...rows.map(r => r.x && r.x.pts || 0)) / 5) * 5);
-  const mM = Math.max(40, ...rows.map(r => (r.x && r.x.sec || 0) / 60));
-  const y = v => pt + ih - v / yM * ih, ym = v => pt + ih - v / mM * ih;
-  let s = `<svg width="${W}" height="${H}">`;
-  [0, yM / 2, yM].forEach(v => s += `<line x1="${pl}" x2="${W - pr}" y1="${y(v)}" y2="${y(v)}" class="${v ? 'gl' : 'gl0'}"/><text x="${pl - 8}" y="${y(v) + 3.5}" class="ax" text-anchor="end">${v}</text>`);
-  [20, 40].forEach(v => v <= mM && (s += `<text x="${W - pr + 8}" y="${ym(v) + 3.5}" class="ax" fill="var(--blue)" style="fill:var(--blue);opacity:.8">${v}'</text>`));
-  const bW = Math.min(36, bw * .44);
-  let line = '', dots = '', labels = '';
-  rows.forEach((r, i) => {
-    const cx = pl + bw * i + bw / 2, x = r.x;
-    const wl = r.g.res;
-    if (x && x.pts != null) {
-      s += `<path d="${rbar(cx - bW / 2, y(x.pts), bW, ih - (y(x.pts) - pt), 6)}" fill="url(#gbar)"/>`;
-      const ly = y(x.pts) - 8, dy = x.sec ? ym(x.sec / 60) : -99, inside = Math.abs(dy - ly + 5) < 14 && ih - (y(x.pts) - pt) > 26;
-      labels += inside ? `<text x="${cx}" y="${y(x.pts) + 18}" class="vl" text-anchor="middle" style="fill:#fff">${x.pts}</text>`
-        : `<text x="${cx}" y="${Math.abs(dy - ly + 5) < 14 ? Math.min(ly, dy - 10) : ly}" class="vl" text-anchor="middle" style="paint-order:stroke;stroke:var(--panel);stroke-width:4px">${x.pts}</text>`;
-    } else if (x) {
-      s += `<rect x="${cx - bW / 2}" y="${pt + ih - 20}" width="${bW}" height="20" rx="5" fill="none" stroke="var(--line2)" stroke-dasharray="3 3"/>`;
-    }
-    if (x && x.sec) {
-      const yy = ym(x.sec / 60);
-      line += (line ? 'L' : 'M') + cx + ',' + yy;
-      dots += `<circle cx="${cx}" cy="${yy}" r="4" fill="var(--panel)" stroke="var(--blue)" stroke-width="2"/>`;
-    }
-    s += `<text x="${cx}" y="${H - pb + 18}" class="axb" text-anchor="middle" style="fill:${wl === 'W' ? 'var(--pos)' : wl === 'L' ? 'var(--neg)' : 'var(--muted)'}">J${r.g.j}</text>`;
-    s += `<text x="${cx}" y="${H - pb + 32}" class="ax" text-anchor="middle">${r.g.home ? '' : '@'}${esc(r.g.code)}</text>`;
-    const tipH = x ? `<b>J${r.g.j} · ${esc(r.g.opp)}</b><br>${x.pts != null ? x.pts + ' pts · ' : ''}${mmss(x.sec)} min${x.pm != null ? ' · ' + sgn(x.pm) : ''}${x.fta != null ? '<br>TL ' + x.ftm + '/' + x.fta + ' · ' + x.fc + ' faltas' : ''}` : `<b>J${r.g.j} · ${esc(r.g.opp)}</b><br>No jugó`;
-    s += `<rect x="${pl + bw * i}" y="${pt - 10}" width="${bw}" height="${ih + 10}" fill="transparent" data-tip="${esc(tipH)}"/>`;
-  });
-  if (line) s += `<path d="${line}" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linejoin="round" opacity=".7"/>${dots}`;
-  s += labels;
-  s += `<defs><linearGradient id="gbar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--accent)" stop-opacity=".45"/></linearGradient></defs></svg>`;
-  el.innerHTML = s + `<div class="legend"><span><i style="background:var(--accent)"></i>Puntos</span><span><i style="background:var(--blue)"></i>Minutos</span></div>`;
-};
-
-function ganttSVG(W, G, rows, lw = 76, rh = 26) {
-  const H = rows.length * rh + 24, iw = W - lw - 6, x = t => lw + t / G.len * iw;
-  let s = `<svg width="${W}" height="${H}">`;
-  G.periods.forEach((p, i) => {
-    s += `<text x="${x(p.start + p.len / 2)}" y="12" class="ax" text-anchor="middle">${pLabel(p.p)}</text>`;
-    s += `<line x1="${x(p.start)}" x2="${x(p.start)}" y1="18" y2="${H}" class="gl"/>`;
-  });
-  s += `<line x1="${x(G.len)}" x2="${x(G.len)}" y1="18" y2="${H}" class="gl"/>`;
-  rows.forEach((r, i) => {
-    const yy = 22 + i * rh;
-    s += `<text x="${lw - 10}" y="${yy + rh / 2 + 4}" text-anchor="end" class="rl ${r.me ? 'me' : ''}">${esc(r.label)}</text>`;
-    s += `<rect x="${lw}" y="${yy + rh / 2 - 1}" width="${iw}" height="2" rx="1" class="track"/>`;
-    (r.stints || []).forEach(st => {
-      const x1 = x(st.startSeconds), w = Math.max(2, x(st.endSeconds) - x1), pm = (st.computed || {}).onCourtPlusMinus || 0;
-      const col = pm > 0 ? 'var(--pos)' : pm < 0 ? 'var(--neg)' : 'var(--muted)';
-      const op = pm === 0 ? .35 : Math.min(.95, .4 + Math.abs(pm) * .07);
-      const tp = `<b>${esc(r.full || r.label)}</b><br>${pLabel(st.startPeriod)} → ${pLabel(st.endPeriod)} · ${mmss(st.endSeconds - st.startSeconds)} min<br>${sgn(pm)} en pista`;
-      s += `<rect x="${x1}" y="${yy + 4}" width="${w}" height="${rh - 8}" rx="5" fill="${col}" fill-opacity="${op}" data-tip="${esc(tp)}"/>`;
-      if (w > 26) s += `<text x="${x1 + w / 2}" y="${yy + rh / 2 + 4}" class="st" text-anchor="middle">${sgn(pm)}</text>`;
-    });
-  });
-  return s + '</svg>';
-}
-
-CH.rotation = (el, W) => {
-  const p = cur();
-  const gs = D.games.filter(g => g.periods && g.stints[p.uuid]);
-  if (!gs.length) { el.innerHTML = `<div class="empty" style="padding:24px">—</div>`; return; }
-  el.innerHTML = gs.map(g => {
-    const x = p.g[g.n] || {};
-    return ganttSVG(W, g, [{ label: `J${g.j} ${g.code}`, full: `J${g.j} · ${g.opp}`, stints: g.stints[p.uuid], me: false }], 76, 30);
-  }).join('');
-};
-
-CH.gantt = (el, W, n) => {
-  const G = D.games.find(g => g.n == n); if (!G || !G.periods) return;
-  const rows = G.box.us.players.filter(pl => pl.computed.seconds > 0).map(pl => {
-    const p = D.P[pl.uuid]; const st = G.stints[pl.uuid] || [];
-    return { label: (p ? p.nick : title(pl.name).split(' ')[0]), full: title(pl.name), stints: st, me: pl.uuid === CFG.me, s0: st.length ? st[0].startSeconds : 1e9, start: pl.starting };
-  }).sort((a, b) => (b.start - a.start) || a.s0 - b.s0);
-  el.innerHTML = ganttSVG(W, G, rows, W < 500 ? 70 : 96, 28);
-};
-
-CH.flow = (el, W, n) => {
-  const G = D.games.find(g => g.n == n); if (!G || !G.flow) return;
-  const H = 240, pl = 34, pr = 12, pt = 26, pb = 16, iw = W - pl - pr, ih = H - pt - pb;
-  const F = G.flow, yM = Math.max(6, Math.ceil(Math.max(...F.map(f => Math.abs(f.us - f.them))) / 4) * 4);
-  const x = t => pl + t / G.len * iw, y = d => pt + (yM - d) / (2 * yM) * ih;
-  let d = `M${x(0)},${y(0)}`;
-  F.forEach(f => d += `H${x(f.t).toFixed(1)}V${y(f.us - f.them).toFixed(1)}`);
-  d += `H${x(G.len)}`;
-  const area = d + `V${y(0)}H${x(0)}Z`;
-  const id = 'fl' + n;
-  let s = `<svg width="${W}" height="${H}"><defs>
-    <clipPath id="${id}a"><rect x="0" y="0" width="${W}" height="${y(0)}"/></clipPath>
-    <clipPath id="${id}b"><rect x="0" y="${y(0)}" width="${W}" height="${H}"/></clipPath>
-    <linearGradient id="${id}g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--pos)" stop-opacity=".5"/><stop offset="1" stop-color="var(--pos)" stop-opacity=".05"/></linearGradient>
-    <linearGradient id="${id}g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--neg)" stop-opacity=".05"/><stop offset="1" stop-color="var(--neg)" stop-opacity=".5"/></linearGradient></defs>`;
-  [-yM, -yM / 2, yM / 2, yM].forEach(v => s += `<line x1="${pl}" x2="${W - pr}" y1="${y(v)}" y2="${y(v)}" class="gl" stroke-dasharray="2 4"/><text x="${pl - 8}" y="${y(v) + 3.5}" class="ax" text-anchor="end">${sgn(v)}</text>`);
-  G.periods.forEach((p, i) => {
-    if (i) s += `<line x1="${x(p.start)}" x2="${x(p.start)}" y1="${pt - 8}" y2="${H - pb}" class="gl"/>`;
-    s += `<text x="${x(p.start + p.len / 2)}" y="12" class="ax" text-anchor="middle">${pLabel(p.p)}</text>`;
-  });
-  s += `<path d="${area}" fill="url(#${id}g1)" clip-path="url(#${id}a)"/><path d="${area}" fill="url(#${id}g2)" clip-path="url(#${id}b)"/>`;
-  s += `<line x1="${pl}" x2="${W - pr}" y1="${y(0)}" y2="${y(0)}" class="gl0"/>`;
-  s += `<path d="${d}" fill="none" stroke="var(--text)" stroke-width="1.6" stroke-linejoin="round" opacity=".9"/>`;
-  s += `<line class="cur" x1="0" x2="0" y1="${pt - 8}" y2="${H - pb}" stroke="var(--accent)" stroke-width="1.5" opacity="0"/><circle class="cdot" r="5" fill="var(--accent)" stroke="var(--panel)" stroke-width="2" opacity="0"/>`;
-  s += `<rect class="flowhit" x="${pl}" y="0" width="${iw}" height="${H}" fill="transparent"/></svg>`;
-  el.innerHTML = s;
-  const svg = el.querySelector('svg'), cl = svg.querySelector('.cur'), cd = svg.querySelector('.cdot'), hit = svg.querySelector('.flowhit');
-  const move = e => {
-    const r = svg.getBoundingClientRect(), t = (e.clientX - r.left - pl) / iw * G.len;
-    let f = F[0]; for (const q of F) { if (q.t <= t) f = q; else break; }
-    const per = G.periods.find(p => t >= p.start && t < p.start + p.len) || G.periods[G.periods.length - 1];
-    const rem = per.start + per.len - t, xx = x(Math.max(0, Math.min(G.len, t))), dd = f.us - f.them;
-    cl.setAttribute('x1', xx); cl.setAttribute('x2', xx); cl.setAttribute('opacity', 1);
-    cd.setAttribute('cx', xx); cd.setAttribute('cy', y(dd)); cd.setAttribute('opacity', 1);
-    showTip(`<b>${pLabel(per.p)} · ${mmss(rem)}</b><br>${f.us} – ${f.them} <b>${sgn(dd)}</b>`, e.clientX, e.clientY);
-  };
-  hit.addEventListener('pointermove', move); hit.addEventListener('pointerdown', move);
-  hit.addEventListener('pointerleave', () => { cl.setAttribute('opacity', 0); cd.setAttribute('opacity', 0); hideTip(); });
-};
-
-function courtSVG(shots, colorFn) {
-  const L = 'var(--courtline)';
-  let s = `<svg class="court" viewBox="-7700 -1800 15400 10600" role="img">
-  <rect x="-7500" y="-1575" width="15000" height="10375" rx="260" fill="var(--court)" stroke="${L}" stroke-width="40"/>
-  <rect x="-2450" y="-1575" width="4900" height="5800" fill="color-mix(in srgb,var(--accent) 5%,transparent)" stroke="${L}" stroke-width="40"/>
-  <circle cx="0" cy="4225" r="1800" fill="none" stroke="${L}" stroke-width="40"/>
-  <path d="M-6600,-1575V1416A6750,6750 0 0 0 6600,1416V-1575" fill="none" stroke="${L}" stroke-width="40"/>
-  <path d="M-1250,0A1250,1250 0 0 0 1250,0" fill="none" stroke="${L}" stroke-width="40"/>
-  <line x1="-900" x2="900" y1="-375" y2="-375" stroke="var(--muted)" stroke-width="70"/>
-  <circle cx="0" cy="0" r="225" fill="none" stroke="var(--accent)" stroke-width="45"/>`;
-  shots.forEach(sh => {
-    const c = colorFn(sh);
-    s += `<circle class="sh" cx="${sh.cx}" cy="${sh.cy}" r="200" fill="${c}" fill-opacity=".85" stroke="var(--panel)" stroke-width="45" data-tip="${esc(sh.tip)}"/>`;
-  });
-  return s + '</svg>';
-}
-
-function donut(parts, size = 132, w = 18) {
-  const tot = parts.reduce((s, p) => s + p.v, 0) || 1, r = (size - w) / 2, C = 2 * Math.PI * r;
-  let off = 0, s = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="var(--panel2)" stroke-width="${w}"/>`;
-  parts.forEach(p => {
-    const len = p.v / tot * C;
-    if (len > 0) s += `<circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="${p.c}" stroke-width="${w}" stroke-dasharray="${Math.max(0, len - 2)} ${C}" stroke-dashoffset="${-off}" transform="rotate(-90 ${size / 2} ${size / 2})" stroke-linecap="butt" data-tip="${esc(p.tip)}"/>`;
-    off += len;
-  });
-  return s + `<text x="50%" y="50%" dy="6" text-anchor="middle" style="font:700 30px var(--num);fill:var(--text)">${tot}</text></svg>`;
-}
-
-/* ---------------- views ---------------- */
-function card(span, title, body, extra = '') {
-  return `<section class="card ${span} fade"><div class="ch"><h3>${title}</h3><div class="sp"></div>${extra}</div>${body}</section>`;
-}
-const seg = (key, opts, val) => `<div class="seg">${opts.map(([v, l]) => `<button data-act="set" data-k="${key}" data-v="${v}" class="${val === v ? 'on' : ''}">${l}</button>`).join('')}</div>`;
-
-function viewYo() {
-  const p = cur(), m = metrics(p), gs = D.games;
-  const isMe = p.uuid === CFG.me;
-  const strip = players().slice().sort((a, b) => (b.uuid === CFG.me) - (a.uuid === CFG.me) || +a.dorsal - +b.dorsal)
-    .map(x => `<button class="chip ${x.uuid === p.uuid ? 'on' : ''}" data-act="player" data-id="${x.uuid}"><span class="dn">${x.dorsal}</span>${esc(x.nick)}${x.uuid === CFG.me ? '<span class="star">★</span>' : ''}</button>`).join('');
-
-  const series = k => gs.map(g => { const x = p.g[g.n]; if (!x) return null; return k(x); });
-  const rk = (key, dir) => { const r = rankOf(p, key, dir); return r ? `<span class="rk">#${r}</span>` : ''; };
-  const kp = (l, v, extra, rkk, sp) => `<div class="kpi"><div class="l"><span>${l}</span>${rkk || ''}</div><div class="v">${v}${extra ? `<small class="${extra.includes('/') && extra.length > 2 ? 'x' : ''}">${extra}</small>` : ''}</div>${sp || ''}</div>`;
-  const kpis = [
-    kp('Puntos', nf(m.ppg), '/p', rk('ppg'), spark(series(x => x.pts ?? null), 'var(--accent)')),
-    kp('Minutos', nf(m.mpg), "'", rk('mpg'), spark(series(x => x.sec / 60), 'var(--blue)')),
-    kp('Pts · 40\'', nf(m.p40), '', rk('p40')),
-    kp('+/-', `<span class="${m.pm > 0 ? 'pos' : m.pm < 0 ? 'neg' : ''}">${sgn(m.pm)}</span>`, '', rk('pm'), spark(series(x => x.pm ?? null), 'var(--pos)')),
-    kp('TL', m.ft == null ? '—' : nf(m.ft, 0) + '<small>%</small>', `${m.ftm}/${m.fta}`, rk('ft')),
-    kp('Faltas', nf(m.fpg), '/p', '', spark(series(x => x.fc ?? null), 'var(--neg)')),
-  ].join('');
-
-  const hero = `<section class="card s12 hero fade"><div class="big">${p.dorsal}</div>
-    <div class="who"><h2>${esc(p.first)} <span>${esc(p.name.split(' ').slice(1).join(' '))}</span></h2></div>
-    <div class="sub" style="position:relative">#${p.dorsal} · ${p.gp} PJ · ${mmss(p.sec)} min</div>
-    <div class="kpis">${kpis}</div></section>`;
-
-  // quarters heat
-  const mg = gs.filter(g => g.periods && p.g[g.n]);
-  const maxP = Math.max(4, ...gs.filter(g => g.periods).map(g => g.periods.length));
-  const cols = `grid-template-columns:64px repeat(${maxP},1fr)`;
-  let heat = `<div class="heat"><div class="hr" style="${cols}"><div></div>${Array.from({ length: maxP }, (_, i) => `<div class="hd">${pLabel(i + 1)}</div>`).join('')}</div>`;
-  mg.forEach(g => {
-    const x = p.g[g.n];
-    heat += `<div class="hr" style="${cols}"><div class="lab">J${g.j}<small>${g.home ? '' : '@'}${esc(g.code)}</small></div>`;
-    for (let i = 1; i <= maxP; i++) {
-      const per = g.periods.find(q => q.p === i), q = x.per[i];
-      if (!per) { heat += `<div class="cell off" style="opacity:.25"></div>`; continue; }
-      if (!q || !q.sec) { heat += `<div class="cell off"></div>`; continue; }
-      const f = q.sec / per.len, a = Math.round(10 + f * 60);
-      const tp = `<b>J${g.j} · ${pLabel(i)}</b><br>${mmss(q.sec)} min · ${q.pts} pts · ${sgn(q.pm)}${q.fc ? ' · ' + q.fc + ' F' : ''}`;
-      heat += `<div class="cell" style="background:color-mix(in srgb,var(--accent) ${a}%,var(--panel2));border-color:color-mix(in srgb,var(--accent) ${a / 2}%,var(--line))" data-tip="${esc(tp)}"><b>${Math.round(q.sec / 60)}'</b><span>${q.pts ? q.pts + 'p · ' : ''}<em class="${q.pm > 0 ? 'pos' : q.pm < 0 ? 'neg' : ''}" style="font-style:normal">${sgn(q.pm)}</em></span></div>`;
-    }
-    heat += `</div>`;
-  });
-  heat += `</div>`;
-  if (!mg.length) heat = `<div class="empty" style="padding:24px">—</div>`;
-
-  // shots
-  const myShots = D.shots.off.filter(s => s.p && s.p.uuid === p.uuid).map(s => ({ ...s, tip: `<b>${s.type === 'T3' ? 'Triple' : 'Canasta de 2'}</b><br>J${(D.games.find(g => g.n === s.g) || {}).j || s.g} · ${pLabel(s.per)}` }));
-  const court = courtSVG(myShots, s => s.type === 'T3' ? 'var(--blue)' : 'var(--accent)') +
-    `<div class="legend"><span><i style="background:var(--accent)"></i>2P · ${m.t2}</span><span><i style="background:var(--blue)"></i>3P · ${m.t3}</span><span><i style="background:var(--muted)"></i>TL · ${m.ftm}/${m.fta}</span></div>`;
-
-  // points mix
-  const a = p.a;
-  const mix = `<div style="display:flex;align-items:center;gap:22px;justify-content:center;padding:6px 0">${donut([
-    { v: a.t2m * 2, c: 'var(--accent)', tip: `2P · ${a.t2m * 2} pts` }, { v: a.t3m * 3, c: 'var(--blue)', tip: `3P · ${a.t3m * 3} pts` }, { v: a.ftm, c: 'var(--muted)', tip: `TL · ${a.ftm} pts` }])}
-    <div class="dl"><div><i style="background:var(--accent)"></i><b>${a.t2m * 2}</b><span>2P</span></div><div><i style="background:var(--blue)"></i><b>${a.t3m * 3}</b><span>3P</span></div><div><i style="background:var(--muted)"></i><b>${a.ftm}</b><span>TL</span></div></div></div>`;
-
-  // on/off
-  const oo = [['En pista', m.on40], ['En el banquillo', m.off40]];
-  const mx = Math.max(5, ...oo.map(o => Math.abs(o[1] || 0)));
-  const onoff = `<div class="bars">${oo.map(([l, v]) => `<div class="br" style="grid-template-columns:110px 1fr 52px"><span class="n" style="color:var(--muted)">${l}</span><div class="t"><span class="mid"></span><i style="${v >= 0 ? 'left:50%' : `right:50%`};width:${Math.abs(v || 0) / mx * 50}%;background:${v >= 0 ? 'var(--pos)' : 'var(--neg)'};border-radius:${v >= 0 ? '0 7px 7px 0' : '7px 0 0 7px'}"></i></div><span class="v ${v > 0 ? 'pos' : v < 0 ? 'neg' : ''}">${sgn(v, 1)}</span></div>`).join('')}</div>
-    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)"><span style="font-weight:600;color:var(--muted)">Impacto neto · 40'</span><span style="font:700 34px var(--num)" class="${m.net40 > 0 ? 'pos' : m.net40 < 0 ? 'neg' : ''}">${sgn(m.net40, 1)}</span></div>`;
-
-  // chemistry
-  const pr = partners(p.uuid).slice(0, 10);
-  const pmx = Math.max(4, ...pr.map(x => Math.abs(x.pm))), smx = Math.max(...pr.map(x => x.sec), 1);
-  const chem = pr.length ? `<div class="bars">${pr.map(x => `<div class="br" data-tip="${esc(`<b>${x.p.name}</b><br>${mmss(x.sec)} min juntas · ${sgn(x.pm)}`)}"><span class="n">${esc(x.p.nick)}</span><div class="t"><i style="left:0;width:${x.sec / smx * 100}%;background:color-mix(in srgb,var(--blue) 18%,transparent)"></i><span class="mid"></span><i style="${x.pm >= 0 ? 'left:50%' : 'right:50%'};width:${Math.abs(x.pm) / pmx * 48}%;top:6px;bottom:6px;background:${x.pm >= 0 ? 'var(--pos)' : 'var(--neg)'}"></i><em>${Math.round(x.sec / 60)}'</em></div><span class="v ${x.pm > 0 ? 'pos' : x.pm < 0 ? 'neg' : ''}">${sgn(x.pm)}</span></div>`).join('')}</div>` : '—';
-
-  return `<div class="strip">${strip}</div><div class="grid">${hero}
-    ${card('s8', 'Partido a partido', `<div class="chart" data-c="perGame"></div>`)}
-    ${card('s4', 'Impacto en pista', onoff)}
-    ${card('s7', 'Minutos por cuarto', heat)}
-    ${card('s5', 'Puntos', mix)}
-    ${card('s12', 'Rotación', `<div class="chart" data-c="rotation"></div>`, `<span class="tag">+/- por tramo</span>`)}
-    ${card('s6', 'Canastas', court, `<span class="tag">solo anotadas</span>`)}
-    ${card('s6', 'Química', chem, `<span class="tag">minutos · +/- juntas</span>`)}
-  </div>`;
-}
-
-function viewEquipo() {
-  const r = D.rec, gs = D.games;
-  const pf = gs.reduce((s, g) => s + g.pf, 0), pa = gs.reduce((s, g) => s + g.pa, 0), n = gs.length || 1;
-  const ftm = gs.reduce((s, g) => s + (g.acc.ftm || 0), 0), fta = gs.reduce((s, g) => s + (g.acc.fta || 0), 0);
-  const fc = gs.reduce((s, g) => s + (g.acc.fc || 0), 0);
-  const kp = (l, v, extra = '') => `<div class="kpi"><div class="l"><span>${l}</span></div><div class="v">${v}${extra ? `<small>${extra}</small>` : ''}</div></div>`;
-  const kpis = `<section class="card s12 hero fade" style="padding:18px 22px"><div class="kpis" style="margin-top:0">
-    ${kp('Balance', `${r.wins || 0}<span style="color:var(--dim)">–</span>${r.losses || 0}`)}
-    ${kp('A favor', nf(pf / n), '/p')}${kp('En contra', nf(pa / n), '/p')}
-    ${kp('Diferencia', `<span class="${pf - pa > 0 ? 'pos' : pf - pa < 0 ? 'neg' : ''}">${sgn((pf - pa) / n, 1)}</span>`, '/p')}
-    ${kp('Tiros libres', fta ? nf(ftm / fta * 100, 0) + '<small>%</small><small class="x">' + ftm + '/' + fta + '</small>' : '—')}
-    ${kp('Faltas', nf(fc / n), '/p')}</div></section>`;
-
-  const games = `<div class="games">${gs.slice().reverse().map(g => `<button class="game" data-act="game" data-n="${g.n}">
-    <div class="gt"><span>J${g.j} · ${fdate(g.date)}</span><span>${g.home ? 'Casa' : 'Fuera'}</span></div>
-    <div class="go">${esc(g.opp)}</div>
-    <div class="gs"><span class="wl ${g.res}">${g.res === 'W' ? 'V' : g.res === 'L' ? 'D' : 'E'}</span><b>${g.pf}–${g.pa}</b><span class="${g.diff > 0 ? 'pos' : 'neg'}" style="font:700 15px var(--num)">${sgn(g.diff)}</span></div></button>`).join('')}</div>`;
-
-  // quarters
-  const pbp = (D.splits.pointsByPeriod || []);
-  const qm = Math.max(10, ...pbp.map(q => Math.max(q.pointsPerGame, q.opponentPointsPerGame)));
-  const quarters = pbp.map(q => {
-    const d = q.pointsPerGame - q.opponentPointsPerGame;
-    return `<div class="qrow"><span class="p">${pLabel(q.period)}</span><div class="l"><i style="width:${q.opponentPointsPerGame / qm * 100}%"></i><em>${nf(q.opponentPointsPerGame)}</em></div><div class="r"><i style="width:${q.pointsPerGame / qm * 100}%"></i><em>${nf(q.pointsPerGame)}</em></div><span class="d ${d > 0 ? 'pos' : d < 0 ? 'neg' : ''}">${sgn(d, 1)}</span></div>`;
-  }).join('') + `<div class="legend" style="justify-content:space-between;padding:0 54px 0 42px"><span><i style="background:var(--neg)"></i>Rival</span><span><i style="background:var(--pos)"></i>Claret</span></div>`;
-
-  // roster table
-  const avg = S.mode === 'avg';
-  const cols = [
-    ['dor', '#', p => +p.dorsal, p => `<span class="dor">${p.dorsal}</span>`],
-    ['name', 'Jugadora', p => p.name, null],
-    ['gp', 'PJ', p => p.gp, p => p.gp],
-    ['min', 'Min', p => avg ? p.sec / p.gp / 60 : p.sec, p => avg ? nf(p.sec / p.gp / 60) : mmss(p.sec)],
-    ['pts', 'Pts', p => avg ? p.a.pts / p.gp : p.a.pts, p => avg ? nf(p.a.pts / p.gp) : p.a.pts],
-    ['t2', '2P', p => avg ? p.a.t2m / p.gp : p.a.t2m, p => avg ? nf(p.a.t2m / p.gp) : p.a.t2m],
-    ['t3', '3P', p => avg ? p.a.t3m / p.gp : p.a.t3m, p => avg ? nf(p.a.t3m / p.gp) : p.a.t3m],
-    ['tl', 'TL', p => p.a.ftm, p => `${p.a.ftm}<span style="color:var(--dim)">/${p.a.fta}</span>`],
-    ['tlp', 'TL%', p => p.a.fta ? p.a.ftm / p.a.fta : -1, p => p.a.fta ? nf(p.a.ftm / p.a.fta * 100, 0) : '—'],
-    ['fc', 'F', p => avg ? p.a.fc / p.gp : p.a.fc, p => avg ? nf(p.a.fc / p.gp) : p.a.fc],
-    ['pm', avg ? "+/-·40'" : '+/-', p => avg ? per40(p.on, p.sec) : p.on, p => { const v = avg ? per40(p.on, p.sec) : p.on; return `<span class="${v > 0 ? 'pos' : v < 0 ? 'neg' : ''}">${sgn(v, avg ? 1 : 0)}</span>`; }],
-  ];
-  const sc = cols.find(c => c[0] === S.sort.k) || cols[4];
-  const rows = players().slice().sort((a, b) => { const va = sc[2](a), vb = sc[2](b); return (typeof va === 'string' ? va.localeCompare(vb) : va - vb) * S.sort.d; });
-  const heatCols = ['min', 'pts', 'pm'];
-  const ranges = {}; heatCols.forEach(k => { const c = cols.find(x => x[0] === k); const v = rows.map(c[2]).filter(isFinite); ranges[k] = [Math.min(...v), Math.max(...v)]; });
-  const tint = (k, v) => { const [a, b] = ranges[k]; if (!(b > a)) return ''; const f = (v - a) / (b - a); const col = k === 'pm' ? (v >= 0 ? 'var(--pos)' : 'var(--neg)') : 'var(--accent)'; const al = k === 'pm' ? Math.round(Math.abs(v) / Math.max(Math.abs(a), Math.abs(b)) * 22) : Math.round(f * 22); return `background:color-mix(in srgb,${col} ${al}%,transparent)`; };
-  const table = `<div class="tw"><table><thead><tr>${cols.map(c => c[0] === 'dor' ? '' : `<th data-act="sort" data-k="${c[0]}" class="${S.sort.k === c[0] ? 'on' : ''}">${c[1]}${S.sort.k === c[0] ? (S.sort.d < 0 ? ' ↓' : ' ↑') : ''}</th>`).join('')}</tr></thead><tbody>
-    ${rows.map(p => `<tr class="${p.uuid === CFG.me ? 'me' : ''}">${cols.map(c => {
-      if (c[0] === 'dor') return '';
-      if (c[0] === 'name') return `<td class="nm cl" data-act="player" data-id="${p.uuid}"><span class="dor">${p.dorsal}</span>${esc(p.name)}</td>`;
-      return `<td style="${heatCols.includes(c[0]) ? tint(c[0], c[2](p)) : ''}">${c[3](p)}</td>`;
-    }).join('')}</tr>`).join('')}</tbody></table></div>`;
-
-  // minutes share
-  const tot = players().reduce((s, p) => s + p.sec, 0) || 1;
-  const pal = ['#ff7a1a', '#4aa8ff', '#2fd39a', '#b48cff', '#ffc94a', '#ff5d8f', '#3dd6d0', '#8fa3c7', '#ff9f6b', '#7aa7ff', '#6ee7b7', '#d4a5ff', '#ffd98a', '#9fb0c9'];
-  const share = `<div class="share">${players().map((p, i) => `<i style="flex:${p.sec};background:${p.uuid === CFG.me ? 'var(--accent)' : `color-mix(in srgb,${pal[(i + 1) % pal.length]} 60%,var(--panel2))`}" data-tip="${esc(`<b>${p.name}</b><br>${mmss(p.sec)} min · ${nf(p.sec / tot * 100)}%`)}">${p.sec / tot > .045 ? p.dorsal : ''}</i>`).join('')}</div>`;
-
-  // lineups
-  const lus = D.lineups.slice().sort((a, b) => b.seconds - a.seconds).slice(0, 8);
-  const lmx = Math.max(4, ...lus.map(l => Math.abs(l.plusMinus || 0)));
-  const lineups = `<div class="lus">${lus.map(l => {
-    const pm = l.plusMinus || 0;
-    const ps = l.players.slice().sort((a, b) => +a.dorsal - +b.dorsal).map(x => `<span class="${x.uuid === CFG.me ? 'me' : ''}" data-tip="${esc(title(x.name))}">${x.dorsal}</span>`).join('');
-    return `<div class="lu"><div class="ps">${ps}</div><span class="m">${l.min || mmss(l.seconds)}</span><div class="br" style="grid-template-columns:1fr 34px;gap:8px"><div class="t" style="height:14px"><span class="mid"></span><i style="${pm >= 0 ? 'left:50%' : 'right:50%'};width:${Math.abs(pm) / lmx * 50}%;background:${pm >= 0 ? 'var(--pos)' : 'var(--neg)'}"></i></div><span class="v ${pm > 0 ? 'pos' : pm < 0 ? 'neg' : ''}" style="font-size:15px">${sgn(pm)}</span></div></div>`;
-  }).join('')}</div>`;
-
-  // shots
-  const sh = (S.shot === 'off' ? D.shots.off : D.shots.def).map(s => ({ ...s, tip: `<b>${s.type === 'T3' ? 'Triple' : 'Canasta de 2'}</b>${s.p ? '<br>' + esc(s.p.name) : ''}<br>J${(D.games.find(g => g.n === s.g) || {}).j || s.g} · ${pLabel(s.per)}` }));
-  const c2 = sh.filter(s => s.type === 'T2').length, c3 = sh.filter(s => s.type === 'T3').length;
-  const col2 = S.shot === 'off' ? 'var(--accent)' : 'var(--neg)', col3 = S.shot === 'off' ? 'var(--blue)' : '#b48cff';
-  const court = courtSVG(sh, s => s.p && s.p.uuid === CFG.me ? 'var(--text)' : s.type === 'T3' ? col3 : col2) +
-    `<div class="legend"><span><i style="background:${col2}"></i>2P · ${c2}</span><span><i style="background:${col3}"></i>3P · ${c3}</span>${S.shot === 'off' ? `<span><i style="background:var(--text)"></i>${esc(D.P[CFG.me] ? D.P[CFG.me].first : '')}</span>` : ''}</div>`;
-
-  return `<div class="grid">${kpis}
-    ${card('s12', 'Partidos', games)}
-    ${card('s12', 'Plantilla', table, seg('mode', [['avg', 'Media'], ['tot', 'Total']], S.mode))}
-    ${card('s12', 'Reparto de minutos', share)}
-    ${card('s5', 'Por cuartos', quarters, '<span class="tag">media</span>')}
-    ${card('s7', 'Quintetos', lineups, '<span class="tag">más usados</span>')}
-    ${card('s12', 'Carta de tiro', court, `<span class="tag">solo anotadas</span>${seg('shot', [['off', 'Ataque'], ['def', 'Defensa']], S.shot)}`)}
-  </div>`;
-}
-
-function viewPartidos() {
-  const gs = D.games;
-  if (!gs.length) return emptyView();
-  if (S.game == null || !gs.find(g => g.n == S.game)) S.game = (gs.slice().reverse().find(g => g.periods) || gs[gs.length - 1]).n;
-  const G = gs.find(g => g.n == S.game);
-  const chips = `<div class="games" style="margin-bottom:14px">${gs.slice().reverse().map(g => `<button class="game ${g.n == G.n ? 'on' : ''}" data-act="game" data-n="${g.n}" style="min-width:150px;padding:10px 12px">
-    <div class="gt"><span>J${g.j}</span><span>${fdate(g.date)}</span></div>
-    <div class="gs" style="margin-top:6px"><span class="wl ${g.res}">${g.res === 'W' ? 'V' : g.res === 'L' ? 'D' : 'E'}</span><b style="font-size:20px">${g.home ? '' : '@'}${esc(g.code)}</b><span style="color:var(--muted);font:700 15px var(--num)">${g.pf}–${g.pa}</span></div></button>`).join('')}</div>`;
-
-  const us = D.name, them = G.opp;
-  const board = `<div class="board"><div class="tm"><small>${G.home ? 'CASA' : 'FUERA'}</small>${esc(us)}</div>
-    <div class="sc">${G.pf}<i>–</i>${G.pa}</div><div class="tm r"><small>J${G.j} · ${fdate(G.date)}</small>${esc(them)}</div></div>
-    ${G.periods ? `<div class="qs">${G.periods.map(q => { const d = q.us - q.them; return `<div class="q"><small>${pLabel(q.p)}</small><b>${q.us}–${q.them}</b><div style="font:700 12px var(--num)" class="${d > 0 ? 'pos' : d < 0 ? 'neg' : ''}">${sgn(d)}</div></div>`; }).join('')}</div>` : ''}
-    ${G.facts ? `<div class="facts"><span class="fact">Máx. ventaja<b class="pos">${sgn(G.facts.maxL)}</b></span><span class="fact">Máx. desventaja<b class="neg">${G.facts.maxT ? '−' + G.facts.maxT : '±0'}</b></span><span class="fact">Mejor parcial<b>${G.facts.runUs}–0</b></span><span class="fact">Peor parcial<b>0–${G.facts.runThem}</b></span><span class="fact">Cambios de líder<b>${G.facts.chg}</b></span></div>` : ''}`;
-
-  if (!G.periods) {
-    return `${chips}<div class="grid"><section class="card s12 fade">${board}</section><section class="card s12 fade"><div class="empty">${ICON.sync}<b>Sin detalle</b>Sincroniza para cargar este partido</div></section></div>`;
-  }
-
-  const side = S.box === 'us' ? G.box.us : G.box.them;
-  const pls = side.players.filter(p => p.computed.seconds > 0).sort((a, b) => b.starting - a.starting || b.computed.seconds - a.computed.seconds);
-  const box = `<div class="tw"><table><thead><tr><th>Jugadora</th><th>Min</th><th>Pts</th><th>2P</th><th>3P</th><th>TL</th><th>F</th><th>+/-</th></tr></thead><tbody>
-    ${pls.map(pl => { const a = pl.accumulated, c = pl.computed, me = pl.uuid === CFG.me; const pm = c.onCourtPlusMinus;
-      return `<tr class="${me ? 'me' : ''}"><td class="nm ${S.box === 'us' ? 'cl' : ''}" ${S.box === 'us' && D.P[pl.uuid] ? `data-act="player" data-id="${pl.uuid}"` : ''}><span class="dor">${pl.dorsal}</span>${esc(title(pl.name))}${pl.starting ? '<span class="dot5" title="Titular"></span>' : ''}</td>
-      <td>${c.min || mmss(c.seconds)}</td><td style="font-size:16px">${a.pts}</td><td>${a.t2m}</td><td>${a.t3m}</td><td>${a.ftm}<span style="color:var(--dim)">/${a.fta}</span></td><td style="${a.fc >= 5 ? 'color:var(--neg)' : ''}">${a.fc}</td><td class="${pm > 0 ? 'pos' : pm < 0 ? 'neg' : ''}">${sgn(pm)}</td></tr>`; }).join('')}
-    <tr class="tot"><td class="nm">Total</td><td></td><td style="font-size:16px;color:var(--text)">${side.accumulated.pts}</td><td>${side.accumulated.t2m}</td><td>${side.accumulated.t3m}</td><td>${side.accumulated.ftm}/${side.accumulated.fta}</td><td>${side.accumulated.fc}</td><td></td></tr>
-    </tbody></table></div>`;
-
-  return `${chips}<div class="grid">
-    <section class="card s12 fade">${board}</section>
-    ${card('s12', 'Marcador', `<div class="chart" data-c="flow" data-a="${G.n}"></div>`, '<span class="tag">diferencia</span>')}
-    ${card('s12', 'Estadísticas', box, seg('box', [['us', 'Claret'], ['them', G.code]], S.box))}
-    ${card('s12', 'Rotaciones', `<div class="chart" data-c="gantt" data-a="${G.n}"></div>`, '<span class="tag">+/- por tramo</span>')}
-  </div>`;
-}
-
-function viewComparar() {
-  const ps = players();
-  let [a, b] = S.cmp;
-  if (!D.P[a]) a = CFG.me in D.P ? CFG.me : ps[0].uuid;
-  if (!D.P[b] || b === a) b = (ps.find(p => p.uuid !== a) || ps[0]).uuid;
-  S.cmp = [a, b];
-  const A = D.P[a], B = D.P[b], ma = metrics(A), mb = metrics(B);
-  const opt = sel => ps.map(p => `<option value="${p.uuid}" ${p.uuid === sel ? 'selected' : ''}>${p.dorsal} · ${esc(p.nick)}</option>`).join('');
-  const rows = [
-    ['Partidos', A.gp, B.gp, 0, false],
-    ['Min/p', ma.mpg, mb.mpg, 1, false],
-    ['Pts/p', ma.ppg, mb.ppg, 1, false],
-    ["Pts·40'", ma.p40, mb.p40, 1, false],
-    ['2P', ma.t2, mb.t2, 0, false],
-    ['3P', ma.t3, mb.t3, 0, false],
-    ['TL %', ma.ft, mb.ft, 0, false],
-    ["Faltas·40'", ma.f40, mb.f40, 1, false, true],
-    ['+/-', ma.pm, mb.pm, 0, true],
-    ["+/-·40'", ma.on40, mb.on40, 1, true],
-    ["Impacto", ma.net40, mb.net40, 1, true],
-  ];
-  const body = rows.map(([l, va, vb, d, signed, lowBetter]) => {
-    const mx = Math.max(Math.abs(va || 0), Math.abs(vb || 0)) || 1;
-    const fa = signed ? sgn(va, d) : nf(va, d), fb = signed ? sgn(vb, d) : nf(vb, d);
-    const better = va == null || vb == null || va === vb ? 0 : ((va > vb) !== !!lowBetter ? -1 : 1);
-    const ca = signed && va < 0 ? 'var(--neg)' : 'var(--accent)', cb = signed && vb < 0 ? 'var(--neg)' : 'var(--blue)';
-    return `<div class="mrow"><span class="va" style="color:${better < 0 ? 'var(--accent)' : 'var(--muted)'}">${fa}</span>
-      <div class="ta"><i style="width:${Math.abs(va || 0) / mx * 100}%;background:${ca};opacity:${better < 0 ? 1 : .45}"></i></div>
-      <span class="lab">${l}</span>
-      <div class="tb"><i style="width:${Math.abs(vb || 0) / mx * 100}%;background:${cb};opacity:${better > 0 ? 1 : .45}"></i></div>
-      <span class="vb" style="color:${better > 0 ? 'var(--blue)' : 'var(--muted)'}">${fb}</span></div>`;
-  }).join('');
-
-  // per-game duel
-  const duel = D.games.map(g => {
-    const xa = A.g[g.n], xb = B.g[g.n];
-    return `<div class="mrow" style="grid-template-columns:56px 1fr 120px 1fr 56px"><span class="va" style="font-size:17px">${xa && xa.pts != null ? xa.pts : '—'}</span>
-      <div class="ta" style="height:10px"><i style="width:${xa && xa.pts ? xa.pts / 25 * 100 : 0}%"></i></div>
-      <span class="lab" style="letter-spacing:.02em">J${g.j} ${g.home ? '' : '@'}${esc(g.code)}</span>
-      <div class="tb" style="height:10px"><i style="width:${xb && xb.pts ? xb.pts / 25 * 100 : 0}%"></i></div>
-      <span class="vb" style="font-size:17px">${xb && xb.pts != null ? xb.pts : '—'}</span></div>`;
-  }).join('');
-
-  return `<div class="grid"><section class="card s12 fade">
-    <div class="cmp-h"><div class="sel a"><select data-act="cmp" data-i="0">${opt(a)}</select></div><span class="vs">VS</span><div class="sel b"><select data-act="cmp" data-i="1">${opt(b)}</select></div></div>
-    ${body}</section>
-    ${card('s12', 'Puntos por partido', duel)}</div>`;
-}
-
-function emptyView() {
-  return `<div class="card fade"><div class="empty">${ICON.sync}<b>Sin datos todavía</b>Pulsa «Sincronizar» en basquetcatala.cat</div></div>`;
-}
-
-/* ---------------- render ---------------- */
-const TABS = [['yo', 'Yo', ICON.me], ['equipo', 'Equipo', ICON.team], ['partidos', 'Partidos', ICON.game], ['comparar', 'Comparar', ICON.cmp]];
-function render() {
-  $('#tabs').innerHTML = TABS.map(([k, l, ic]) => `<button class="tab ${S.view === k ? 'on' : ''}" data-act="view" data-v="${k}">${ic}${k === 'yo' && D && S.player !== CFG.me && D.P[S.player] ? esc(D.P[S.player].first) : l}</button>`).join('');
-  if (!D) { $('#app').innerHTML = emptyView(); return; }
-  const v = { yo: viewYo, equipo: viewEquipo, partidos: viewPartidos, comparar: viewComparar }[S.view] || viewYo;
-  $('#app').innerHTML = v();
-  mountCharts();
-}
-function mountCharts() {
-  document.querySelectorAll('.chart[data-c]').forEach(el => {
-    const W = Math.floor(el.clientWidth);
-    if (W > 0 && CH[el.dataset.c]) CH[el.dataset.c](el, W, el.dataset.a);
-  });
-}
+/* ================= chart mounting ================= */
+let CHARTS = [];
+function chart(fn, cls = '') { const id = 'c' + CHARTS.length; CHARTS.push({ id, fn }); return `<div class="chart ${cls}" id="${id}"></div>`; }
+function mountCharts() { CHARTS.forEach(c => { const el = document.getElementById(c.id); if (el) { const W = Math.floor(el.clientWidth); if (W > 0) c.fn(el, W); } }); }
 let rT, lastW = innerWidth;
 addEventListener('resize', () => { if (innerWidth === lastW) return; lastW = innerWidth; clearTimeout(rT); rT = setTimeout(mountCharts, 120); });
 
-function header() {
-  $('#tname').textContent = D.name;
-  $('#tsub').textContent = D.sub;
-  const r = D.rec, gs = D.games;
-  const streak = gs.slice(-5).map(g => `<span class="wl ${g.res}" style="width:14px;height:14px;border-radius:4px;font-size:9px" data-tip="${esc(`J${g.j} · ${g.opp}<br>${g.pf}–${g.pa}`)}">${''}</span>`).join('');
-  const sync = D.meta && D.meta.syncedAt ? new Date(D.meta.syncedAt) : null;
-  $('#rec').innerHTML = `<span class="pill"><b>${r.wins || 0}–${r.losses || 0}</b></span><span class="pill" style="gap:4px">${streak}</span>${sync ? `<span class="sync" title="Última sincronización">${sync.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</span>` : ''}`;
+const card = (span, h, body, extra = '', sub = '') => `<section class="card ${span} fade"><div class="ch"><h3>${h}</h3>${sub ? `<span class="sub">${sub}</span>` : ''}<div class="sp"></div>${extra}</div>${body}</section>`;
+const seg = (key, opts, val) => `<div class="seg">${opts.map(([v, l]) => `<button data-act="set" data-k="${key}" data-v="${v}" class="${String(val) === String(v) ? 'on' : ''}">${l}</button>`).join('')}</div>`;
+const MODES = [['tot', 'Total'], ['pg', 'Por partido'], ['p40', "Por 40'"]];
+
+/* ---------- vertical bars (one series) ---------- */
+function vbars(el, W, o) {
+  const { items, signed, avg, d = 0, H = 200 } = o;
+  const pl = 34, pr = 8, pt = 22, pb = 40, iw = W - pl - pr, ih = H - pt - pb;
+  const vals = items.map(i => i.v).filter(ok);
+  let mx = Math.max(1, ...vals.map(v => Math.abs(v)));
+  const step = niceStep(mx / 3); mx = Math.ceil(mx / step) * step;
+  const mn = signed ? -mx : 0;
+  const y = v => pt + (mx - v) / (mx - mn) * ih;
+  const bw = iw / Math.max(items.length, 1), bW = Math.min(44, bw * .56);
+  let s = `<svg width="${W}" height="${H}" role="img">`;
+  for (let v = mn; v <= mx + 1e-9; v += step) s += `<line x1="${pl}" x2="${W - pr}" y1="${y(v)}" y2="${y(v)}" class="${v === 0 ? 'gl0' : 'gl'}"/><text x="${pl - 8}" y="${y(v) + 3.5}" class="ax" text-anchor="end">${signed && v > 0 ? '+' : ''}${nf(v, step < 1 ? 1 : 0)}</text>`;
+  items.forEach((it, i) => {
+    const cx = pl + bw * i + bw / 2;
+    if (ok(it.v)) {
+      const y0 = y(0), y1 = y(it.v), top = Math.min(y0, y1), h = Math.abs(y1 - y0);
+      const col = signed ? pmCol(it.v) : (it.color || 'var(--blue)');
+      if (h > 0) s += `<path d="${roundBar(cx - bW / 2, top, bW, h, it.v >= 0)}" fill="${col}" ${it.ghost ? 'fill-opacity=".35" stroke="' + col + '" stroke-dasharray="3 2"' : ''}/>`;
+      else s += `<line x1="${cx - bW / 2}" x2="${cx + bW / 2}" y1="${y0}" y2="${y0}" stroke="var(--text3)" stroke-width="2"/>`;
+      const ly = it.v >= 0 ? y1 - 6 : y1 + 14;
+      s += `<text x="${cx}" y="${ly}" class="vl" text-anchor="middle">${signed ? sgn(it.v, d) : nf(it.v, d)}</text>`;
+    } else {
+      s += `<text x="${cx}" y="${y(0) - 6}" class="ax" text-anchor="middle">—</text>`;
+    }
+    s += `<text x="${cx}" y="${H - pb + 16}" class="axs" text-anchor="middle">${esc(it.label)}</text>`;
+    if (it.sub) s += `<text x="${cx}" y="${H - pb + 30}" class="ax" text-anchor="middle">${esc(it.sub)}</text>`;
+    s += `<rect x="${pl + bw * i}" y="${pt - 12}" width="${bw}" height="${ih + 24}" fill="transparent" data-tip="${esc(it.tip || '')}"/>`;
+  });
+  if (ok(avg)) s += `<line x1="${pl}" x2="${W - pr}" y1="${y(avg)}" y2="${y(avg)}" stroke="var(--text2)" stroke-width="1" stroke-dasharray="4 4"/>`;
+  el.innerHTML = s + '</svg>' + (ok(avg) ? `<div class="lg"><span><svg width="18" height="2"><line x1="0" x2="18" y1="1" y2="1" stroke="var(--text2)" stroke-dasharray="4 3"/></svg>Media ${signed ? sgn(avg, 1) : nf(avg, 1)}</span></div>` : '');
+}
+function niceStep(v) { if (v <= 0) return 1; const e = Math.pow(10, Math.floor(Math.log10(v))), f = v / e; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * e; }
+function roundBar(x, y, w, h, up) {
+  const r = Math.min(4, w / 2, h);
+  return up ? `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`
+            : `M${x},${y}V${y + h - r}Q${x},${y + h} ${x + r},${y + h}H${x + w - r}Q${x + w},${y + h} ${x + w},${y + h - r}V${y}Z`;
 }
 
+/* ---------- horizontal diverging/plain list ---------- */
+function hbars(rows, { signed, max, fmt = v => nf(v, 1), sub }) {
+  const mx = max || Math.max(1e-9, ...rows.map(r => Math.abs(r.v || 0)));
+  return rows.map(r => {
+    const v = r.v || 0, w = Math.abs(v) / mx;
+    const bar = signed
+      ? `<span class="z"></span><i style="${v >= 0 ? 'left:50%' : 'right:50%'};width:${w * 50}%;background:${pmCol(v)};${r.dim ? 'opacity:.35' : ''}"></i>`
+      : `<i style="left:0;width:${w * 100}%;background:${r.color || 'var(--blue)'};${r.dim ? 'opacity:.35' : ''}"></i>`;
+    return `<div class="hb" ${r.tip ? `data-tip="${esc(r.tip)}"` : ''}><span class="n ${r.me ? 'me' : ''}">${esc(r.label)}</span><div class="t">${bar}</div><span class="v">${ok(r.v) ? fmt(r.v) : '—'}${r.sub ? `<small>${r.sub}</small>` : ''}</span></div>`;
+  }).join('');
+}
+
+/* ---------- court ---------- */
+function court(shots, colorFn, legend) {
+  const L = 'var(--border2)';
+  let s = `<svg class="court" viewBox="-7700 -1800 15400 10600" role="img">
+  <rect x="-7500" y="-1575" width="15000" height="10375" rx="200" fill="var(--surface2)" stroke="${L}" stroke-width="40"/>
+  <rect x="-2450" y="-1575" width="4900" height="5800" fill="none" stroke="${L}" stroke-width="40"/>
+  <circle cx="0" cy="4225" r="1800" fill="none" stroke="${L}" stroke-width="40"/>
+  <path d="M-6600,-1575V1416A6750,6750 0 0 0 6600,1416V-1575" fill="none" stroke="${L}" stroke-width="40"/>
+  <path d="M-1250,0A1250,1250 0 0 0 1250,0" fill="none" stroke="${L}" stroke-width="40"/>
+  <line x1="-900" x2="900" y1="-375" y2="-375" stroke="var(--text3)" stroke-width="60"/>
+  <circle cx="0" cy="0" r="225" fill="none" stroke="var(--text3)" stroke-width="45"/>`;
+  shots.forEach(sh => s += `<circle cx="${sh.cx}" cy="${sh.cy}" r="190" fill="${colorFn(sh)}" stroke="var(--surface)" stroke-width="50" data-tip="${esc(sh.tip || '')}"/>`);
+  return s + '</svg>' + (legend ? `<div class="lg" style="justify-content:center">${legend}</div>` : '');
+}
+const ZN = { pin: 'Pintura', med: 'Media distancia', tri: 'Triple' };
+
+/* ---------- gantt (stints) ---------- */
+function gantt(el, W, G, rows, lw, scaleLen, noHead) {
+  const L0 = scaleLen || G.len, rh = 26, top = noHead ? 0 : 18, H = rows.length * rh + top + 4, iw = W - lw - 4, x = t => lw + t / L0 * iw;
+  let s = `<svg width="${W}" height="${H}" role="img">`;
+  G.periods.forEach(p => {
+    s += `<line x1="${x(p.start)}" x2="${x(p.start)}" y1="${top ? 16 : 0}" y2="${H}" class="gl"/>`;
+    if (!noHead) s += `<text x="${x(p.start + p.len / 2)}" y="11" class="ax" text-anchor="middle">${pLabel(p.p)}</text>`;
+  });
+  s += `<line x1="${x(G.len)}" x2="${x(G.len)}" y1="${top ? 16 : 0}" y2="${H}" class="gl"/>`;
+  rows.forEach((r, i) => {
+    const yy = top + 2 + i * rh;
+    s += `<text x="${lw - 10}" y="${yy + rh / 2 + 4}" text-anchor="end" class="rl ${r.me ? 'me' : ''}">${esc(r.label)}</text>`;
+    s += `<rect x="${lw}" y="${yy + rh / 2 - .5}" width="${iw}" height="1" class="trk"/>`;
+    (r.stints || []).forEach(st => {
+      const x1 = x(st.s), w = Math.max(2, x(st.e) - x1);
+      const tp = `<b>${esc(r.full || r.label)}</b><br><span class="tm">${pLabel(st.sp)} → ${pLabel(st.ep)} · ${mmss(st.e - st.s)}</span><br>${sgn(st.pm)} en pista`;
+      s += `<rect x="${x1}" y="${yy + 4}" width="${w}" height="${rh - 8}" rx="3" fill="${pmCol(st.pm)}" fill-opacity="${st.pm === 0 ? .55 : .9}" data-tip="${esc(tp)}"/>`;
+      if (w > 28) s += `<text x="${x1 + w / 2}" y="${yy + rh / 2 + 3.5}" class="vlw" text-anchor="middle">${sgn(st.pm)}</text>`;
+    });
+    (r.fouls || []).forEach((f, k) => {
+      s += `<g data-tip="${esc(`<b>Falta ${k + 1}</b><br><span class="tm">${pLabel(f.p)} · ${mmss(f.t - G.periods.find(q => q.p === f.p).start)}</span>`)}"><circle cx="${x(f.t)}" cy="${yy + 4}" r="5" fill="var(--surface)" stroke="var(--text)" stroke-width="1.4"/><text x="${x(f.t)}" y="${yy + 7}" text-anchor="middle" style="font:700 7.5px var(--font);fill:var(--text)">${k + 1}</text></g>`;
+    });
+  });
+  el.innerHTML = s + '</svg>';
+}
+
+/* ---------- score flow ---------- */
+function flowChart(el, W, G) {
+  const H = 230, pl = 32, pr = 8, pt = 24, pb = 10, iw = W - pl - pr, ih = H - pt - pb;
+  const F = G.flow;
+  let yM = Math.max(4, ...F.map(f => Math.abs(f.us - f.them))); const st = niceStep(yM / 2.5); yM = Math.ceil(yM / st) * st;
+  const x = t => pl + t / G.len * iw, y = d => pt + (yM - d) / (2 * yM) * ih;
+  let d = `M${x(0)},${y(0)}`; F.forEach(f => d += `H${x(f.t).toFixed(1)}V${y(f.us - f.them).toFixed(1)}`); d += `H${x(G.len)}`;
+  const area = d + `V${y(0)}H${x(0)}Z`, id = 'f' + Math.random().toString(36).slice(2, 7);
+  let s = `<svg width="${W}" height="${H}" role="img"><defs><clipPath id="${id}a"><rect x="0" y="0" width="${W}" height="${y(0)}"/></clipPath><clipPath id="${id}b"><rect x="0" y="${y(0)}" width="${W}" height="${H}"/></clipPath></defs>`;
+  for (let v = -yM; v <= yM; v += st) if (v) s += `<line x1="${pl}" x2="${W - pr}" y1="${y(v)}" y2="${y(v)}" class="gl"/><text x="${pl - 8}" y="${y(v) + 3.5}" class="ax" text-anchor="end">${sgn(v)}</text>`;
+  G.periods.forEach((p, i) => { if (i) s += `<line x1="${x(p.start)}" x2="${x(p.start)}" y1="${pt - 8}" y2="${H - pb}" class="gl"/>`; s += `<text x="${x(p.start + p.len / 2)}" y="12" class="ax" text-anchor="middle">${pLabel(p.p)}</text>`; });
+  s += `<path d="${area}" fill="var(--blue)" fill-opacity=".18" clip-path="url(#${id}a)"/><path d="${area}" fill="var(--red)" fill-opacity=".18" clip-path="url(#${id}b)"/>`;
+  s += `<line x1="${pl}" x2="${W - pr}" y1="${y(0)}" y2="${y(0)}" class="gl0"/>`;
+  s += `<path d="${d}" fill="none" stroke="var(--text)" stroke-width="1.6" stroke-linejoin="round"/>`;
+  s += `<line class="cl" y1="${pt - 8}" y2="${H - pb}" stroke="var(--text2)" stroke-width="1" opacity="0"/><circle class="cd" r="4.5" fill="var(--text)" stroke="var(--surface)" stroke-width="2" opacity="0"/>`;
+  s += `<rect data-hover="1" x="${pl}" y="0" width="${iw}" height="${H}" fill="transparent"/></svg>`;
+  el.innerHTML = s;
+  const svg = el.querySelector('svg'), cl = svg.querySelector('.cl'), cd = svg.querySelector('.cd'), hit = svg.querySelector('[data-hover]');
+  const mv_ = e => {
+    const r = svg.getBoundingClientRect(), t = clamp((e.clientX - r.left - pl) / iw * G.len, 0, G.len);
+    let f = F[0]; for (const q of F) { if (q.t <= t) f = q; else break; }
+    const per = G.periods.find(p => t >= p.start && t < p.start + p.len) || G.periods[G.periods.length - 1];
+    const xx = x(t), dd = f.us - f.them;
+    cl.setAttribute('x1', xx); cl.setAttribute('x2', xx); cl.setAttribute('opacity', 1);
+    cd.setAttribute('cx', xx); cd.setAttribute('cy', y(dd)); cd.setAttribute('opacity', 1);
+    const sc = G.scores.filter(z => Math.abs(z.t - f.t) < 1 && f.t > 0).map(z => `${z.us ? '' : '<span class="tm">'}${esc(z.name)} +${z.v}${z.us ? '' : '</span>'}`).join('<br>');
+    showTip(`<b>${pLabel(per.p)} · ${mmss(per.start + per.len - t)}</b><br>Claret ${f.us} – ${f.them} ${esc(G.code)} <b>${sgn(dd)}</b>${sc ? '<br>' + sc : ''}`, e.clientX, e.clientY);
+  };
+  hit.addEventListener('pointermove', mv_); hit.addEventListener('pointerdown', mv_);
+  hit.addEventListener('pointerleave', () => { cl.setAttribute('opacity', 0); cd.setAttribute('opacity', 0); hideTip(); });
+}
+
+/* ---------- presence curve ---------- */
+function presence(el, W, games, id) {
+  const gs = games.filter(g => g.detail && g.players[id]);
+  if (!gs.length) { el.innerHTML = '<div class="empty">Sin datos</div>'; return; }
+  const maxLen = Math.max(...gs.map(g => g.len)), step = 15;
+  const pts = [];
+  for (let t = 0; t <= maxLen; t += step) {
+    const elig = gs.filter(g => t < g.len || (t === g.len && t > 0));
+    const on = elig.filter(g => (g.stints[id] || []).some(s => t >= s.s && t < s.e || (t === g.len && s.e === g.len))).length;
+    pts.push({ t, v: elig.length ? on / elig.length * 100 : null, n: elig.length, on });
+  }
+  const H = 170, pl = 34, pr = 8, pt = 22, pb = 10, iw = W - pl - pr, ih = H - pt - pb;
+  const x = t => pl + t / maxLen * iw, y = v => pt + (100 - v) / 100 * ih;
+  const pr0 = gs.reduce((a, g) => g.periods.length > a.periods.length ? g : a, gs[0]).periods;
+  let s = `<svg width="${W}" height="${H}" role="img">`;
+  [0, 50, 100].forEach(v => s += `<line x1="${pl}" x2="${W - pr}" y1="${y(v)}" y2="${y(v)}" class="${v ? 'gl' : 'gl0'}"/><text x="${pl - 8}" y="${y(v) + 3.5}" class="ax" text-anchor="end">${v}%</text>`);
+  pr0.forEach((p, i) => { if (i) s += `<line x1="${x(p.start)}" x2="${x(p.start)}" y1="${pt - 8}" y2="${H - pb}" class="gl"/>`; s += `<text x="${x(p.start + p.len / 2)}" y="12" class="ax" text-anchor="middle">${pLabel(p.p)}</text>`; });
+  let d = '', a = '';
+  pts.forEach((p, i) => { if (p.v == null) return; d += (d ? 'L' : 'M') + x(p.t).toFixed(1) + ',' + y(p.v).toFixed(1); });
+  const valid = pts.filter(p => p.v != null);
+  a = d + `L${x(valid[valid.length - 1].t)},${y(0)}L${x(0)},${y(0)}Z`;
+  s += `<path d="${a}" fill="var(--blue)" fill-opacity=".16"/><path d="${d}" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linejoin="round"/>`;
+  s += `<line class="cl" y1="${pt - 8}" y2="${H - pb}" stroke="var(--text2)" stroke-width="1" opacity="0"/><circle class="cd" r="4.5" fill="var(--blue)" stroke="var(--surface)" stroke-width="2" opacity="0"/>`;
+  s += `<rect data-hover="1" x="${pl}" y="0" width="${iw}" height="${H}" fill="transparent"/></svg>`;
+  el.innerHTML = s;
+  const svg = el.querySelector('svg'), cl = svg.querySelector('.cl'), cd = svg.querySelector('.cd'), hit = svg.querySelector('[data-hover]');
+  const mv_ = e => {
+    const r = svg.getBoundingClientRect(), t = clamp((e.clientX - r.left - pl) / iw * maxLen, 0, maxLen);
+    const p = valid.reduce((b, q) => Math.abs(q.t - t) < Math.abs(b.t - t) ? q : b, valid[0]);
+    const per = pr0.find(q => p.t >= q.start && p.t < q.start + q.len) || pr0[pr0.length - 1];
+    cl.setAttribute('x1', x(p.t)); cl.setAttribute('x2', x(p.t)); cl.setAttribute('opacity', 1);
+    cd.setAttribute('cx', x(p.t)); cd.setAttribute('cy', y(p.v)); cd.setAttribute('opacity', 1);
+    showTip(`<b>${pLabel(per.p)} · ${mmss(per.start + per.len - p.t)}</b><br>En pista en ${p.on} de ${p.n} partidos (${nf(p.v, 0)}%)`, e.clientX, e.clientY);
+  };
+  hit.addEventListener('pointermove', mv_); hit.addEventListener('pointerdown', mv_);
+  hit.addEventListener('pointerleave', () => { cl.setAttribute('opacity', 0); cd.setAttribute('opacity', 0); hideTip(); });
+}
+
+/* ================= views ================= */
+function emptyState(msg) { return `<div class="card fade"><div class="empty">${msg}</div></div>`; }
+function playerOptions(A, cur) {
+  const ps = Object.values(A.P).sort((a, b) => (b.id === CFG.me) - (a.id === CFG.me) || (+a.dorsal) - (+b.dorsal));
+  return ps.map(p => `<option value="${p.id}" ${p.id === cur ? 'selected' : ''}>${esc(p.name)} · ${p.dorsal}</option>`).join('');
+}
+
+/* ---------- JUGADORA ---------- */
+function viewJugadora() {
+  const gs = activeGames(); if (!gs.length) return emptyState('No hay partidos seleccionados.');
+  const A = agg(gs);
+  if (!A.P[S.player]) S.player = A.P[CFG.me] ? CFG.me : Object.keys(A.P)[0];
+  const p = A.P[S.player]; if (!p) return emptyState('Sin datos.');
+  const md = S.mode;
+  // form
+  const mine = gs.filter(g => g.players[p.id] && g.players[p.id].sec > 0 && !g.players[p.id].partial);
+  const fw = mine.length >= 4 ? 3 : (mine.length >= 2 ? 1 : 0);
+  const FA = fw ? agg(mine.slice(-fw)) : null, fp = FA && FA.P[p.id];
+
+  const tile = (key, lab, opts = {}) => {
+    const v = key === 'min' ? (md === 'tot' ? p.sec / 60 : p.sec / 60 / p.gp) : mv(p, key, md);
+    const mdR = key === 'min' ? (md === 'tot' ? 'tot' : 'pg') : md;
+    const r = rank(A, p.id, key, mdR, MET[key] && MET[key].low);
+    let val;
+    if (key === 'min') val = md === 'tot' ? mmss(p.sec) : nf(v, 1);
+    else if (key === 'ftp') val = ok(v) ? nf(v, 0) + '<small>%</small>' : '—';
+    else if (key === 'pm') val = sgn(v, md === 'tot' ? 0 : 1);
+    else val = nf(v, md === 'tot' ? 0 : 1);
+    if (opts.suffix) val += `<small>${opts.suffix}</small>`;
+    let f = '';
+    if (fp && md !== 'tot') {
+      const fv = key === 'min' ? fp.sec / 60 / fp.gp : mv(fp, key, md);
+      if (ok(fv) && ok(v)) {
+        const df = fv - v, low = MET[key] && MET[key].low, th = Math.max(Math.abs(v) * .08, .2);
+        const dir = Math.abs(df) < th ? '' : ((df > 0) !== !!low ? 'up' : 'dn');
+        const fmtv = key === 'ftp' ? nf(fv, 0) + '%' : key === 'pm' ? sgn(fv, 1) : nf(fv, 1);
+        f = `<span class="arr ${dir}">${dir === 'up' ? '▲' : dir === 'dn' ? '▼' : '='}</span><b>${fmtv}</b> ${fw === 1 ? 'último' : 'últ. ' + fw}`;
+      }
+    } else if (opts.foot) f = opts.foot;
+    return `<div class="kpi" ${r ? `data-tip="${esc(`${lab}: ${r.r}º de ${r.n} en el equipo`)}"` : ''}><div class="l"><span>${lab}</span>${r ? `<span class="rk ${r.r <= 3 ? 'top' : ''}">${r.r}º<span class="muted">/${r.n}</span></span>` : ''}</div><div class="v">${val}</div><div class="f">${f}</div></div>`;
+  };
+  const kp = `<div class="kpis fade">
+    ${tile('min', md === 'tot' ? 'Minutos' : 'Minutos / partido', { foot: `${nf(p.sec / (sum(gs.filter(g => g.players[p.id] && g.players[p.id].sec > 0), g => g.len) || 1) * 100, 0)}% del tiempo en pista` })}
+    ${tile('pts', 'Puntos')}
+    ${tile('t2m', 'Canastas de 2')}
+    ${tile('t3m', 'Triples')}
+    ${tile('ftp', 'Tiros libres', { foot: `<b>${p.ftm}/${p.fta}</b> total` })}
+    ${tile('fc', 'Faltas')}
+    ${tile('pm', '+/−')}
+  </div>`;
+
+  const head = `<div class="phead"><div class="psel"><select data-act="player">${playerOptions(A, p.id)}</select></div>
+    <div class="pmeta"><span><b>${p.gp}</b>PJ</span><span><b>${p.gs}</b>titular</span><span><b>${mmss(p.sec)}</b>min</span><span><b>${p.pts}</b>pts</span></div>
+    <div class="sp"></div>${seg('mode', MODES, md)}</div>`;
+
+  // per game
+  const pgOpts = [['pts', 'Puntos'], ['min', 'Minutos'], ['pm', '+/−'], ['fc', 'Faltas'], ['ftm', 'TL']];
+  const perGame = chart((el, W) => {
+    const k = S.pgMetric;
+    const items = gs.map(g => {
+      const x = g.players[p.id];
+      const v = !x || !(x.sec > 0) ? null : k === 'min' ? x.sec / 60 : x.partial ? null : x[k];
+      return { v, label: `J${g.j}`, sub: (g.home ? '' : '@') + g.code,
+        tip: x && x.sec > 0 ? `<b>J${g.j} · ${esc(g.opp)}</b> <span class="tm">${g.pf}–${g.pa}</span><br>${mmss(x.sec)} min${x.partial ? '' : ` · ${x.pts} pts · ${sgn(x.pm)}<br>TL ${x.ftm}/${x.fta} · ${x.fc} faltas${x.start ? ' · titular' : ''}`}` : `<b>J${g.j} · ${esc(g.opp)}</b><br>No jugó` };
+    });
+    const vs = items.map(i => i.v).filter(ok);
+    vbars(el, W, { items, signed: k === 'pm', avg: vs.length > 1 ? sum(vs) / vs.length : null, d: k === 'min' ? 1 : 0, H: 210 });
+  });
+
+  // impact
+  const on40 = per40(p.pm, p.sec), off40 = per40(p.offPm, p.offSec), net = ok(on40) && ok(off40) ? on40 - off40 : null;
+  const imx = Math.max(5, Math.abs(on40 || 0), Math.abs(off40 || 0));
+  const impRows = hbars([
+    { label: 'En pista', v: on40, tip: `${sgn(p.pm)} en ${mmss(p.sec)} min` },
+    { label: 'Banquillo', v: off40, tip: `${sgn(p.offPm)} en ${mmss(p.offSec)} min` },
+  ], { signed: true, max: imx, fmt: v => sgn(v, 1) });
+  const rnet = (() => { const arr = Object.values(A.P).map(q => ({ id: q.id, v: mv(q, 'net') })).filter(z => ok(z.v)).sort((a, b) => b.v - a.v); const i = arr.findIndex(z => z.id === p.id); return i < 0 ? null : { r: i + 1, n: arr.length }; })();
+  const impact = `${impRows}
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
+      <div><div class="muted" style="font-size:12px">Impacto neto · por 40'</div>${rnet ? `<div style="font-size:12px;color:var(--text2);margin-top:2px">${rnet.r}º de ${rnet.n} en el equipo</div>` : ''}</div>
+      <div style="font-size:28px;font-weight:700;letter-spacing:-.02em">${sgn(net, 1)}</div></div>
+    <div class="tw" style="margin-top:12px"><table><thead><tr><th>Partido</th><th>En pista</th><th>Banquillo</th><th>Neto/40'</th></tr></thead><tbody>
+    ${mine.map(g => { const x = g.players[p.id], off = g.diff - x.pm, offS = g.len - x.sec, n4 = (per40(x.pm, x.sec) ?? 0) - (per40(off, offS) ?? 0);
+      return `<tr><td>J${g.j} <span class="sub">${g.home ? '' : '@'}${esc(g.code)}</span></td><td>${pmHtml(x.pm)}</td><td>${pmHtml(off)}</td><td>${sgn(n4, 1)}</td></tr>`; }).join('')}</tbody></table></div>`;
+
+  // quarters heat
+  const maxP = Math.max(4, ...mine.map(g => g.periods.length));
+  const cols = `grid-template-columns:64px repeat(${maxP},minmax(0,1fr))`;
+  const heatCell = (sec, len, pts, pm, fc, tipH) => {
+    if (len == null) return `<div class="cell na"></div>`;
+    if (!sec) return `<div class="cell zero" data-tip="${esc(tipH)}">0'</div>`;
+    const f = clamp(sec / len, 0, 1), a = Math.round(12 + f * 78);
+    const dark = f > .55;
+    return `<div class="cell" style="background:color-mix(in srgb,var(--blue) ${a}%,var(--surface2));color:${dark ? '#fff' : 'var(--text)'}" data-tip="${esc(tipH)}">${nf(sec / 60, 0)}'<small>${pts ? pts + ' pts · ' : ''}${sgn(pm)}</small></div>`;
+  };
+  let heat = `<div class="heat"><div class="hr" style="${cols}"><div></div>${Array.from({ length: maxP }, (_, i) => `<div class="hd">${pLabel(i + 1)}</div>`).join('')}</div>`;
+  mine.forEach(g => {
+    const x = g.players[p.id];
+    heat += `<div class="hr" style="${cols}"><div class="lab">J${g.j}<small>${g.home ? '' : '@'}${esc(g.code)}</small></div>`;
+    for (let i = 1; i <= maxP; i++) {
+      const per = g.periods.find(q => q.p === i), q = x.per[i] || {};
+      heat += heatCell(q.sec || 0, per ? per.len : null, q.pts, q.pm || 0, q.fc, per ? `<b>J${g.j} · ${pLabel(i)}</b><br>${mmss(q.sec || 0)} min · ${q.pts || 0} pts · ${sgn(q.pm || 0)}${q.fc ? `<br>${q.fc} falta${q.fc > 1 ? 's' : ''}` : ''}` : '');
+    }
+    heat += `</div>`;
+  });
+  if (mine.length > 1) {
+    heat += `<div class="hr avg" style="${cols};margin-top:4px"><div class="lab">Media</div>`;
+    for (let i = 1; i <= maxP; i++) {
+      const gsP = mine.filter(g => g.periods.some(q => q.p === i));
+      if (!gsP.length) { heat += `<div class="cell na"></div>`; continue; }
+      const sec = sum(gsP, g => (g.players[p.id].per[i] || {}).sec || 0) / gsP.length, len = gsP[0].periods.find(q => q.p === i).len;
+      const pts = sum(gsP, g => (g.players[p.id].per[i] || {}).pts || 0) / gsP.length, pm = sum(gsP, g => (g.players[p.id].per[i] || {}).pm || 0);
+      heat += heatCell(sec, len, pts ? nf(pts, 1) : 0, pm, 0, `<b>Media ${pLabel(i)}</b> <span class="tm">(${gsP.length} partidos)</span><br>${mmss(sec)} min · ${nf(pts, 1)} pts · ${sgn(pm)} total`);
+    }
+    heat += `</div>`;
+  }
+  heat += `</div>`;
+
+  // points type
+  const tp = [{ k: '2P', v: p.t2m * 2, n: p.t2m, c: 'var(--blue)' }, { k: '3P', v: p.t3m * 3, n: p.t3m, c: '#eb6834' }, { k: 'TL', v: p.ftm, n: p.ftm, c: 'var(--text3)' }];
+  const tot = p.pts || 1;
+  const pshots = gs.flatMap(g => g.shotsUs.filter(s => s.id === p.id).map(s => ({ ...s, tip: `<b>${s.type === 'T3' ? 'Triple' : 'Canasta de 2'}</b> · ${ZN[s.zone]}<br><span class="tm">J${g.j} ${esc(g.code)} · ${pLabel(s.per)}</span>` })));
+  const zc = { pin: pshots.filter(s => s.zone === 'pin').length, med: pshots.filter(s => s.zone === 'med').length, tri: pshots.filter(s => s.zone === 'tri').length };
+  const ptsType = `<div class="split"><div>${court(pshots, s => s.type === 'T3' ? '#eb6834' : 'var(--blue)', '')}</div><div>
+    <div class="stack" style="margin-bottom:12px">${tp.filter(t => t.v).map(t => `<i style="flex:${t.v};background:${t.c}" data-tip="${esc(`${t.k}: ${t.v} pts (${nf(t.v / tot * 100, 0)}%)`)}">${t.v / tot > .12 ? nf(t.v / tot * 100, 0) + '%' : ''}</i>`).join('') || '<i style="flex:1;background:var(--surface2)"></i>'}</div>
+    ${hbars(tp.map(t => ({ label: t.k === '2P' ? 'Tiros de 2' : t.k === '3P' ? 'Triples' : 'Tiros libres', v: t.v, color: t.c, sub: t.k === 'TL' ? `${p.ftm}/${p.fta}` : `×${t.n}` })), { max: Math.max(1, ...tp.map(t => t.v)), fmt: v => nf(v, 0) + ' pts' })}
+    <div class="mini" style="margin:14px 0 0;grid-template-columns:repeat(3,minmax(0,1fr))">${['pin', 'med', 'tri'].map(z => `<div><span>${ZN[z]}</span><b>${zc[z]}</b></div>`).join('')}</div></div></div>`;
+
+  // rotation
+  const st = []; mine.filter(g => g.detail).forEach(g => (g.stints[p.id] || []).forEach(s => st.push({ ...s, g })));
+  const nSt = st.length, avgSt = nSt ? sum(st, s => s.e - s.s) / nSt : null;
+  const rests = []; mine.filter(g => g.detail).forEach(g => { const a = g.stints[p.id] || []; for (let i = 1; i < a.length; i++) rests.push(a[i].s - a[i - 1].e); });
+  const firstIn = mine.filter(g => g.detail && (g.stints[p.id] || []).length).map(g => g.stints[p.id][0].s);
+  const longest = st.reduce((b, s) => !b || (s.e - s.s) > (b.e - b.s) ? s : b, null);
+  const rotMini = `<div class="mini">
+    <div><span>Tramos / partido</span><b>${mine.length ? nf(nSt / mine.length, 1) : '—'}</b></div>
+    <div><span>Duración media</span><b>${avgSt ? mmss(avgSt) : '—'}</b></div>
+    <div><span>Descanso medio</span><b>${rests.length ? mmss(sum(rests) / rests.length) : '—'}</b></div>
+    <div><span>Primera entrada</span><b>${firstIn.length ? (firstIn.every(t => t === 0) ? 'Titular' : 'min ' + nf(sum(firstIn) / firstIn.length / 60, 1)) : '—'}</b></div>
+    <div><span>Tramo más largo</span><b>${longest ? mmss(longest.e - longest.s) : '—'}<small>${longest ? 'J' + longest.g.j : ''}</small></b></div></div>`;
+  const rotGantts = chart((el, W) => {
+    el.innerHTML = '';
+    const gg = mine.filter(g => g.detail);
+    if (!gg.length) { el.innerHTML = '<div class="empty">Sin datos</div>'; return; }
+    const L0 = Math.max(...gg.map(g => g.len)), ref = gg.find(g => g.len === L0);
+    const hd = document.createElement('div'); el.appendChild(hd);
+    gantt(hd, W, ref, [], 76, L0);
+    gg.forEach(g => {
+      const d = document.createElement('div'); el.appendChild(d);
+      gantt(d, W, g, [{ label: `J${g.j} ${g.home ? '' : '@'}${g.code}`, full: `J${g.j} · ${g.opp}`, stints: g.stints[p.id], fouls: g.fouls.filter(f => f.id === p.id) }], 76, L0, true);
+    });
+  });
+
+  // fouls detail
+  const fl = mine.filter(g => g.detail).map(g => ({ g, f: g.fouls.filter(f => f.id === p.id).sort((a, b) => a.t - b.t) }));
+  const byQ = {}; fl.forEach(x => x.f.forEach(f => byQ[f.p] = (byQ[f.p] || 0) + 1));
+  const loaded = [0, 0, 0, 0, 0, 0];
+  fl.forEach(({ g, f }) => (g.stints[p.id] || []).forEach(s => {
+    const cuts = [s.s, ...f.map(z => z.t).filter(t => t > s.s && t < s.e), s.e];
+    for (let i = 0; i < cuts.length - 1; i++) { const mid = (cuts[i] + cuts[i + 1]) / 2, c = f.filter(z => z.t <= mid).length; loaded[Math.min(5, c)] += cuts[i + 1] - cuts[i]; }
+  }));
+  const totL = sum(loaded) || 1;
+  const fcol = ['var(--surface3)', 'color-mix(in srgb,var(--red) 25%,var(--surface2))', 'color-mix(in srgb,var(--red) 50%,var(--surface2))', 'color-mix(in srgb,var(--red) 75%,var(--surface2))', 'var(--red)', 'var(--text)'];
+  const maxQ = Math.max(4, ...Object.keys(byQ).map(Number));
+  const fouls = `<div class="mini">
+      <div><span>Faltas / partido</span><b>${nf(p.fc / (p.gp - p.partial || 1), 1)}</b></div>
+      <div><span>Faltas / 40'</span><b>${nf(per40(p.fc, p.sec), 1)}</b></div>
+      <div><span>Minutos por falta</span><b>${p.fc ? nf(p.sec / 60 / p.fc, 1) : '—'}</b></div>
+      <div><span>Eliminada</span><b>${fl.filter(x => x.f.length >= 5).length}<small>veces</small></b></div></div>
+    <div class="muted" style="font-size:12px;margin-bottom:6px">Por cuarto</div>
+    ${hbars(Array.from({ length: maxQ }, (_, i) => ({ label: pLabel(i + 1), v: byQ[i + 1] || 0, color: 'var(--red)' })), { max: Math.max(1, ...Object.values(byQ)), fmt: v => nf(v, 0) })}
+    <div class="muted" style="font-size:12px;margin:14px 0 6px">Minutos jugados según faltas acumuladas</div>
+    <div class="stack">${loaded.map((s, i) => s > 0 ? `<i style="flex:${s};background:${fcol[i]};color:${i < 2 ? 'var(--text)' : '#fff'}" data-tip="${esc(`Con ${i}${i === 5 ? '+' : ''} falta${i === 1 ? '' : 's'}: ${mmss(s)} min (${nf(s / totL * 100, 0)}%)`)}">${s / totL > .1 ? i + 'F' : ''}</i>` : '').join('')}</div>
+    <div class="lg">${loaded.map((s, i) => s > 0 ? `<span><i style="background:${fcol[i]}"></i>${i}F · ${mmss(s)}</span>` : '').join('')}</div>`;
+
+  // chemistry
+  const pr = {};
+  A.L.forEach(l => { if (!l.ids.includes(p.id)) return; l.ids.forEach(o => { if (o === p.id) return; const x = pr[o] || (pr[o] = { sec: 0, pm: 0 }); x.sec += l.sec; x.pm += l.pm; }); });
+  let chemRows = Object.entries(pr).map(([o, x]) => ({ o, ...x, q: A.P[o], p40: per40(x.pm, x.sec) })).filter(r => r.q);
+  chemRows.sort(S.chem === 'pm' ? (a, b) => (b.sec >= 120) - (a.sec >= 120) || b.p40 - a.p40 : (a, b) => b.sec - a.sec);
+  const cmax = Math.max(10, ...chemRows.filter(r => r.sec >= 120).map(r => Math.abs(r.p40)));
+  const chem = chemRows.length ? hbars(chemRows.map(r => ({ label: r.q.nick, v: r.p40, dim: r.sec < 120,
+      sub: `${nf(r.sec / 60, 0)}'`, tip: `<b>${esc(p.first)} + ${esc(r.q.name)}</b><br>${mmss(r.sec)} min juntas · ${sgn(r.pm)}<br>${sgn(r.p40, 1)} por 40'${r.sec < 120 ? '<br><span class="tm">Muestra pequeña</span>' : ''}` })),
+      { signed: true, max: cmax, fmt: v => sgn(v, 1) })
+    + `<div class="lg"><span><i style="background:var(--blue)"></i>+/− por 40' juntas</span><span class="muted">minutos juntas a la derecha · atenuado &lt; 2'</span></div>` : '<div class="empty">Sin datos de quintetos</div>';
+
+  return head + kp + `<div class="grid" style="margin-top:12px">
+    ${card('s8', 'Partido a partido', perGame, seg('pgMetric', pgOpts, S.pgMetric))}
+    ${card('s4', 'Impacto en pista', impact, '', "+/− por 40'")}
+    ${card('s7', 'Minutos por cuarto', heat)}
+    ${card('s5', 'Tipo de puntos', ptsType)}
+    ${card('s12', 'Rotación', rotMini + `<div class="muted" style="font-size:12px;margin-bottom:4px">Probabilidad de estar en pista en cada momento del partido</div>` + chart((el, W) => presence(el, W, gs, p.id)) +
+      `<div class="muted" style="font-size:12px;margin:14px 0 2px">Tramos por partido · color = +/− del tramo · ① faltas</div>` + rotGantts)}
+    ${card('s6', 'Faltas', fouls)}
+    ${card('s6', 'Química', chem, seg('chem', [['sec', 'Más minutos'], ['pm', 'Mejor +/−']], S.chem), "+/− por 40' juntas")}
+  </div>`;
+}
+
+/* ---------- EQUIPO ---------- */
+function viewEquipo() {
+  const gs = activeGames(); if (!gs.length) return emptyState('No hay partidos seleccionados.');
+  const A = agg(gs), T = A.T, n = T.gp;
+  const k = (l, v, s = '') => `<div class="kpi"><div class="l"><span>${l}</span></div><div class="v">${v}</div><div class="f">${s}</div></div>`;
+  const kp = `<div class="kpis fade" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr))">
+    ${k('Balance', `${T.w}–${T.l}`, `${n} partido${n > 1 ? 's' : ''}`)}
+    ${k('Puntos a favor', nf(T.pf / n, 1), `${T.pf} total`)}
+    ${k('Puntos en contra', nf(T.pa / n, 1), `${T.pa} total`)}
+    ${k('Diferencia', sgn((T.pf - T.pa) / n, 1), `${sgn(T.pf - T.pa)} total`)}
+    ${k('Tiros libres', ok(pct(T.ftm, T.fta)) ? nf(pct(T.ftm, T.fta), 0) + '<small>%</small>' : '—', `${T.ftm}/${T.fta}`)}
+    ${k('Faltas', nf(T.fc / n, 1), `rival ${nf(T.ofc / n, 1)}`)}
+  </div>`;
+
+  // games strip, oldest left → newest right
+  const act = new Set(gs.map(g => g.n));
+  const games = `<div class="games">${M.games.map(g => `<button class="game ${act.has(g.n) ? '' : 'off'}" data-act="game" data-n="${g.n}">
+    <div class="gt"><span>J${g.j} · ${fdate(g.date)}</span><span>${g.home ? 'Casa' : 'Fuera'}</span></div>
+    <div class="go">${esc(g.opp)}</div>
+    <div class="gs"><span class="wl ${g.res}">${g.res === 'W' ? 'V' : g.res === 'L' ? 'D' : 'E'}</span><b>${g.pf}–${g.pa}</b><span class="dif">${sgn(g.diff)}</span></div></button>`).join('')}</div>`;
+
+  // roster table
+  const tm = S.tmode;
+  const v = (p, key) => key === 'min' ? (tm === 'tot' ? p.sec / 60 : p.sec / 60 / p.gp) : mv(p, key, tm);
+  const d = tm === 'tot' ? 0 : 1;
+  const cols = [
+    ['name', 'Jugadora', p => p.name],
+    ['gp', 'PJ', p => p.gp, p => p.gp],
+    ['gs', 'Tit', p => p.gs, p => p.gs],
+    ['min', tm === 'tot' ? 'Min' : 'Min/p', p => v(p, 'min'), p => tm === 'tot' ? mmss(p.sec) : nf(v(p, 'min'), 1), true],
+    ['pts', 'Pts', p => v(p, 'pts'), p => nf(v(p, 'pts'), d), true],
+    ['t2m', '2P', p => v(p, 't2m'), p => nf(v(p, 't2m'), d)],
+    ['t3m', '3P', p => v(p, 't3m'), p => nf(v(p, 't3m'), d)],
+    ['ftm', 'TL', p => v(p, 'ftm'), p => tm === 'tot' ? `${p.ftm}<span class="sub">/${p.fta}</span>` : `${nf(v(p, 'ftm'), 1)}<span class="sub">/${nf(v(p, 'fta'), 1)}</span>`],
+    ['ftp', 'TL%', p => p.fta ? pct(p.ftm, p.fta) : -1, p => p.fta ? nf(pct(p.ftm, p.fta), 0) : '—'],
+    ['fc', 'F', p => v(p, 'fc'), p => nf(v(p, 'fc'), d)],
+    ['pm', '+/−', p => v(p, 'pm'), p => pmHtml(v(p, 'pm'), d)],
+  ];
+  const sc = cols.find(c => c[0] === S.sort.k) || cols[3];
+  const rows = Object.values(A.P).sort((a, b) => { const x = sc[2](a), y = sc[2](b); return (typeof x === 'string' ? x.localeCompare(y) : (x ?? -1e9) - (y ?? -1e9)) * S.sort.d; });
+  const bmax = {}; cols.filter(c => c[4]).forEach(c => bmax[c[0]] = Math.max(1e-9, ...rows.map(r => c[2](r) || 0)));
+  const table = `<div class="tw"><table><thead><tr>${cols.map(c => `<th class="s ${S.sort.k === c[0] ? 'on' : ''}" data-act="sort" data-k="${c[0]}">${c[1]}${S.sort.k === c[0] ? (S.sort.d < 0 ? ' ↓' : ' ↑') : ''}</th>`).join('')}</tr></thead><tbody>
+    ${rows.map(p => `<tr class="${p.id === CFG.me ? 'me' : ''}">${cols.map(c => c[0] === 'name'
+      ? `<td class="nm" data-act="toPlayer" data-id="${p.id}"><span class="dor">${p.dorsal}</span>${esc(p.name)}</td>`
+      : c[4] ? `<td class="cellbar" style="--w:${clamp((c[2](p) || 0) / bmax[c[0]], 0, 1) * 70}%"><span>${c[3](p)}</span></td>` : `<td>${c[3](p)}</td>`).join('')}</tr>`).join('')}
+    <tr class="tot"><td>Equipo</td><td>${n}</td><td></td><td>${tm === 'tot' ? mmss(T.sec) : nf(T.sec / 60 / n, 1)}</td><td>${tm === 'tot' ? T.pf : tm === 'pg' ? nf(T.pf / n, 1) : nf(per40(T.pf, T.sec), 1)}</td>
+      <td>${tm === 'tot' ? T.t2m : tm === 'pg' ? nf(T.t2m / n, 1) : nf(per40(T.t2m, T.sec), 1)}</td><td>${tm === 'tot' ? T.t3m : tm === 'pg' ? nf(T.t3m / n, 1) : nf(per40(T.t3m, T.sec), 1)}</td>
+      <td>${tm === 'tot' ? `${T.ftm}/${T.fta}` : tm === 'pg' ? `${nf(T.ftm / n, 1)}/${nf(T.fta / n, 1)}` : `${nf(per40(T.ftm, T.sec), 1)}/${nf(per40(T.fta, T.sec), 1)}`}</td><td>${nf(pct(T.ftm, T.fta), 0)}</td>
+      <td>${tm === 'tot' ? T.fc : tm === 'pg' ? nf(T.fc / n, 1) : nf(per40(T.fc, T.sec), 1)}</td><td>${sgn(tm === 'tot' ? T.pf - T.pa : tm === 'pg' ? (T.pf - T.pa) / n : per40(T.pf - T.pa, T.sec), d)}</td></tr>
+    </tbody></table></div><div class="lg"><span><span class="st" style="margin:0"></span></span><span class="muted">Clic en una jugadora para ver su ficha · ${tm === 'p40' ? "por 40' = ritmo por cada 40 minutos en pista" : tm === 'pg' ? 'media por partido jugado' : 'acumulado'}</span></div>`;
+
+  // minutes share
+  const shOpts = [['tot', 'Total'], ['pg', 'Media'], ...gs.map(g => [String(g.n), 'J' + g.j])];
+  if (!shOpts.some(o => o[0] === S.share)) S.share = 'tot';
+  let shareRows;
+  if (S.share === 'tot' || S.share === 'pg') shareRows = Object.values(A.P).map(p => ({ p, s: S.share === 'tot' ? p.sec : p.sec / n }));
+  else { const g = gs.find(x => String(x.n) === S.share); shareRows = Object.entries(g.players).filter(([, x]) => x.sec > 0).map(([id, x]) => ({ p: A.P[id] || { name: (M.names[id] || {}).name, nick: (M.names[id] || {}).name, id, dorsal: '' }, s: x.sec })); }
+  shareRows.sort((a, b) => b.s - a.s);
+  const shTot = sum(shareRows, r => r.s) || 1;
+  const share = `<div class="stack" style="margin-bottom:14px">${shareRows.map(r => `<i style="flex:${r.s};background:${r.p.id === CFG.me ? 'var(--me)' : 'var(--blue)'};opacity:${r.p.id === CFG.me ? 1 : .35 + .65 * r.s / shareRows[0].s}" data-tip="${esc(`<b>${r.p.name}</b><br>${mmss(r.s)} min · ${nf(r.s / shTot * 100, 1)}%`)}">${r.s / shTot > .06 ? r.p.dorsal : ''}</i>`).join('')}</div>
+    ${hbars(shareRows.map(r => ({ label: r.p.nick || r.p.name, me: r.p.id === CFG.me, v: r.s / 60, color: r.p.id === CFG.me ? 'var(--me)' : 'var(--blue)', sub: nf(r.s / shTot * 100, 0) + '%', tip: `${esc(r.p.name)}: ${mmss(r.s)}` })), { max: S.share === 'tot' ? Math.max(...shareRows.map(r => r.s / 60)) : 40, fmt: v => nf(v, 1) + "'" })}`;
+
+  // quarters
+  const qs = Object.entries(T.per).sort((a, b) => a[0] - b[0]);
+  const qm = Math.max(10, ...qs.map(([, x]) => Math.max(x.us, x.them) / x.n));
+  const quarters = `<div class="tw"><table><thead><tr><th>Cuarto</th><th>A favor</th><th></th><th>En contra</th><th>Dif.</th><th>Ganados</th></tr></thead><tbody>
+    ${qs.map(([k, x]) => { const won = gs.filter(g => (g.periods || []).some(q => q.p == k && q.us > q.them)).length; const df = (x.us - x.them) / x.n;
+      return `<tr><td>${pLabel(+k)}</td><td>${nf(x.us / x.n, 1)}</td><td style="width:40%"><div style="display:flex;gap:2px;height:12px"><div style="flex:1;display:flex;justify-content:flex-end"><i style="display:block;width:${x.us / x.n / qm * 100}%;background:var(--blue);border-radius:3px 0 0 3px"></i></div><div style="flex:1"><i style="display:block;height:100%;width:${x.them / x.n / qm * 100}%;background:var(--red);border-radius:0 3px 3px 0"></i></div></div></td><td>${nf(x.them / x.n, 1)}</td><td>${pmHtml(df, 1)}</td><td>${won}/${x.n}</td></tr>`; }).join('')}
+    </tbody></table></div><div class="lg"><span><i style="background:var(--blue)"></i>Claret</span><span><i style="background:var(--red)"></i>Rival</span><span class="muted">media por partido</span></div>`;
+
+  // lineups
+  let lus = A.L.map(l => ({ ...l, p40: per40(l.pm, l.sec) }));
+  if (S.luMin === 'me') lus = lus.filter(l => l.ids.includes(CFG.me));
+  lus.sort(S.luSort === 'pm' ? (a, b) => b.pm - a.pm || b.sec - a.sec : S.luSort === 'p40' ? (a, b) => (b.sec >= 300) - (a.sec >= 300) || b.p40 - a.p40 : (a, b) => b.sec - a.sec);
+  lus = lus.slice(0, 12);
+  const lineups = lus.length ? `<div class="tw"><table><thead><tr><th>Quinteto</th><th>Min</th><th>Partidos</th><th>+/−</th><th>+/− 40'</th></tr></thead><tbody>
+    ${lus.map(l => `<tr><td><div class="lu">${l.ids.map(id => ({ id, d: (M.names[id] || {}).dorsal || '?', nm: (M.names[id] || {}).name || '' })).sort((a, b) => a.d - b.d).map(x => `<span class="${x.id === CFG.me ? 'me' : ''}" data-tip="${esc(x.nm)}">${x.d}</span>`).join('')}</div></td>
+      <td>${mmss(l.sec)}</td><td>${l.g.size}</td><td>${pmHtml(l.pm)}</td><td class="${l.sec < 300 ? 'muted' : ''}">${sgn(l.p40, 1)}</td></tr>`).join('')}</tbody></table></div><div class="lg"><span class="muted">+/− 40' atenuado con menos de 5 minutos juntas</span></div>` : '<div class="empty">Sin quintetos</div>';
+
+  // shots
+  const side = S.shot;
+  const all = gs.flatMap(g => (side === 'us' ? g.shotsUs : g.shotsThem).map(s => ({ ...s, G: g })));
+  const shooters = [...new Set(all.map(s => s.id).filter(Boolean))].map(id => A.P[id] || { id, name: (M.names[id] || {}).name, dorsal: (M.names[id] || {}).dorsal }).sort((a, b) => a.dorsal - b.dorsal);
+  if (side !== 'us') S.shotP = 'all';
+  const fs = all.filter(s => (S.shotP === 'all' || s.id === S.shotP) && (S.shotT === 'all' || s.type === S.shotT) && (S.shotQ === 'all' || String(s.per) === S.shotQ))
+    .map(s => ({ ...s, tip: `<b>${s.type === 'T3' ? 'Triple' : 'Canasta de 2'}</b> · ${ZN[s.zone]}${s.id ? '<br>' + esc((M.names[s.id] || {}).name || '') : s.dorsal ? `<br><span class="tm">Rival #${s.dorsal}</span>` : ''}<br><span class="tm">J${s.G.j} ${esc(s.G.code)} · ${pLabel(s.per)}</span>` }));
+  const zc = ['pin', 'med', 'tri'].map(z => ({ z, n: fs.filter(s => s.zone === z).length, pts: fs.filter(s => s.zone === z).length * (z === 'tri' ? 3 : 2) }));
+  const maxQ = Math.max(4, ...gs.map(g => (g.periods || []).length));
+  const shotCtl = `<div class="ctrls">${seg('shot', [['us', 'Ataque'], ['them', 'Defensa']], side)}
+    ${side === 'us' ? `<select data-act="sel" data-k="shotP"><option value="all">Todas</option>${shooters.map(p => `<option value="${p.id}" ${S.shotP === p.id ? 'selected' : ''}>${p.dorsal} · ${esc(p.name)}</option>`).join('')}</select>` : ''}
+    <select data-act="sel" data-k="shotT"><option value="all">2P y 3P</option><option value="T2" ${S.shotT === 'T2' ? 'selected' : ''}>Solo 2P</option><option value="T3" ${S.shotT === 'T3' ? 'selected' : ''}>Solo 3P</option></select>
+    <select data-act="sel" data-k="shotQ"><option value="all">Todos los cuartos</option>${Array.from({ length: maxQ }, (_, i) => `<option value="${i + 1}" ${S.shotQ === String(i + 1) ? 'selected' : ''}>${pLabel(i + 1)}</option>`).join('')}</select></div>`;
+  const cA = side === 'us' ? 'var(--blue)' : 'var(--red)';
+  const shots = `<div class="split"><div>${court(fs, s => s.type === 'T3' ? '#eb6834' : cA, `<span><i class="c" style="background:${cA}"></i>2P</span><span><i class="c" style="background:#eb6834"></i>3P</span><span class="muted">${fs.length} canastas · solo anotadas</span>`)}</div>
+    <div>${hbars(zc.map(z => ({ label: ZN[z.z], v: z.n, color: z.z === 'tri' ? '#eb6834' : cA, sub: z.pts + ' pts' })), { max: Math.max(1, ...zc.map(z => z.n)), fmt: v => nf(v, 0) })}
+    <div class="mini" style="margin:14px 0 0"><div><span>Por partido</span><b>${nf(fs.length / n, 1)}</b></div><div><span>Puntos de campo</span><b>${sum(zc, z => z.pts)}</b></div><div><span>% desde la pintura</span><b>${fs.length ? nf(zc[0].n / fs.length * 100, 0) : '—'}<small>%</small></b></div></div></div></div>`;
+
+  return kp + `<div class="grid" style="margin-top:12px">
+    ${card('s12', 'Partidos', games, '', 'más reciente a la derecha')}
+    ${card('s12', 'Plantilla', table, seg('tmode', MODES, tm))}
+    ${card('s6', 'Reparto de minutos', share, seg('share', shOpts, S.share))}
+    ${card('s6', 'Por cuartos', quarters)}
+    ${card('s12', 'Quintetos', lineups, seg('luMin', [['all', 'Todos'], ['me', 'Con ' + esc(((M.names[CFG.me] || {}).name || 'Jana').split(' ')[0])]], S.luMin) + seg('luSort', [['sec', 'Minutos'], ['pm', '+/−'], ['p40', "+/− 40'"]], S.luSort))}
+    ${card('s12', 'Carta de tiro', shots, shotCtl)}
+  </div>`;
+}
+
+/* ---------- PARTIDOS ---------- */
+function viewPartidos() {
+  const all = M.games; if (!all.length) return emptyState('Sin partidos.');
+  if (S.game == null || !all.find(g => g.n == S.game)) S.game = all[all.length - 1].n;
+  const G = all.find(g => g.n == S.game);
+  const strip = `<div class="games" style="margin:4px 0 12px">${all.map(g => `<button class="game ${g.n == G.n ? 'on' : ''}" data-act="game" data-n="${g.n}">
+    <div class="gt"><span>J${g.j} · ${fdate(g.date)}</span><span>${g.home ? 'Casa' : 'Fuera'}</span></div>
+    <div class="go">${esc(g.opp)}</div>
+    <div class="gs"><span class="wl ${g.res}">${g.res === 'W' ? 'V' : g.res === 'L' ? 'D' : 'E'}</span><b>${g.pf}–${g.pa}</b><span class="dif">${sgn(g.diff)}</span></div></button>`).join('')}</div>`;
+  const usN = M.name, us = G.home ? usN : G.opp, them = G.home ? G.opp : usN;
+  const sL = G.home ? G.pf : G.pa, sR = G.home ? G.pa : G.pf;
+  let board = `<div class="board"><div class="tm"><small>LOCAL</small>${esc(us)}</div><div class="sc">${sL}<i>–</i>${sR}</div><div class="tm r"><small>VISITANTE</small>${esc(them)}</div></div>`;
+  if (G.periods) {
+    board += `<div class="tw"><table class="qtab"><thead><tr><th></th>${G.periods.map(q => `<th>${pLabel(q.p)}</th>`).join('')}<th>Total</th></tr></thead><tbody>
+      <tr><td>Claret</td>${G.periods.map(q => `<td style="${q.us > q.them ? 'font-weight:700' : ''}">${q.us}</td>`).join('')}<td style="font-weight:700">${G.pf}</td></tr>
+      <tr><td>${esc(G.code)}</td>${G.periods.map(q => `<td style="${q.them > q.us ? 'font-weight:700' : ''}">${q.them}</td>`).join('')}<td style="font-weight:700">${G.pa}</td></tr></tbody></table></div>`;
+    const f = G.facts;
+    board += `<div class="facts"><div><span>Máxima ventaja</span><b>${sgn(f.maxL)}</b></div><div><span>Máxima desventaja</span><b>${f.maxT ? '−' + f.maxT : '0'}</b></div>
+      <div><span>Mejor parcial</span><b>${f.runUs}–0</b></div><div><span>Peor parcial</span><b>0–${f.runThem}</b></div>
+      <div><span>Tiempo por delante</span><b>${mmss(f.lead)}</b></div><div><span>Cambios de líder</span><b>${f.chg}</b></div></div>`;
+  }
+  if (!G.detail) return strip + `<div class="grid"><section class="card s12">${board}</section>${card('s12', 'Detalle', '<div class="empty">Sincroniza para cargar el detalle de este partido.</div>')}</div>`;
+
+  // box
+  const sideBox = S.box === 'us' ? G.box.us : G.box.them;
+  const pls = sideBox.players.filter(p => (p.computed || {}).seconds > 0).sort((a, b) => b.starting - a.starting || (b.computed.seconds - a.computed.seconds));
+  const ptsMax = Math.max(1, ...pls.map(p => p.accumulated.pts));
+  const box = `<div class="tw"><table><thead><tr><th>Jugadora</th><th>Min</th><th>Pts</th><th>2P</th><th>3P</th><th>TL</th><th>F</th><th>+/−</th></tr></thead><tbody>
+    ${pls.map(pl => { const a = pl.accumulated, c = pl.computed, me = pl.uuid === CFG.me;
+      return `<tr class="${me ? 'me' : ''}"><td class="${S.box === 'us' ? 'nm' : ''}" ${S.box === 'us' ? `data-act="toPlayer" data-id="${pl.uuid}"` : ''}><span class="dor">${pl.dorsal}</span>${esc(title(pl.name))}${pl.starting ? '<span class="st" title="Titular"></span>' : ''}</td>
+      <td>${c.min || mmss(c.seconds)}</td><td class="cellbar" style="--w:${a.pts / ptsMax * 70}%"><span style="font-weight:600">${a.pts}</span></td><td>${a.t2m}</td><td>${a.t3m}</td><td>${a.ftm}<span class="sub">/${a.fta}</span></td><td style="${a.fc >= 5 ? 'color:var(--red);font-weight:600' : ''}">${a.fc}</td><td>${pmHtml(c.onCourtPlusMinus)}</td></tr>`; }).join('')}
+    <tr class="tot"><td>Total</td><td></td><td>${sideBox.accumulated.pts}</td><td>${sideBox.accumulated.t2m}</td><td>${sideBox.accumulated.t3m}</td><td>${sideBox.accumulated.ftm}/${sideBox.accumulated.fta}</td><td>${sideBox.accumulated.fc}</td><td></td></tr></tbody></table></div>
+    <div class="lg"><span><span class="st" style="margin:0"></span>Titular</span></div>`;
+
+  // rotation rows
+  const rows = G.box.us.players.filter(p => (p.computed || {}).seconds > 0).map(pl => {
+    const st = G.stints[pl.uuid] || [], nm = (M.names[pl.uuid] || {}).name || title(pl.name);
+    return { label: nm.split(' ')[0] + (G.box.us.players.filter(q => title(q.name).split(' ')[0] === nm.split(' ')[0]).length > 1 ? ' ' + (nm.split(' ')[1] || '')[0] + '.' : ''), full: nm, stints: st, me: pl.uuid === CFG.me, s0: st.length ? st[0].s : 1e9, start: pl.starting, fouls: G.fouls.filter(f => f.id === pl.uuid) };
+  }).sort((a, b) => (b.start - a.start) || a.s0 - b.s0);
+
+  // shots of game
+  const shs = (S.mshot === 'us' ? G.shotsUs : G.shotsThem).map(s => ({ ...s, tip: `<b>${s.type === 'T3' ? 'Triple' : 'Canasta de 2'}</b>${s.id ? '<br>' + esc((M.names[s.id] || {}).name || '') : s.dorsal ? `<br><span class="tm">#${s.dorsal}</span>` : ''}<br><span class="tm">${pLabel(s.per)}</span>` }));
+  const cA = S.mshot === 'us' ? 'var(--blue)' : 'var(--red)';
+  // scorers
+  const top = G.box.us.players.slice().sort((a, b) => b.accumulated.pts - a.accumulated.pts).slice(0, 5);
+  const bestPm = G.box.us.players.filter(p => p.computed.seconds > 300).sort((a, b) => b.computed.onCourtPlusMinus - a.computed.onCourtPlusMinus)[0];
+  const sn = pl => { const w = title(pl.name).split(' '); return w[0] + ' ' + (w[1] || '')[0] + '.'; };
+  const lead = `<div class="mini">${top.slice(0, 3).map((p, i) => `<div><span>${i === 0 ? 'Máxima anotadora' : (i + 1) + 'ª anotadora'}</span><b>${p.accumulated.pts}<small>${esc(sn(p))}</small></b></div>`).join('')}${bestPm ? `<div><span>Mejor +/−</span><b>${sgn(bestPm.computed.onCourtPlusMinus)}<small>${esc(sn(bestPm))}</small></b></div>` : ''}</div>`;
+
+  return strip + `<div class="grid">
+    <section class="card s12 fade">${board}</section>
+    ${card('s12', 'Evolución del marcador', chart((el, W) => flowChart(el, W, G)), '', 'diferencia Claret − ' + esc(G.code))}
+    ${card('s12', 'Estadísticas', lead + box, seg('box', [['us', 'Claret'], ['them', esc(G.code)]], S.box))}
+    ${card('s12', 'Rotaciones', chart((el, W) => gantt(el, W, G, rows, W < 520 ? 70 : 110)), '', 'color = +/− del tramo · ① faltas')}
+    ${card('s12', 'Carta de tiro', `<div class="split"><div>${court(shs, s => s.type === 'T3' ? '#eb6834' : cA, `<span><i class="c" style="background:${cA}"></i>2P</span><span><i class="c" style="background:#eb6834"></i>3P</span><span class="muted">solo anotadas</span>`)}</div><div>${hbars(['pin', 'med', 'tri'].map(z => ({ label: ZN[z], v: shs.filter(s => s.zone === z).length, color: z === 'tri' ? '#eb6834' : cA })), { max: Math.max(1, ...['pin', 'med', 'tri'].map(z => shs.filter(s => s.zone === z).length)), fmt: v => nf(v, 0) })}</div></div>`, seg('mshot', [['us', 'Claret'], ['them', esc(G.code)]], S.mshot))}
+  </div>`;
+}
+
+/* ---------- SIMULAR ---------- */
+const SIMF = [['n', 'Partidos', 1, 10], ['min', 'Minutos', 0, 45], ['t2m', 'Canastas de 2', 0, 30], ['t3m', 'Triples', 0, 15], ['ftm', 'TL anotados', 0, 30], ['fta', 'TL intentados', 0, 40], ['fc', 'Faltas', 0, 5], ['pm', '+/−', -60, 60]];
+function viewSimular() {
+  const gs = activeGames(); if (!gs.length) return emptyState('No hay partidos seleccionados.');
+  const A = agg(gs);
+  if (!A.P[S.player]) S.player = A.P[CFG.me] ? CFG.me : Object.keys(A.P)[0];
+  const p = A.P[S.player];
+  if (!S.sim || S.sim.id !== p.id) {
+    const g = p.gp - p.partial || 1;
+    S.sim = { id: p.id, n: 1, min: Math.round(p.sec / 60 / p.gp), t2m: Math.round(p.t2m / g), t3m: Math.round(p.t3m / g), ftm: Math.round(p.ftm / g), fta: Math.round(p.fta / g), fc: Math.round(p.fc / g), pm: 0 };
+  }
+  const sm = S.sim; sm.fta = Math.max(sm.fta, sm.ftm);
+  // simulated player
+  const q = { ...p, per: p.per, games: p.games };
+  q.gp = p.gp + sm.n; q.sec = p.sec + sm.n * sm.min * 60;
+  ['t2m', 't3m', 'ftm', 'fta', 'fc', 'pm'].forEach(k => q[k] = p[k] + sm.n * sm[k]);
+  q.pts = p.pts + sm.n * (sm.t2m * 2 + sm.t3m * 3 + sm.ftm);
+  const B = { P: { ...A.P, [p.id]: q } };
+  const simPts = sm.t2m * 2 + sm.t3m * 3 + sm.ftm;
+
+  const inputs = `<div class="simgrid">${SIMF.map(([k, l, mn, mx]) => `<div class="inp"><label>${l}${k === 'n' ? '' : ' / partido'}</label><div class="stp"><button data-act="sim" data-k="${k}" data-d="-1" aria-label="menos">−</button><input type="number" inputmode="numeric" data-act="simIn" data-k="${k}" min="${mn}" max="${mx}" value="${sm[k]}"><button data-act="sim" data-k="${k}" data-d="1" aria-label="más">+</button></div></div>`).join('')}</div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px"><span class="muted" style="font-size:12px">Atajos</span><div class="presets">
+      <button class="pbtn" data-act="preset" data-v="avg">Mi media</button><button class="pbtn" data-act="preset" data-v="best">Mi mejor partido</button><button class="pbtn" data-act="preset" data-v="up">Media +20%</button><button class="pbtn" data-act="preset" data-v="zero">No juego</button></div>
+      <div class="sp" style="flex:1"></div><span style="font-size:13px">= <b>${simPts}</b> pts por partido simulado</span></div>`;
+
+  const rowsDef = [['min', 'Minutos / partido', 'pg', 1], ['pts', 'Puntos / partido', 'pg', 1], ['pts', "Puntos / 40'", 'p40', 1], ['t2m', 'Canastas de 2 / partido', 'pg', 1], ['t3m', 'Triples / partido', 'pg', 1], ['ftp', 'TL %', 'pg', 0], ['fc', 'Faltas / partido', 'pg', 1], ['fc', "Faltas / 40'", 'p40', 1], ['pm', '+/− total', 'tot', 0], ['pm', "+/− / 40'", 'p40', 1], ['pts', 'Puntos totales', 'tot', 0]];
+  const val = (pp, k, m) => k === 'min' ? pp.sec / 60 / pp.gp : mv(pp, k, m);
+  const res = `<div class="tw"><table><thead><tr><th>Estadística</th><th>Ahora</th><th>Simulado</th><th>Cambio</th><th>Ranking</th></tr></thead><tbody>
+    ${rowsDef.map(([k, l, m, d]) => {
+      const a = val(p, k, m), b = val(q, k, m), df = ok(a) && ok(b) ? b - a : null, low = MET[k] && MET[k].low;
+      const ra = rank(A, p.id, k, k === 'min' ? 'pg' : m, low), rb = rank(B, p.id, k, k === 'min' ? 'pg' : m, low);
+      const dir = !ok(df) || Math.abs(df) < .05 ? '' : ((df > 0) !== !!low ? 'up' : 'dn');
+      const f = v => k === 'ftp' ? (ok(v) ? nf(v, 0) + '%' : '—') : k === 'pm' ? sgn(v, d) : nf(v, d);
+      return `<tr><td>${l}</td><td>${f(a)}</td><td style="font-weight:700">${f(b)}</td><td class="delta ${dir}">${ok(df) ? (Math.abs(df) < .05 ? '=' : (df > 0 ? '+' : '−') + nf(Math.abs(df), k === 'ftp' ? 1 : d)) : '—'}</td>
+        <td>${ra ? ra.r + 'º' : '—'}${rb && ra && rb.r !== ra.r ? ` → <b>${rb.r}º</b>` : ''}</td></tr>`; }).join('')}
+    </tbody></table></div>`;
+
+  const chartSim = chart((el, W) => {
+    const items = gs.filter(g => g.players[p.id] && g.players[p.id].sec > 0 && !g.players[p.id].partial).map(g => ({ v: g.players[p.id].pts, label: 'J' + g.j, sub: (g.home ? '' : '@') + g.code, tip: `<b>J${g.j} · ${esc(g.opp)}</b><br>${g.players[p.id].pts} pts` }));
+    for (let i = 0; i < Math.min(sm.n, 6); i++) items.push({ v: simPts, label: 'S' + (i + 1), sub: 'simulado', ghost: true, tip: `<b>Partido simulado</b><br>${simPts} pts · ${sm.min} min` });
+    vbars(el, W, { items, avg: q.pts / q.gp, H: 200 });
+  });
+
+  const head = `<div class="phead"><div class="psel"><select data-act="player">${playerOptions(A, p.id)}</select></div><div class="pmeta"><span>Base: <b>${p.gp}</b>partidos seleccionados</span></div></div>`;
+  return head + `<div class="grid">
+    ${card('s12', 'Próximos partidos', inputs, '', 'qué números harías')}
+    ${card('s7', 'Cómo cambiarían tus números', res)}
+    ${card('s5', 'Puntos por partido', chartSim, '', 'reales + simulados')}
+  </div>`;
+}
+
+/* ================= render ================= */
+const TABS = [['jugadora', 'Jugadora'], ['equipo', 'Equipo'], ['partidos', 'Partidos'], ['simular', 'Simular']];
+function renderFilters() {
+  if (!M || S.view === 'partidos') { $('#filters').innerHTML = '<div style="height:12px"></div>'; return; }
+  const sel = new Set(S.sel || M.games.map(g => g.n));
+  const chips = M.games.map(g => {
+    const locOk = S.loc === 'all' || (S.loc === 'home') === g.home;
+    return `<button class="gchip ${sel.has(g.n) ? 'on' : ''} ${locOk ? '' : 'dis'}" data-act="tg" data-n="${g.n}" data-tip="${esc(`${g.opp} · ${g.pf}–${g.pa}`)}"><span class="cb"></span>J${g.j} ${g.home ? '' : '@'}${esc(g.code)}<span class="r ${g.res}">${g.res === 'W' ? 'V' : g.res === 'L' ? 'D' : 'E'}</span></button>`;
+  }).join('');
+  const allOn = sel.size === M.games.length;
+  $('#filters').innerHTML = `<div class="filters"><div class="fgroup"><span class="fl">Partidos</span>${chips}${allOn ? '' : `<button class="linkbtn" data-act="selAll">Todos</button>`}</div>
+    <div class="fgroup">${seg('loc', [['all', 'Todos'], ['home', 'Casa'], ['away', 'Fuera']], S.loc)}</div></div>`;
+}
+function render() {
+  $('#tabs').innerHTML = TABS.map(([k, l]) => `<button class="tab ${S.view === k ? 'on' : ''}" data-act="view" data-v="${k}">${l}</button>`).join('');
+  CHARTS = [];
+  if (!M) { $('#filters').innerHTML = ''; $('#app').innerHTML = emptyState(RAW === false ? 'No se han podido cargar los datos.' : 'Cargando…'); return; }
+  renderFilters();
+  const v = { jugadora: viewJugadora, equipo: viewEquipo, partidos: viewPartidos, simular: viewSimular }[S.view] || viewJugadora;
+  $('#app').innerHTML = v();
+  mountCharts();
+}
+function header() {
+  $('#tname').textContent = M.name; $('#tsub').textContent = M.sub;
+  const w = M.games.filter(g => g.res === 'W').length, l = M.games.filter(g => g.res === 'L').length;
+  const sy = M.meta && M.meta.syncedAt ? new Date(M.meta.syncedAt) : null;
+  $('#rec').innerHTML = `<span class="lbl">${sy ? 'Act. ' + sy.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }) : ''}</span><div class="form">${M.games.slice(-5).map(g => `<i class="${g.res}" data-tip="${esc(`J${g.j} · ${g.opp} · ${g.pf}–${g.pa}`)}"></i>`).join('')}</div><b>${w}–${l}</b>`;
+}
+
+/* ================= events ================= */
+function go(push) { const h = '#' + S.view + (S.view === 'partidos' && S.game != null ? '/' + S.game : ''); if (location.hash !== h) history.replaceState(null, '', h); render(); }
 document.addEventListener('click', e => {
-  const t = e.target.closest('[data-act]'); if (!t || t.tagName === 'SELECT') return;
+  const t = e.target.closest('[data-act]'); if (!t || t.tagName === 'SELECT' || t.tagName === 'INPUT') return;
   const a = t.dataset.act;
   if (a === 'view') { S.view = t.dataset.v; go(); }
-  else if (a === 'player') { S.player = t.dataset.id; store.set('player', S.player); S.view = 'yo'; go(); scrollTo({ top: 0, behavior: 'smooth' }); }
-  else if (a === 'game') { S.game = +t.dataset.n; S.view = 'partidos'; go(); }
-  else if (a === 'set') { S[t.dataset.k] = t.dataset.v; render(); }
+  else if (a === 'set') { S[t.dataset.k] = t.dataset.v; ['mode', 'tmode', 'loc'].includes(t.dataset.k) && store.set(t.dataset.k, t.dataset.v); render(); }
   else if (a === 'sort') { const k = t.dataset.k; S.sort = { k, d: S.sort.k === k ? -S.sort.d : (k === 'name' ? 1 : -1) }; render(); }
+  else if (a === 'toPlayer') { S.player = t.dataset.id; store.set('player', S.player); S.view = 'jugadora'; go(); scrollTo({ top: 0, behavior: 'smooth' }); }
+  else if (a === 'game') { S.game = +t.dataset.n; S.view = 'partidos'; go(); scrollTo({ top: 0, behavior: 'smooth' }); }
+  else if (a === 'tg') {
+    const sel = new Set(S.sel || M.games.map(g => g.n)), n = +t.dataset.n;
+    if (sel.has(n)) { if (sel.size > 1) sel.delete(n); } else sel.add(n);
+    S.sel = sel.size === M.games.length ? null : [...sel]; store.set('sel', S.sel); render();
+  }
+  else if (a === 'selAll') { S.sel = null; store.set('sel', null); render(); }
+  else if (a === 'sim') { const f = SIMF.find(x => x[0] === t.dataset.k); S.sim[f[0]] = clamp((+S.sim[f[0]] || 0) + +t.dataset.d, f[2], f[3]); if (f[0] === 'ftm') S.sim.fta = Math.max(S.sim.fta, S.sim.ftm); if (f[0] === 'fta') S.sim.ftm = Math.min(S.sim.ftm, S.sim.fta); render(); }
+  else if (a === 'preset') {
+    const A = agg(activeGames()), p = A.P[S.player]; if (!p) return;
+    const mine = activeGames().filter(g => g.players[p.id] && g.players[p.id].sec > 0 && !g.players[p.id].partial).map(g => g.players[p.id]);
+    const g = mine.length || 1, base = { min: p.sec / 60 / p.gp, t2m: p.t2m / g, t3m: p.t3m / g, ftm: p.ftm / g, fta: p.fta / g, fc: p.fc / g, pm: p.pm / g };
+    const v = t.dataset.v; let o = base;
+    if (v === 'best' && mine.length) { const b = mine.reduce((x, y) => y.pts > x.pts ? y : x); o = { min: b.sec / 60, t2m: b.t2m, t3m: b.t3m, ftm: b.ftm, fta: b.fta, fc: b.fc, pm: b.pm }; }
+    if (v === 'up') o = Object.fromEntries(Object.entries(base).map(([k, x]) => [k, k === 'fc' ? x : k === 'pm' ? x + 3 : x * 1.2]));
+    if (v === 'zero') o = { min: 0, t2m: 0, t3m: 0, ftm: 0, fta: 0, fc: 0, pm: 0 };
+    Object.entries(o).forEach(([k, x]) => S.sim[k] = Math.round(x)); S.sim.fta = Math.max(S.sim.fta, S.sim.ftm);
+    render();
+  }
 });
 document.addEventListener('change', e => {
-  const t = e.target; if (t.dataset.act !== 'cmp') return;
-  S.cmp[+t.dataset.i] = t.value; store.set('cmp', S.cmp); render();
+  const t = e.target, a = t.dataset.act;
+  if (a === 'player') { S.player = t.value; store.set('player', S.player); render(); }
+  else if (a === 'sel') { S[t.dataset.k] = t.value; render(); }
+  else if (a === 'simIn') { const f = SIMF.find(x => x[0] === t.dataset.k); S.sim[f[0]] = clamp(Math.round(+t.value || 0), f[2], f[3]); if (f[0] === 'ftm') S.sim.fta = Math.max(S.sim.fta, S.sim.ftm); if (f[0] === 'fta') S.sim.ftm = Math.min(S.sim.ftm, S.sim.fta); render(); }
 });
-function go() {
-  const h = S.view === 'partidos' && S.game != null ? `#partidos/${S.game}` : '#' + S.view;
-  if (location.hash !== h) history.replaceState(null, '', h);
-  render();
-}
-function readHash() {
-  const [v, n] = location.hash.slice(1).split('/');
-  if (TABS.some(t => t[0] === v)) S.view = v;
-  if (n != null && n !== '') S.game = +n;
-}
+function readHash() { const [v, n] = location.hash.slice(1).split('/'); if (TABS.some(t => t[0] === v)) S.view = v; if (n) S.game = +n; }
 addEventListener('hashchange', () => { readHash(); render(); });
 
-/* theme */
-function setTheme(t) {
-  document.documentElement.dataset.theme = t; store.set('theme', t);
-  $('#theme').innerHTML = t === 'dark' ? ICON.sun : ICON.moon;
-  document.querySelector('meta[name=theme-color]').content = t === 'dark' ? '#0a0f1a' : '#f2f4f9';
-}
-setTheme(store.get('theme', matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'));
-$('#theme').onclick = () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
-
-/* boot */
-readHash();
-render();
-load().then(() => { header(); render(); }).catch(err => { console.error(err); render(); });
+readHash(); render();
+load().then(() => {
+  if (S.sel) { const ok_ = S.sel.filter(n => M.games.some(g => g.n === n)); S.sel = ok_.length ? ok_ : null; }
+  header(); render();
+}).catch(err => { console.error(err); RAW = false; render(); });
 </script>
 </body>
 </html>
